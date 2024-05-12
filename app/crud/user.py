@@ -26,3 +26,6 @@ def delete_user(db: Session, user_id: int):
     db.delete(db_user)
     db.commit()
     return db_user
+
+def authenticate_user(db: Session, email: str, password: str):
+    return db.query(models.User).filter(models.User.email == email, models.User.password == password).first()
