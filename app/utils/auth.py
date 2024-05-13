@@ -1,27 +1,47 @@
-import jwt
-from fastapi import HTTPException, status
-from datetime import datetime, timedelta
+from jose import jwt
+from datetime import datetime
+from passlib.context import CryptContext
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBearer
+from app.settings import SECRET_KEY, TOKEN_EXPIRATION, ALGORITHM
 
-# Secret key for JWT encoding and decoding
-SECRET_KEY = "your_secret_key_here"
-# Expiration time for JWT token (1 hour in this case)
-TOKEN_EXPIRATION = timedelta(hours=1)
+OAuth2PasswordBearer = HTTPBearer()
 
-def generate_token(user_id: int) -> str:
+def create_access_token(user_id: int) -> str:
     payload = {
         "user_id": user_id,
         "exp": datetime.utcnow() + TOKEN_EXPIRATION
     }
     return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
-def verify_token(token: str) -> int:
+def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        user_id = payload.get("user_id")
-        if user_id is None:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
-        return user_id
+        return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired")
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+
+
+def decode_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def hash_password(password: str):
+    return pwd_context.hash(password)
+
+
+def verify_password(password: str, hashed_password: str):
+    return pwd_context.verify(password, hashed_password)
+
+
