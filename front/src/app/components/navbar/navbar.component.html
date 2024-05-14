@@ -1,0 +1,44 @@
+<mat-toolbar color="primary" class="nav-bar">
+  <span class="nav-bar-logo">AFL</span>
+  <div class="nav-bar-links">
+    <ul>
+      <li>
+        <a
+          routerLink="/home"
+          [class.active]="currentUrl.includes('/home')"
+          routerLinkActive="active"
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/profile"
+          [class.active]="currentUrl.includes('/profile')"
+          routerLinkActive="active"
+          >Profile</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/teams"
+          [class.active]="currentUrl.includes('/team')"
+          routerLinkActive="active"
+          >Teams</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/matches"
+          [class.active]="currentUrl.includes('/matches')"
+          routerLinkActive="active"
+          >Matches</a
+        >
+      </li>
+      <li>
+        <a routerLink="/matches" routerLinkActive="active" (click)="logout()"
+          >Logout</a
+        >
+      </li>
+    </ul>
+  </div>
+</mat-toolbar>

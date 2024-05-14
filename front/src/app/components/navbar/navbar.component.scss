@@ -1,0 +1,38 @@
+.nav-bar {
+  justify-content: space-between;
+}
+.nav-bar-logo {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.nav-bar-links {
+  justify-content: space-between;
+}
+
+.nav-bar-links a {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.nav-bar-links a:hover {
+  color: #f1356d;
+}
+.nav-bar-links a.active {
+  color: #ff4081;
+}
+
+.nav-bar-links ul {
+  display: flex;
+  list-style: none;
+}
+
+.nav-bar-links li {
+  padding: 0 1rem;
+}
