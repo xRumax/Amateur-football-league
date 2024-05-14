@@ -2,44 +2,55 @@
   <div class="login-form">
     <mat-card>
       <mat-card-content>
-        <h2>Login to account</h2>
+        <h2>Login</h2>
         <form #loginForm="ngForm" (ngSubmit)="login()">
           <mat-form-field>
-            <input
-              matInput
-              placeholder="Email"
-              [(ngModel)]="email"
-              #emailField="ngModel"
-              name="email"
-              required
-              email
-              (keyup.enter)="login()"
-            />
+            <div class="input-box">
+              <input
+                placeholder="Email"
+                [(ngModel)]="email"
+                #emailField="ngModel"
+                name="email"
+                required
+                email
+                (keyup.enter)="login()"
+              />
+            </div>
             <mat-error *ngIf="emailField.errors?.['required']"
               >Email is required</mat-error
             >
           </mat-form-field>
+          <i class="bx bxs-user"></i>
           <mat-form-field>
-            <input
-              matInput
-              type="password"
-              placeholder="Password"
-              [(ngModel)]="password"
-              #passwordField="ngModel"
-              name="password"
-              required
-              minlength="6"
-              (keyup.enter)="login()"
-            />
+            <div class="input-box">
+              <input
+                type="password"
+                placeholder="Password"
+                [(ngModel)]="password"
+                #passwordField="ngModel"
+                name="password"
+                required
+                minlength="6"
+                (keyup.enter)="login()"
+              />
+            </div>
             <mat-error *ngIf="passwordField.errors?.['required']"
               >Password is required</mat-error
             >
           </mat-form-field>
-          <button mat-button>Login</button>
+          <i class="bx bxs-lock-alt"></i>
+          <div class="remember-forgot">
+            <label><input type="checkbox" />Remember me</label>
+            <a routerLink="#"> Forgot password?</a>
+          </div>
+          <button mat-button class="btn">Login</button>
         </form>
         <mat-error *ngIf="errorMessage" class="error-message">{{
           errorMessage
         }}</mat-error>
+        <div class="register-link">
+          <p>Don't have an account? <a routerLink="#">Register</a></p>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

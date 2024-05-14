@@ -1,4 +1,6 @@
 .login-container {
+  background-image: url("https://img.freepik.com/premium-photo/empty-football-field-illuminated-by-staldon-light_1053291-9811.jpg?w=1060");
+  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,8 +9,106 @@
 }
 
 .login-form {
-  width: 300px;
-  background-color: #fff;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 430px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  mat-form-field {
+    width: 95%;
+  }
+  mat-card {
+    background-color: transparent;
+  }
+}
+
+.input-box input {
+  width: 80%;
+  height: 100%;
+  background: transparent;
+  border: 2px solid rgb(186, 186, 186, 0.1);
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder {
+  color: #fff;
+}
+
+.input-box input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+}
+
+.bx {
+  font-size: 18px;
+}
+
+.login-form h2 {
+  margin-top: 15px;
+  font-size: 30px;
+  text-align: center;
+}
+
+.login-form .remember-forgot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -15px 0 15px;
+
+  a {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.remember-forgot label input {
+  accent-color: #fff;
+  margin-right: 3px;
+  margin-top: 15px;
+}
+
+.login-form .btn {
+  width: 100%;
+  height: 45px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
+
+.login-form .register-link {
+  font-size: 14.5px;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.register-link p a {
+  color: #000000;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link p a:hover {
+  text-decoration: underline;
 }

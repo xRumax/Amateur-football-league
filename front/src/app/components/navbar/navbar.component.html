@@ -18,13 +18,22 @@
           >Profile</a
         >
       </li>
-      <li>
+      <li class="dropdown">
         <a
           routerLink="/teams"
           [class.active]="currentUrl.includes('/team')"
           routerLinkActive="active"
           >Teams</a
         >
+        <div class="nav-bar-submenu-block">
+          <div class="nav-bar-submenu-padding">
+            <ul class="nav-bar-level2">
+              <li><a routerLink="/teams">Team 1</a></li>
+              <li><a routerLink="/teams">Team 2</a></li>
+              <li><a routerLink="/teams">Team 3</a></li>
+            </ul>
+          </div>
+        </div>
       </li>
       <li>
         <a
@@ -35,9 +44,7 @@
         >
       </li>
       <li>
-        <a routerLink="/matches" routerLinkActive="active" (click)="logout()"
-          >Logout</a
-        >
+        <a (click)="logout()">Logout</a>
       </li>
     </ul>
   </div>
