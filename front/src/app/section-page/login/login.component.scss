@@ -10,19 +10,29 @@
 }
 
 .login-form {
-  backdrop-filter: blur(15px) brightness(0.85);
+  backdrop-filter: blur(15px) brightness(0.7);
 
   border: 1px solid rgba(255, 255, 255, 0.1);
   width: 430px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-  mat-form-field {
-    width: 95%;
-  }
   mat-card {
     background: transparent;
   }
+}
+
+.login-form h2 {
+  margin-top: 15px;
+  font-size: 30px;
+  text-align: center;
+}
+
+.input-box {
+  position: relative;
+  margin-top: 35px;
+  margin-bottom: 35px;
+  width: 100%;
 }
 
 .input-box input {
@@ -36,8 +46,19 @@
   padding: 20px 45px 20px 20px;
 }
 
-.input-box input::placeholder {
-  color: #fff;
+.input-box .placeholder-label {
+  position: absolute;
+  pointer-events: none;
+  left: 20px;
+  top: 20px;
+  transition: 0.3s ease all;
+  color: #ffffffe2;
+}
+
+.input-box input:focus ~ .placeholder-label,
+.input-box input:valid ~ .placeholder-label {
+  top: -25px;
+  font-size: 14px;
 }
 
 .input-box input:focus {
@@ -57,23 +78,16 @@
   font-size: 18px;
 }
 
-.login-form h2 {
-  margin-top: 15px;
-  font-size: 30px;
-  text-align: center;
-}
-
 .login-form .remember-forgot {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: -15px 0 15px;
-  color: black;
-  font-weight: bold;
+  color: rgb(255, 255, 255);
 
   a {
     text-decoration: none;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     font-weight: bold;
   }
   a:hover {
@@ -85,6 +99,23 @@
   accent-color: #fff;
   margin-right: 3px;
   margin-top: 15px;
+}
+
+.login-form .register-link {
+  font-size: 14.5px;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.register-link p a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link p a:hover {
+  text-decoration: underline;
 }
 
 .login-form .btn {
@@ -100,19 +131,9 @@
   font-size: 16px;
 }
 
-.login-form .register-link {
-  font-size: 14.5px;
+.error-message {
+  color: red;
   text-align: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.register-link p a {
-  color: #000000;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.register-link p a:hover {
-  text-decoration: underline;
+  margin-top: 10px;
+  font-size: 14px;
 }

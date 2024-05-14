@@ -5,10 +5,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { routes_login } from './section-page/login/login-routing.module';
 import { routes_home } from './section-page/home/home-routing.module';
 import { routes_profile } from './section-page/profile/profile-routing.module';
+import { routes_register } from './section-page/register/register-routing.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   ...routes_login,
+  ...routes_register,
   ...routes_home,
   ...routes_profile,
 ];

@@ -12,6 +12,6 @@ export class AppComponent {
   constructor(private router: Router) {}
 
   isLoginPage(): boolean {
-    return this.router.url === '/login'; // Sprawdzamy, czy aktualna ścieżka to strona logowania
+    return this.router.url === '/login' || this.router.url === '/register';
   }
 }

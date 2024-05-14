@@ -1,11 +1,20 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import relationship
+from sqlalchemy import Enum as SQLEnum
+from enum import Enum
 from app.database import Base
 
+class SexEnum(Enum):
+    Male = "Male"
+    Female = "Female"
 class Player(Base):
     __tablename__ = "players"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
+    last_name = Column(String)
+    date_of_birth = Column(Date)
+    sex = Column(SQLEnum(SexEnum))
+    num_of_goals = Column(Integer)
     team_id  = Column(String, ForeignKey("teams.id"))
     team = relationship("Team", back_populates="players")
