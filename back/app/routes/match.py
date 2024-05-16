@@ -4,7 +4,7 @@ from app.schemas.match import MatchCreate, MatchUpdate, Match
 from app.services.match import MatchService
 from app.database import get_db
 
-router = APIRouter(prefix="/matchs", tags=["matchs"])
+router = APIRouter(prefix="/matches", tags=["matches"])
 
 @router.post("/", response_model=Match)
 def create_match(match: MatchCreate, db: Session = Depends(get_db)):
@@ -12,9 +12,9 @@ def create_match(match: MatchCreate, db: Session = Depends(get_db)):
     return match_service.create_match(match)
 
 @router.get("/", response_model=list[Match])
-def read_matchs(db: Session = Depends(get_db)):
+def read_matches(db: Session = Depends(get_db)):
     match_service = MatchService(db)
-    return match_service.get_all_matchs()
+    return match_service.get_all_matches()
 
 @router.get("/{match_id}", response_model=Match)
 def read_match(match_id: int, db: Session = Depends(get_db)):

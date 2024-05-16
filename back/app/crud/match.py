@@ -10,7 +10,7 @@ def create_match(db: Session, match: MatchCreate):
     db.refresh(db_match)
     return db_match
 
-def get_all_matchs(db: Session):
+def get_all_matches(db: Session):
     return db.query(models.Match).all()
 
 def get_match(db: Session, match_id: int):
