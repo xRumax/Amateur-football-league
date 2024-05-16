@@ -9,6 +9,8 @@ class Match(Base):
     date = Column(Date)
     result = Column(String)
 
+    match_statistics = relationship("Statistics", back_populates="match", uselist=False, lazy="joined") 
+
     # Relacja z drużyną gospodarzy
     team_1_id = Column(Integer, ForeignKey("teams.id"))
     team_1 = relationship("Team", foreign_keys=[team_1_id], back_populates="matches_as_home")
