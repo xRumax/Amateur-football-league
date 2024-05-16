@@ -8,6 +8,7 @@ class Team(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     players = relationship("Player", back_populates="team")
+    matches_played = Column(Integer)
 
     # Relacja z meczami jako drużyna gospodarzy
     matches_as_home = relationship("Match", foreign_keys="Match.team_1_id", back_populates="team_1")
