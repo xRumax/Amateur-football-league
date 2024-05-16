@@ -1,1 +1,24 @@
-<p>profile works!</p>
+<div class="profile-container">
+  <h1>PROFILE</h1>
+  <mat-card>
+    <div class="table-con">
+      <table>
+        <tr>
+          <td>Login:</td>
+          <td>{{ user?.username }}</td>
+        </tr>
+        <tr>
+          <td>Email:</td>
+          <td>{{ user?.email }}</td>
+        </tr>
+        <tr>
+          <td>Subscription:</td>
+          <td>{{ user?.is_superuser }}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="buttons-container">
+      <button mat-button>Edit Profile</button>
+    </div>
+  </mat-card>
+</div>
