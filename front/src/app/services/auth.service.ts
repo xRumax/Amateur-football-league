@@ -20,6 +20,18 @@ export class AuthService {
         .then((response) => {
           if (response.data.access_token) {
             this.isUserLoggedIn = true;
+            sessionStorage.setItem('access_token', response.data.access_token); // Save the JWT to sessionStorage
+            axios
+              .get('http://127.0.0.1:8000/users/me', {
+                headers: {
+                  Authorization: `Bearer ${response.data.access_token}`,
+                },
+              })
+              .then((userResponse) => {
+                const userId = userResponse.data.user_id; // Replace 'user_id' with the actual key in the response
+                console.log(userId); // Log user id to console
+                console.log(sessionStorage); // Log access token to console
+              });
             observer.next(response.data);
             observer.complete();
           } else {
@@ -42,5 +54,6 @@ export class AuthService {
 
   logout(): void {
     this.isUserLoggedIn = false;
+    sessionStorage.clear();
   }
 }
