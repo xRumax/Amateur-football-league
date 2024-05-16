@@ -3,7 +3,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { SessionService } from '../../services/session.service';
 
+export interface FormField {
+  email: string;
+  password: string;
+}
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,7 +19,11 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private sessionService: SessionService
+  ) {}
 
   login(): void {
     if (!this.email || !this.password) {
@@ -38,6 +47,9 @@ export class LoginComponent {
       .subscribe((response) => {
         if (response && response.access_token) {
           this.router.navigate(['/home']);
+          const userId = this.sessionService.getUserId();
+          if (userId) {
+          }
         } else {
           this.errorMessage = 'Invalid email or password';
         }

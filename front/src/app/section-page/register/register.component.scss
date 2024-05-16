@@ -17,9 +17,6 @@
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-  mat-form-field {
-    width: 95%;
-  }
   mat-card {
     background: transparent;
   }
@@ -69,10 +66,7 @@
   transform: translateY(-50%);
   font-size: 20px;
 }
-.custom-input {
-  background-color: transparent; /* Ustawienie przezroczystego tła */
-  border: none; /* Usunięcie obramowania */
-}
+
 .bx {
   font-size: 18px;
 }
