@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatCardModule,
     MatInputModule,
+    MatTableModule,
   ],
   providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],
