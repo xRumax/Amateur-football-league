@@ -31,7 +31,8 @@ def verify_token(token: str):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except JWTError:
-        return None
+        raise Exception("Could not validate credentials")
+        
 
 
 def decode_token(token: str):

@@ -29,8 +29,8 @@
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
               <li><a routerLink="/teams">Add Team</a></li>
-              <li><a routerLink="/teams">Team DataBase</a></li>
-              <li><a routerLink="/teams">Team Statics</a></li>
+              <li><a routerLink="/teams">Teams Base</a></li>
+              <li><a routerLink="/teams">My Team</a></li>
             </ul>
           </div>
         </div>
@@ -42,6 +42,38 @@
           routerLinkActive="active"
           >Matches</a
         >
+      </li>
+      <li class="dropdown">
+        <a
+          routerLink="/players"
+          [class.active]="currentUrl.includes('/players')"
+          routerLinkActive="active"
+          >Players</a
+        >
+        <div class="nav-bar-submenu-block">
+          <div class="nav-bar-submenu-padding">
+            <ul class="nav-bar-level2">
+              <li><a routerLink="/players">Add Player</a></li>
+              <li><a routerLink="/players">Players Base</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a
+          routerLink="/tournament"
+          [class.active]="currentUrl.includes('/tournament')"
+          routerLinkActive="active"
+          >Tournament</a
+        >
+        <div class="nav-bar-submenu-block">
+          <div class="nav-bar-submenu-padding">
+            <ul class="nav-bar-level2">
+              <li><a routerLink="/tournament">Create Tournament</a></li>
+              <li><a routerLink="/tournament">My Tournament</a></li>
+            </ul>
+          </div>
+        </div>
       </li>
       <li>
         <a (click)="logout()">Logout</a>
