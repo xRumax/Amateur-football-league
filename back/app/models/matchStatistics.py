@@ -2,8 +2,8 @@ from sqlalchemy import Column, Integer, ForeignKey
 from app.database import Base
 from sqlalchemy.orm import relationship
 
-class Statistics(Base):
-    __tablename__ = "statistics"
+class MatchStatistics(Base):
+    __tablename__ = "matchstatistics"
 
     id = Column(Integer, primary_key=True, index=True)
     home_shots = Column(Integer)

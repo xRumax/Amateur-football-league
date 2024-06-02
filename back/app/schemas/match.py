@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
-from app.schemas.statistics import StatisticsBase
+from app.schemas.matchStatistics import MatchStatisticsBase
 
 class MatchBase(BaseModel):
     date : datetime
@@ -21,7 +21,7 @@ class Match(BaseModel):
     result : str
     team_1_id : int
     team_2_id : int
-    match_statistics : Optional[StatisticsBase]
+    match_statistics : Optional[MatchStatisticsBase]
 
     class Config:
         from_attributes = True

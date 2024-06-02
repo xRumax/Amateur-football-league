@@ -8,7 +8,7 @@ import { routes_profile } from './section-page/profile/profile-routing.module';
 import { routes_register } from './section-page/register/register-routing.module';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   ...routes_login,
   ...routes_register,
   ...routes_home,

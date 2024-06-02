@@ -10,7 +10,7 @@ export class UserService {
 
   getUser(userId: number): Promise<UserResponse> {
     return new Promise((resolve, reject) => {
-      const token = sessionStorage.getItem('access_token'); // Get the token from sessionStorage
+      const token = localStorage.getItem('access_token'); // Get the token from sessionStorage
       axios
         .get(`http://127.0.0.1:8000/users/${userId}/`, {
           headers: {
@@ -41,7 +41,7 @@ export class UserService {
 
   getUserId(): Promise<any> {
     return new Promise((resolve, reject) => {
-      const token = sessionStorage.getItem('access_token'); // Get the token from sessionStorage
+      const token = localStorage.getItem('access_token'); // Get the token from sessionStorage
       axios
         .get('http://127.0.0.1:8000/users/me/', {
           headers: {

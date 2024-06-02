@@ -20,7 +20,8 @@ export class AuthService {
         .then((response) => {
           if (response.data.access_token) {
             this.isUserLoggedIn = true;
-            sessionStorage.setItem('access_token', response.data.access_token); // Save the JWT to sessionStorage
+            localStorage.setItem('isLoggedIn', 'true'); // Set the login state
+            localStorage.setItem('access_token', response.data.access_token); // Save the JWT to localStorage
             axios
               .get('http://127.0.0.1:8000/users/me', {
                 headers: {
@@ -30,7 +31,7 @@ export class AuthService {
               .then((userResponse) => {
                 const userId = userResponse.data.user_id; // Replace 'user_id' with the actual key in the response
                 console.log(userId); // Log user id to console
-                console.log(sessionStorage); // Log access token to console
+                console.log(localStorage); // Log access token to console
               });
             observer.next(response.data);
             observer.complete();
@@ -46,14 +47,17 @@ export class AuthService {
 
   setIsUserLoggedIn(value: boolean): void {
     this.isUserLoggedIn = value;
+    localStorage.setItem('isLoggedIn', value ? 'true' : 'false');
   }
 
   isLoggedIn(): boolean {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    this.isUserLoggedIn = isLoggedIn ? isLoggedIn === 'true' : false;
     return this.isUserLoggedIn;
   }
 
   logout(): void {
     this.isUserLoggedIn = false;
-    sessionStorage.clear();
+    localStorage.setItem('isLoggedIn', 'false');
   }
 }

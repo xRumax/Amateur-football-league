@@ -10,7 +10,7 @@
           >Home</a
         >
       </li>
-      <li>
+      <li *ngIf="isLoggedIn">
         <a
           routerLink="/profile"
           [class.active]="currentUrl.includes('/profile')"
@@ -28,9 +28,9 @@
         <div class="nav-bar-submenu-block">
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
-              <li><a routerLink="/teams">Add Team</a></li>
+              <li *ngIf="isLoggedIn"><a routerLink="/teams">Add Team</a></li>
               <li><a routerLink="/teams">Teams Base</a></li>
-              <li><a routerLink="/teams">My Team</a></li>
+              <li *ngIf="isLoggedIn"><a routerLink="/teams">My Team</a></li>
             </ul>
           </div>
         </div>
@@ -53,7 +53,7 @@
         <div class="nav-bar-submenu-block">
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
-              <li><a routerLink="/players">Add Player</a></li>
+              <li *ngIf="isLoggedIn"><a routerLink="/players">Add Player</a></li>
               <li><a routerLink="/players">Players Base</a></li>
             </ul>
           </div>
@@ -69,13 +69,16 @@
         <div class="nav-bar-submenu-block">
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
-              <li><a routerLink="/tournament">Create Tournament</a></li>
-              <li><a routerLink="/tournament">My Tournament</a></li>
+              <li *ngIf="isLoggedIn"><a routerLink="/tournament">Create Tournament</a></li>
+              <li *ngIf="isLoggedIn"><a routerLink="/tournament">My Tournament</a></li>
             </ul>
           </div>
         </div>
       </li>
-      <li>
+      <li *ngIf="!isLoggedIn">
+        <a routerLink="/login">Login</a>
+      </li>
+      <li *ngIf="isLoggedIn">
         <a (click)="logout()">Logout</a>
       </li>
     </ul>

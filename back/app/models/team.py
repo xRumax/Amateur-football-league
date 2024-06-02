@@ -9,6 +9,7 @@ class Team(Base):
     name = Column(String)
     players = relationship("Player", back_populates="team")
     matches_played = Column(Integer)
+    statics = relationship("Player", viewonly=True)
 
     # Relacja z meczami jako drużyna gospodarzy
     matches_as_home = relationship("Match", foreign_keys="Match.team_1_id", back_populates="team_1")

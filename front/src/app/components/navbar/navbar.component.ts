@@ -22,4 +22,8 @@ export class NavbarComponent {
     this.authService.logout(); // Wywołujemy metodę logout() z serwisu autentykacji
     this.router.navigate(['/login']); // Przekierowuje użytkownika na stronę /login po wylogowaniu
   }
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
 }

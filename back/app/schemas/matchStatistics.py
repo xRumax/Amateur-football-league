@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class StatisticsBase(BaseModel):
+class MatchStatisticsBase(BaseModel):
 # Drużyna pierwsza
     home_shots: int
     home_shots_on_target: int
@@ -26,15 +26,14 @@ class StatisticsBase(BaseModel):
     away_offsides: int
     away_corners: int
 
-    match_id: int
 
-class StatisticsCreate(StatisticsBase):
+class MatchStatisticsCreate(MatchStatisticsBase):
     pass
 
-class StatisticsUpdate(StatisticsBase):
+class MatchStatisticsUpdate(MatchStatisticsBase):
     pass
 
-class Statistics(BaseModel):
+class MatchStatistics(BaseModel):
     id: int
 
 # Drużyna pierwsza   

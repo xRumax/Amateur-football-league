@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Optional
-from app.schemas.player import PlayerBase
+from app.schemas.player import PlayerBase, PlayerStats
 
 class TeamBase(BaseModel):
     name: str
@@ -11,9 +11,12 @@ class TeamCreate(TeamBase):
 class TeamUpdate(TeamBase):
     league_id: int
 
-class Team(TeamBase):
+
+class Team(BaseModel):
     id: int
+    name:str
     players: Optional[List[PlayerBase]] = None
+    statics: Optional[List[PlayerStats]] = None
     league_id: int
 
     class Config:

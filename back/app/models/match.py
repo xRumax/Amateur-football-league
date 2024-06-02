@@ -9,7 +9,7 @@ class Match(Base):
     date = Column(Date)
     result = Column(String)
 
-    match_statistics = relationship("Statistics", back_populates="match", uselist=False, lazy="joined") 
+    match_statistics = relationship("MatchStatistics", back_populates="match", uselist=False, lazy="joined") 
 
     # Relacja z drużyną gospodarzy
     team_1_id = Column(Integer, ForeignKey("teams.id"))

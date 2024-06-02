@@ -15,6 +15,15 @@ class Player(Base):
     last_name = Column(String)
     date_of_birth = Column(Date)
     sex = Column(SQLEnum(SexEnum))
+
+    # Statystyki
     num_of_goals = Column(Integer)
+    num_of_assists = Column(Integer)
+    num_of_yellow_cards = Column(Integer)
+    num_of_red_cards = Column(Integer)
+    num_of_matches_played = Column(Integer)
+    minutes_played = Column(Integer)
+
+    # Relacja z drużyną
     team_id  = Column(String, ForeignKey("teams.id"))
     team = relationship("Team", back_populates="players")
