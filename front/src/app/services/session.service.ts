@@ -1,18 +1,33 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
+
+const helper = new JwtHelperService();
 
 @Injectable({ providedIn: 'root' })
 export class SessionService {
-  private readonly USER_ID_KEY = 'userId';
+  private readonly TOKEN_KEY = 'token';
 
-  getUserId(): string | null {
-    return localStorage.getItem(this.USER_ID_KEY);
+  constructor(private http: HttpClient) {}
+
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  setUserId(user_id: string): void {
-    localStorage.setItem(this.USER_ID_KEY, user_id);
+  setToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  getUserId(): string | null {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken = helper.decodeToken(token);
+      return decodedToken.user_id;
+    }
+    return null;
   }
 
   clearSession(): void {
-    localStorage.removeItem(this.USER_ID_KEY);
+    localStorage.removeItem(this.TOKEN_KEY);
   }
 }

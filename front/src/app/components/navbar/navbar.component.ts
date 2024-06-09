@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +11,11 @@ import { Router, NavigationEnd } from '@angular/router';
 export class NavbarComponent {
   currentUrl: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private sessionService: SessionService
+  ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.currentUrl = event.url;
@@ -20,6 +25,7 @@ export class NavbarComponent {
 
   logout(): void {
     this.authService.logout(); // Wywołujemy metodę logout() z serwisu autentykacji
+    this.sessionService.clearSession(); // Wywołujemy metodę clearSession() z serwisu sesji
     this.router.navigate(['/login']); // Przekierowuje użytkownika na stronę /login po wylogowaniu
   }
 

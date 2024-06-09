@@ -24,7 +24,7 @@ export class ProfileComponent {
   ngOnInit(): void {
     this.userService.getUserId().then((data) => {
       console.log(data);
-      const userId = data.user_id.user_id; // Get the user id
+      const userId = data.user_id; // Get the user id
       console.log(userId);
 
       // Now make another request to get the full user data
