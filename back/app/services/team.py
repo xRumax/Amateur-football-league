@@ -8,8 +8,8 @@ class TeamService:
     def __init__(self, db: Session):
         self.db = db
 
-    def create_team(self, team: TeamCreate) -> models.Team:
-        return create_team(self.db, team)
+    def create_team(self, team: TeamCreate, creator_id: str) -> models.Team:
+        return create_team(self.db, team, creator_id)
 
     def get_all_teams(self) -> list[models.Team]:
         return get_all_teams(self.db)

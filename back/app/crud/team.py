@@ -3,8 +3,8 @@ from app.schemas.team import TeamCreate, TeamUpdate
 from app.models import team as models
 
 
-def create_team(db: Session, team: TeamCreate):
-    db_team = models.Team(**team.dict())
+def create_team(db: Session, team: TeamCreate, creator_id: str):
+    db_team = models.Team(creator_id = creator_id, **team.dict())
     db.add(db_team)
     db.commit()
     db.refresh(db_team)

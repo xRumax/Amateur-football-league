@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.schemas.match import MatchCreate, MatchUpdate
 from app.models import match as models
+from app.models import team as team_models
 
 
 def create_match(db: Session, match: MatchCreate):
@@ -8,6 +9,18 @@ def create_match(db: Session, match: MatchCreate):
     db.add(db_match)
     db.commit()
     db.refresh(db_match)
+
+# Update matches_played for both teams
+    team_1_id = db.query(team_models.Team).filter(team_models.Team.id == db_match.team_1_id).first()
+    team_2_id = db.query(team_models.Team).filter(team_models.Team.id == db_match.team_2_id).first()
+
+    if team_1_id:
+        team_1_id.matches_played = team_1_id.matches_played + 1 if team_1_id.matches_played is not None else 1
+    if team_2_id:
+        team_2_id.matches_played = team_2_id.matches_played + 1 if team_2_id.matches_played is not None else 1
+
+    db.commit()
+
     return db_match
 
 def get_all_matches(db: Session):

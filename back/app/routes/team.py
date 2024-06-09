@@ -3,13 +3,16 @@ from sqlalchemy.orm import Session
 from app.schemas.team import TeamCreate, TeamUpdate, Team
 from app.services.team import TeamService
 from app.database import get_db
+from app.utils.auth import get_current_user
 
 router = APIRouter(prefix="/teams", tags=["teams"])
 
 @router.post("/", response_model=Team)
-def create_team(team: TeamCreate, db: Session = Depends(get_db)):
+def create_team(team: TeamCreate, db: Session = Depends(get_db), current_user: str = Depends(get_current_user)):
+    if 'user_id' not in current_user:
+        raise HTTPException(status_code=400, detail="User ID not found")
     team_service = TeamService(db)
-    return team_service.create_team(team)
+    return team_service.create_team(team, creator_id=current_user['user_id'])
 
 @router.get("/", response_model=list[Team])
 def read_teams(db: Session = Depends(get_db)):
