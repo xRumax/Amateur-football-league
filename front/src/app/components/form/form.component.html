@@ -1,0 +1,26 @@
+<div class="form-container">
+  <h1>Edit User</h1>
+  <form [formGroup]="form">
+    <div *ngFor="let field of fields">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ field.placeholder }}</mat-label>
+        <input
+          matInput
+          [type]="field.type"
+          [placeholder]="field.placeholder"
+          [id]="field.id"
+          [formControlName]="field.name"
+          required
+        />
+      </mat-form-field>
+    </div>
+    <div class="btn-change-pass">
+      <p>Password: ********</p>
+      <button mat-button>Change Password</button>
+    </div>
+    <div class="btn-con">
+      <button mat-button (click)="submitForm()">Submit</button>
+      <button mat-button (click)="closeDialog()">Cancel</button>
+    </div>
+  </form>
+</div>

@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HttpClientModule } from '@angular/common/http';
+import { PopupModule } from './components/popup/popup.module';
+import { FormModule } from './components/form/form.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -44,6 +46,8 @@ import { MatTableModule } from '@angular/material/table';
     MatCardModule,
     MatInputModule,
     MatTableModule,
+    PopupModule,
+    FormModule,
   ],
   providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],

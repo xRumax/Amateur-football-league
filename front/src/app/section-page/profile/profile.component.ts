@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { SessionService } from '../../services/session.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupComponent } from '../../components/popup/popup.component';
+import { UserResponse } from '../../services/user.service';
+import { FormComponent } from '../../components/form/form.component';
 
-export interface UserResponse {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-  is_superuser: boolean;
-}
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -19,7 +15,7 @@ export class ProfileComponent {
 
   user: UserResponse | null = null;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.userService.getUserId().then((data) => {
@@ -32,6 +28,28 @@ export class ProfileComponent {
         console.log(userData);
         this.user = userData; // Assign the user data to this.user
       });
+    });
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(PopupComponent, {
+      data: {},
+      height: '300px',
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
+  openEditDialog(): void {
+    const dialogRef = this.dialog.open(FormComponent, {
+      data: { user: this.user },
+      height: '500px',
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // Handle the result from the dialog here
     });
   }
 }
