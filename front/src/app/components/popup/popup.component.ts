@@ -36,13 +36,11 @@ export class PopupComponent {
 
   deleteAccount(): void {
     const userId = this.sessionService.getUserId();
-    console.log('User ID:', userId); // Sprawdź, czy ID jest poprawnie uzyskiwane
 
     if (userId) {
       this.userService
         .deleteUser(userId)
         .then(() => {
-          console.log('User account deleted successfully');
           this.snackBar.open('User account deleted successfully', 'Close', {
             duration: 5000,
           });
