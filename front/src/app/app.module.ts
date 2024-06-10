@@ -22,6 +22,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
+import { TeamsBaseComponent } from './section-page/teams-base/teams-base.component';
+import { TableModule } from './components/table/table.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { MatTableModule } from '@angular/material/table';
     HomeComponent,
     ProfileComponent,
     RegisterComponent,
+    TeamsBaseComponent,
   ],
   imports: [
     HttpClientModule,
@@ -48,6 +51,7 @@ import { MatTableModule } from '@angular/material/table';
     MatTableModule,
     PopupModule,
     FormModule,
+    TableModule,
   ],
   providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],
