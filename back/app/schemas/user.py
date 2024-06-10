@@ -10,8 +10,8 @@ class UserCreate(BaseModel):
     password: str
     is_superuser: bool = Field(default=False)
 
-class UserUpdate(UserCreate):
-    password :str
+class UserUpdate(UserBase):
+    pass
 
 class UserLogin(BaseModel):
     email: str

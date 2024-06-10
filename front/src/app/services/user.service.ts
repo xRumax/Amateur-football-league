@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormField } from '../components/form/form.component';
+import { FormField } from '../app.component';
 
 export interface UserResponse {
   id: number;
@@ -127,6 +127,24 @@ export class UserService {
         .catch((error) => {
           console.error('Error updating user:', error);
           this.snackBar.open('Error updating user', 'Close', {
+            duration: 5000,
+          });
+          reject(error);
+        });
+    });
+  }
+  deleteUser(userId: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete(`http://127.0.0.1:8000/users/${userId}`)
+        .then((response) => {
+          setTimeout(() => {
+            resolve(response.data);
+          }, 500);
+        })
+        .catch((error) => {
+          console.error('Error deleting user:', error);
+          this.snackBar.open('Error deleting user', 'Close', {
             duration: 5000,
           });
           reject(error);

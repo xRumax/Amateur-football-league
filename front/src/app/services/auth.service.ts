@@ -30,8 +30,6 @@ export class AuthService {
               })
               .then((userResponse) => {
                 const userId = userResponse.data.user_id; // Replace 'user_id' with the actual key in the response
-                console.log(userId); // Log user id to console
-                console.log(localStorage); // Log access token to console
               });
             observer.next(response.data);
             observer.complete();

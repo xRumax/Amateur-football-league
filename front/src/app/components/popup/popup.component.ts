@@ -1,21 +1,68 @@
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-
+import { Component, Inject } from '@angular/core';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
+import { SessionService } from '../../services/session.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-popup',
   templateUrl: './popup.component.html',
-  styleUrl: './popup.component.scss',
+  styleUrls: ['./popup.component.scss'],
 })
 export class PopupComponent {
-  text: string = 'popup works!';
+  userId: string;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    public dialogRef: MatDialogRef<PopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private userService: UserService,
+    private authService: AuthService,
+    private sessionService: SessionService
+  ) {
+    if (!data || !data.userId) {
+      throw new Error('User ID is not provided');
+    }
+    this.userId = data.userId;
+  }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(PopupComponent, {
-      data: { text: this.text },
-    });
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
 
-    dialogRef.afterClosed().subscribe((result) => {});
+  deleteAccount(): void {
+    const userId = this.sessionService.getUserId();
+    console.log('User ID:', userId); // Sprawdź, czy ID jest poprawnie uzyskiwane
+
+    if (userId) {
+      this.userService
+        .deleteUser(userId)
+        .then(() => {
+          console.log('User account deleted successfully');
+          this.snackBar.open('User account deleted successfully', 'Close', {
+            duration: 5000,
+          });
+          this.authService.logout(); // Wyloguj użytkownika
+          this.sessionService.clearSession(); // Wyczyść sesję
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 2000); // Przekieruj użytkownika na stronę logowania
+        })
+        .catch((error) => {
+          console.error('Error deleting user account:', error);
+          this.snackBar.open('Server Error', 'Close', {
+            duration: 5000,
+          });
+        });
+    } else {
+      console.error('User ID not found');
+      this.snackBar.open('User ID not found', 'Close', {
+        duration: 5000,
+      });
+    }
   }
 }

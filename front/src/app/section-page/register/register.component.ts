@@ -39,15 +39,14 @@ export class RegisterComponent {
     this.registerService
       .register(this.username, this.email, this.password, this.confirmPassword)
       .then((response) => {
-        this.snackBar.open('Zarejestrowano pomyślnie', '', {
-          duration: 2000,
+        this.snackBar.open('Register Succesful', 'Close', {
+          duration: 5000,
         });
         this.router.navigate(['/login']);
       })
       .catch((error) => {
-        console.log('Registration failed', error);
-        this.snackBar.open('Błąd rejestracji', '', {
-          duration: 2000,
+        this.snackBar.open('Register Error', 'Close', {
+          duration: 5000,
         });
       });
   }

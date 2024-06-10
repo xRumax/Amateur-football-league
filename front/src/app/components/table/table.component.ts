@@ -5,4 +5,11 @@ import { Component } from '@angular/core';
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
-export class TableComponent {}
+export class TableComponent {
+  displayedColumns: string[] = [
+    'name',
+    'matches_played',
+    'league_id',
+    'creator_id',
+  ];
+}

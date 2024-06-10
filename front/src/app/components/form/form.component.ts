@@ -2,14 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserService, UserResponse } from '../../services/user.service';
-
-export interface FormField {
-  type: string;
-  name: string;
-  id: string;
-  placeholder: string;
-  value: string | number | boolean;
-}
+import { FormField } from '../../app.component';
 
 @Component({
   selector: 'app-form',
@@ -34,13 +27,10 @@ export class FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.getUserId().then((data) => {
-      console.log(data);
       const userId = data.user_id; // Get the user id
-      console.log(userId);
 
       // Now make another request to get the full user data
       this.userService.getUser(userId).then((userData) => {
-        console.log(userData);
         this.user = userData; // Assign the user data to this.user
 
         // Generate form fields
@@ -64,9 +54,7 @@ export class FormComponent implements OnInit {
       if (this.user) {
         this.userService
           .updateUser(this.user.id, this.form.value)
-          .then((response) => {
-            console.log('User updated successfully');
-          })
+          .then((response) => {})
           .catch((error) => {
             console.error('Error updating user:', error);
           });

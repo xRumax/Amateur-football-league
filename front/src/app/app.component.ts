@@ -1,6 +1,14 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
+export interface FormField {
+  type: string;
+  name: string;
+  id: string;
+  placeholder: string;
+  value: string | number | boolean;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

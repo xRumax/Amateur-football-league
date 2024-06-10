@@ -12,6 +12,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(o
     token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        print('Decoded Token:', payload)  # Logowanie dekodowanego tokenu
         return payload
     except JWTError:
         raise HTTPException(
@@ -32,8 +33,6 @@ def verify_token(token: str):
         return payload
     except JWTError:
         raise Exception("Could not validate credentials")
-        
-
 
 def decode_token(token: str):
     try:
