@@ -1,0 +1,34 @@
+<div class="mat-elevation-z8">
+  <div class="search-bar">
+    <mat-form-field>
+      <mat-label>Szukaj</mat-label>
+      <input
+        matInput
+        (keyup)="applyFilter($event)"
+        placeholder="Wpisz aby wyszukać"
+      />
+    </mat-form-field>
+  </div>
+
+  <table mat-table [dataSource]="data" matSort class="mat-elevation-z8">
+    <!-- Header row definition -->
+    <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="{{ column.key }}">
+        {{ column.header }}
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{ getItemValue(row, column.key) }}
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+    <tr mat-row *matRowDef="let row; columns: getDisplayedColumns()"></tr>
+  </table>
+
+  <mat-paginator
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+  >
+  </mat-paginator>
+</div>
