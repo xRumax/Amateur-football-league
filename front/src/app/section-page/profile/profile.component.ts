@@ -3,8 +3,8 @@ import { UserService } from '../../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserResponse } from '../../services/user.service';
 import { SessionService } from '../../services/session.service';
-import { PopupComponent } from '../../components/popup/popup.component';
 import { PopupContentComponent } from '../../components/popup-content/popup-content.component';
+import { FormComponent } from '../../components/form/form.component';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -34,14 +34,15 @@ export class ProfileComponent {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(PopupContentComponent, {
-      width: '300px',
+      width: '600px',
+      height: '200px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {});
   }
 
   openEditDialog(): void {
-    const dialogRef = this.dialog.open(PopupComponent, {
+    const dialogRef = this.dialog.open(FormComponent, {
       data: { title: 'Edit Form', formType: 'user', data: { user: this.user } },
       height: '500px',
       width: '600px',

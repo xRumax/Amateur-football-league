@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { HttpClientModule } from '@angular/common/http';
-import { PopupModule } from './components/popup/popup.module';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { FormModule } from './components/form/form.module';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -37,8 +39,8 @@ import { TableModule } from './components/table/table.module';
     TeamsBaseComponent,
     TeamCreateComponent,
   ],
+  bootstrap: [AppComponent],
   imports: [
-    HttpClientModule,
     MatButtonModule,
     BrowserModule,
     AppRoutingModule,
@@ -53,9 +55,12 @@ import { TableModule } from './components/table/table.module';
     MatTableModule,
     TableModule,
     FormModule,
-    PopupModule,
   ],
-  providers: [provideAnimationsAsync(), TeamCreateComponent, ProfileComponent],
-  bootstrap: [AppComponent],
+  providers: [
+    provideAnimationsAsync(),
+    TeamCreateComponent,
+    ProfileComponent,
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
 })
 export class AppModule {}

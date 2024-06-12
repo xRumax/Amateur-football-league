@@ -11,4 +11,4 @@ class User(Base):
     password = Column(String)
     is_superuser = Column(Boolean, default=False)
     
-    team = relationship("Team", back_populates="creator")
+    team = relationship("Team", back_populates="creator", uselist=False)

@@ -11,7 +11,7 @@ describe('PopupContentComponent', () => {
       declarations: [PopupContentComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(PopupContentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

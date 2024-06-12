@@ -1,5 +1,5 @@
 <div class="form-container">
-  <form [formGroup]="form" (ngSubmit)="submitForm()">
+  <form [formGroup]="form">
     <div *ngFor="let field of fields">
       <mat-form-field appearance="fill">
         <mat-label>{{ field.placeholder }}</mat-label>
@@ -14,7 +14,8 @@
       </mat-form-field>
     </div>
     <div class="btn-con">
-      <button mat-button type="submit">Submit</button>
+      <button mat-button (click)="submitForm()">Submit</button>
+      <button mat-button (click)="cancel()">Cancel</button>
     </div>
   </form>
 </div>

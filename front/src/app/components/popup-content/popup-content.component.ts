@@ -1,3 +1,4 @@
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
@@ -7,13 +8,9 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrl: './popup-content.component.scss',
 })
 export class PopupContentComponent {
-  constructor(public dialogRef: MatDialogRef<PopupContentComponent>) {}
+  constructor(private dialogRef: MatDialogRef<PopupContentComponent>) {}
 
-  onYesClick(): void {
-    this.dialogRef.close(true);
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close(false);
+  cancel(): void {
+    this.dialogRef.close();
   }
 }

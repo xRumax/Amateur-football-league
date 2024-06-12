@@ -114,11 +114,7 @@ export class FormComponent implements OnInit {
     }
   }
 
-  cancelForm(): void {
-    if (this.dialogRef) {
-      this.dialogRef.close();
-    } else {
-      this.router.navigate(['/previous-route']);
-    }
+  cancel(): void {
+    this.dialogRef.close();
   }
 }

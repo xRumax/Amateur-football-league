@@ -22,5 +22,5 @@ class Team(Base):
     league = relationship("League", back_populates="teams")
 
     # Relacja do twórcy drużyny
-    creator = relationship("User", back_populates="team")
+    creator = relationship("User", back_populates="team", uselist=False)
     creator_id = Column(Integer, ForeignKey("users.id"))
