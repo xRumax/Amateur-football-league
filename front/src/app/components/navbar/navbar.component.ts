@@ -9,18 +9,14 @@ import { SessionService } from '../../services/session.service';
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
-  currentUrl: string = '';
-
   constructor(
     private authService: AuthService,
     private router: Router,
     private sessionService: SessionService
-  ) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.currentUrl = event.url;
-      }
-    });
+  ) {}
+
+  isActive(route: string): boolean {
+    return this.router.url.includes(route);
   }
 
   logout(): void {

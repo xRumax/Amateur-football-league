@@ -1,66 +1,45 @@
-import { Component, Inject } from '@angular/core';
 import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
-import { SessionService } from '../../services/session.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+  Component,
+  Inject,
+  AfterViewInit,
+  ViewChild,
+  ViewContainerRef,
+  ComponentFactoryResolver,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormComponent } from '../../components/form/form.component';
+
 @Component({
   selector: 'app-popup',
   templateUrl: './popup.component.html',
   styleUrls: ['./popup.component.scss'],
 })
-export class PopupComponent {
-  userId: string;
+export class PopupComponent implements AfterViewInit {
+  @ViewChild('dynamicContent', { read: ViewContainerRef })
+  dynamicContent!: ViewContainerRef;
 
   constructor(
-    private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<PopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private userService: UserService,
-    private authService: AuthService,
-    private sessionService: SessionService
-  ) {
-    if (!data || !data.userId) {
-      throw new Error('User ID is not provided');
-    }
-    this.userId = data.userId;
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngAfterViewInit(): void {
+    this.loadFormComponent();
+  }
+
+  loadFormComponent(): void {
+    const componentFactory =
+      this.componentFactoryResolver.resolveComponentFactory(FormComponent);
+    const componentRef = this.dynamicContent.createComponent(componentFactory);
+    componentRef.instance.formType = this.data.formType;
+    componentRef.instance.data = this.data.data;
+    this.cdr.detectChanges();
   }
 
   closeDialog(): void {
     this.dialogRef.close();
-  }
-
-  deleteAccount(): void {
-    const userId = this.sessionService.getUserId();
-
-    if (userId) {
-      this.userService
-        .deleteUser(userId)
-        .then(() => {
-          this.snackBar.open('User account deleted successfully', 'Close', {
-            duration: 5000,
-          });
-          this.authService.logout(); // Wyloguj użytkownika
-          this.sessionService.clearSession(); // Wyczyść sesję
-          setTimeout(() => {
-            window.location.href = '/login';
-          }, 2000); // Przekieruj użytkownika na stronę logowania
-        })
-        .catch((error) => {
-          console.error('Error deleting user account:', error);
-          this.snackBar.open('Server Error', 'Close', {
-            duration: 5000,
-          });
-        });
-    } else {
-      console.error('User ID not found');
-      this.snackBar.open('User ID not found', 'Close', {
-        duration: 5000,
-      });
-    }
   }
 }

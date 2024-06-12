@@ -12,6 +12,8 @@ import { LoginComponent } from './section-page/login/login.component';
 import { HomeComponent } from './section-page/home/home.component';
 import { ProfileComponent } from './section-page/profile/profile.component';
 import { RegisterComponent } from './section-page/register/register.component';
+import { TeamsBaseComponent } from './section-page/team/teams-base/teams-base.component';
+import { TeamCreateComponent } from './section-page/team/team-create/team-create.component';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -22,7 +24,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
-import { TeamsBaseComponent } from './section-page/teams-base/teams-base.component';
 import { TableModule } from './components/table/table.module';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { TableModule } from './components/table/table.module';
     ProfileComponent,
     RegisterComponent,
     TeamsBaseComponent,
+    TeamCreateComponent,
   ],
   imports: [
     HttpClientModule,
@@ -49,11 +51,11 @@ import { TableModule } from './components/table/table.module';
     MatCardModule,
     MatInputModule,
     MatTableModule,
-    PopupModule,
-    FormModule,
     TableModule,
+    FormModule,
+    PopupModule,
   ],
-  providers: [provideAnimationsAsync()],
+  providers: [provideAnimationsAsync(), TeamCreateComponent, ProfileComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

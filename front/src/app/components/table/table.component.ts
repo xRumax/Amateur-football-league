@@ -17,7 +17,6 @@ export class TableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private teamService: TeamService) {
-    console.log(this.teamService); // Sprawdź, czy teamService jest zdefiniowany
     this.columns = this.teamService.teamcolumns;
   }
 
@@ -25,7 +24,6 @@ export class TableComponent implements OnInit {
     this.teamService
       .getAllTeams()
       .then((teams: Team[]) => {
-        console.log('Fetched teams:', teams); // Loguj pobrane drużyny
         this.data = new MatTableDataSource<Team>(teams);
         this.data.paginator = this.paginator;
         this.data.sort = this.sort; // Dodaj tę linię

@@ -1,9 +1,11 @@
-<div class="main-container">
-  <div class="text-container">
-    <h2>Are you sure?</h2>
+<div>
+  <h1 mat-dialog-title>{{ data.title }}</h1>
+  <div mat-dialog-content>
+    <ng-container #dynamicContent></ng-container>
   </div>
-  <div class="btn-con">
-    <button mat-button class="Yes-button" (click)="deleteAccount()">Yes</button>
-    <button mat-button cdkFocusInitial (click)="closeDialog()">No</button>
+  <div mat-dialog-actions>
+    <button mat-button (click)="closeDialog()" class="button-with-margin">
+      Cancel
+    </button>
   </div>
 </div>

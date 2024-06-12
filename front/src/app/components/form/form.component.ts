@@ -1,8 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Optional, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserService, UserResponse } from '../../services/user.service';
-import { FormField } from '../../app.component';
+import { TeamService, Team } from '../../services/team.service';
+import { SessionService } from '../../services/session.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form',
@@ -10,59 +12,113 @@ import { FormField } from '../../app.component';
   styleUrls: ['./form.component.scss'],
 })
 export class FormComponent implements OnInit {
+  @Input() data: any;
+  @Input() formType!: 'user' | 'team';
+
   form: FormGroup;
-  fields: FormField[] = [];
-  userId: number;
+  fields: any[] = [];
   user: UserResponse | null = null;
+  team: Team | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    public dialogRef: MatDialogRef<FormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private sessionService: SessionService,
+    @Optional() public dialogRef: MatDialogRef<FormComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
+    private teamService: TeamService,
+    private router: Router
   ) {
     this.form = this.formBuilder.group({});
-    this.userId = data.user.userId; // get userId from the data
+    if (dialogData) {
+      this.formType = dialogData.formType;
+      this.data = dialogData.data;
+    }
   }
 
-  ngOnInit(): void {
-    this.userService.getUserId().then((data) => {
-      const userId = data.user_id; // Get the user id
+  async ngOnInit(): Promise<void> {
+    this.form = new FormGroup({});
 
-      // Now make another request to get the full user data
-      this.userService.getUser(userId).then((userData) => {
-        this.user = userData; // Assign the user data to this.user
+    if (this.formType === 'team') {
+      this.fields = this.teamService.generateTeamFields();
+      this.fields = this.fields.filter(
+        (field) => field.name === 'name' || field.name === 'league_id'
+      );
+    } else if (this.formType === 'user') {
+      if (this.data) {
+        this.user = this.data.user;
+        if (this.user !== null) {
+          this.fields = this.userService.generateUserFields(this.user);
+          this.addFormControls();
+          this.setFormValues(this.user);
+        }
+      } else {
+        const userId = this.sessionService.getUserId();
+        if (userId !== null) {
+          const user = await this.userService.getUser(+userId);
+          if (user !== null) {
+            this.fields = this.userService.generateUserFields(user);
+            this.addFormControls();
+            this.setFormValues(user);
+          }
+        }
+      }
+    }
 
-        // Generate form fields
-        this.fields = this.userService.generateUserFields(this.user);
-        this.fields.forEach((field) => {
-          this.form.addControl(field.name, new FormControl(field.value));
-        });
+    if (this.formType === 'team') {
+      this.addFormControls(); // Add controls for team form as well
+    }
+  }
 
-        // Add a control for the show password checkbox
-        this.form.addControl('showPassword', new FormControl(false));
-      });
+  addFormControls(): void {
+    this.fields.forEach((field) => {
+      if (!this.form.contains(field.name)) {
+        this.form.addControl(field.name, new FormControl(''));
+      }
     });
   }
 
-  closeDialog(): void {
-    this.dialogRef.close();
+  setFormValues(user: UserResponse): void {
+    this.form.patchValue({
+      username: user.username,
+      email: user.email,
+      // password: user.password, // Usually, you don't pre-fill the password for security reasons
+    });
   }
 
   submitForm(): void {
     if (this.form.valid) {
-      if (this.user) {
-        this.userService
-          .updateUser(this.user.id, this.form.value)
-          .then((response) => {})
+      if (this.formType === 'user') {
+        if (this.user) {
+          this.userService
+            .updateUser(this.user.id, this.form.value)
+            .then((response) => {
+              // Handle user update response
+            })
+            .catch((error) => {
+              console.error('Error updating user:', error);
+            });
+        }
+      } else if (this.formType === 'team') {
+        this.teamService
+          .createTeam(this.form.value)
+          .then((response) => {
+            // Handle team creation response
+          })
           .catch((error) => {
-            console.error('Error updating user:', error);
+            console.error('Error creating team:', error);
           });
-      } else {
-        console.error('User is null');
       }
     } else {
       console.error('Form is not valid');
+    }
+  }
+
+  cancelForm(): void {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    } else {
+      this.router.navigate(['/previous-route']);
     }
   }
 }

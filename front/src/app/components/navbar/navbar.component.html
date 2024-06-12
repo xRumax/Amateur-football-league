@@ -5,7 +5,7 @@
       <li>
         <a
           routerLink="/home"
-          [class.active]="currentUrl.includes('/home')"
+          [class.active]="isActive('/home')"
           routerLinkActive="active"
           >Home</a
         >
@@ -13,7 +13,7 @@
       <li *ngIf="isLoggedIn">
         <a
           routerLink="/profile"
-          [class.active]="currentUrl.includes('/profile')"
+          [class.active]="isActive('/profile')"
           routerLinkActive="active"
           >Profile</a
         >
@@ -21,16 +21,61 @@
       <li class="dropdown">
         <a
           routerLink="/teams-base"
-          [class.active]="currentUrl.includes('/team')"
+          [class.active]="
+            isActive('/team') ||
+            isActive('/teams-base') ||
+            isActive('/my-team') ||
+            isActive('/team-create')
+          "
           routerLinkActive="active"
-          >Teams</a
+          ><div
+            [ngClass]="{
+              'active-link':
+                isActive('/team') ||
+                isActive('/teams-base') ||
+                isActive('/my-team') ||
+                isActive('/team-create')
+            }"
+          >
+            Teams
+          </div></a
         >
         <div class="nav-bar-submenu-block">
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
-              <li *ngIf="isLoggedIn"><a routerLink="/teams">Create Team</a></li>
-              <li><a routerLink="/teams-base">Teams Base</a></li>
-              <li *ngIf="isLoggedIn"><a routerLink="/teams">My Team</a></li>
+              <li *ngIf="isLoggedIn">
+                <a routerLink="/team-create"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/team-create')
+                    }"
+                  >
+                    Create Team
+                  </div></a
+                >
+              </li>
+              <li>
+                <a routerLink="/teams-base"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/teams-base')
+                    }"
+                  >
+                    Teams Base
+                  </div></a
+                >
+              </li>
+              <li *ngIf="isLoggedIn">
+                <a routerLink="/my-team"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/my-team')
+                    }"
+                  >
+                    My Team
+                  </div></a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -38,7 +83,7 @@
       <li>
         <a
           routerLink="/matches"
-          [class.active]="currentUrl.includes('/matches')"
+          [class.active]="isActive('/matches')"
           routerLinkActive="active"
           >Matches</a
         >
@@ -46,7 +91,7 @@
       <li class="dropdown">
         <a
           routerLink="/players"
-          [class.active]="currentUrl.includes('/players')"
+          [class.active]="isActive('/players')"
           routerLinkActive="active"
           >Players</a
         >
@@ -64,7 +109,7 @@
       <li class="dropdown">
         <a
           routerLink="/tournament"
-          [class.active]="currentUrl.includes('/tournament')"
+          [class.active]="isActive('/tournament')"
           routerLinkActive="active"
           >Tournament</a
         >

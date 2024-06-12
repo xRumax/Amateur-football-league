@@ -2,14 +2,13 @@ import { Component } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserResponse } from '../../services/user.service';
-import { FormComponent } from '../../components/form/form.component';
 import { SessionService } from '../../services/session.service';
 import { PopupComponent } from '../../components/popup/popup.component';
-
+import { PopupContentComponent } from '../../components/popup-content/popup-content.component';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss',
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent {
   displayedColumns: string[] = ['login', 'email', 'password', 'isAdmin'];
@@ -32,19 +31,18 @@ export class ProfileComponent {
       });
     });
   }
+
   openDialog(): void {
-    if (this.user) {
-      const dialogRef = this.dialog.open(PopupComponent, {
-        data: { user: this.user, userId: this.user.id },
-        height: '500px',
-        width: '600px',
-      });
-    }
+    const dialogRef = this.dialog.open(PopupContentComponent, {
+      width: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   openEditDialog(): void {
-    const dialogRef = this.dialog.open(FormComponent, {
-      data: { user: this.user },
+    const dialogRef = this.dialog.open(PopupComponent, {
+      data: { title: 'Edit Form', formType: 'user', data: { user: this.user } },
       height: '500px',
       width: '600px',
     });

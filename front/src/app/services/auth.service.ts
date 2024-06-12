@@ -22,6 +22,8 @@ export class AuthService {
             this.isUserLoggedIn = true;
             localStorage.setItem('isLoggedIn', 'true'); // Set the login state
             localStorage.setItem('access_token', response.data.access_token); // Save the JWT to localStorage
+
+
             axios
               .get('http://127.0.0.1:8000/users/me', {
                 headers: {
