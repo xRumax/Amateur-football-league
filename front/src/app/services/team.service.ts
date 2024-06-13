@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Environment } from '../../environments/environment';
 import { FormField } from '../app.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { League } from './league.service';
 export interface Team {
   id: number;
   name: string;
@@ -23,7 +24,7 @@ export interface TeamColumns {
 export class TeamService {
   constructor(private envService: Environment, private snackBar: MatSnackBar) {}
 
-  generateTeamFields(): FormField[] {
+  generateTeamFields(leagues: League[]): FormField[] {
     return [
       {
         type: 'number',
@@ -54,11 +55,15 @@ export class TeamService {
         value: '',
       },
       {
-        type: 'number',
+        type: 'select',
         name: 'league_id',
         id: 'league_id',
-        placeholder: 'League ID',
+        placeholder: 'League',
         value: '',
+        options: leagues.map((league) => ({
+          label: league.name,
+          value: league.id,
+        })),
       },
       {
         type: 'number',

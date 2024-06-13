@@ -7,6 +7,7 @@ export interface FormField {
   id: string;
   placeholder: string;
   value: string | number | boolean;
+  options?: { label: string; value: number }[];
 }
 
 @Component({

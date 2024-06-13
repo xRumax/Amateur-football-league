@@ -27,8 +27,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { TableModule } from './components/table/table.module';
-import { MatOption } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { FormFieldComponent } from './components/form-field/form-field.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { MatSelect } from '@angular/material/select';
     RegisterComponent,
     TeamsBaseComponent,
     TeamCreateComponent,
+    FormFieldComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -57,8 +59,8 @@ import { MatSelect } from '@angular/material/select';
     MatTableModule,
     TableModule,
     FormModule,
-    MatOption,
-    MatSelect,
+    MatOptionModule,
+    MatSelectModule,
   ],
   providers: [
     provideAnimationsAsync(),
