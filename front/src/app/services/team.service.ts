@@ -9,6 +9,7 @@ export interface Team {
   matches_played: number;
   league_id: number;
   creator_id: number;
+  league_name?: string;
 }
 
 export interface TeamColumns {
@@ -47,6 +48,13 @@ export class TeamService {
       },
       {
         type: 'number',
+        name: 'league_name',
+        id: 'league_name',
+        placeholder: 'League Name',
+        value: '',
+      },
+      {
+        type: 'number',
         name: 'league_id',
         id: 'league_id',
         placeholder: 'League ID',
@@ -66,7 +74,7 @@ export class TeamService {
     { key: 'id', header: 'ID' },
     { key: 'name', header: 'Name' },
     { key: 'matches_played', header: 'Matches Played' },
-    { key: 'league_id', header: 'League ID' },
+    { key: 'league_name', header: 'League Name' },
     { key: 'creator_id', header: 'Creator ID' },
   ];
 
@@ -98,6 +106,19 @@ export class TeamService {
     return new Promise((resolve, reject) => {
       axios
         .get(`${this.envService.base_url}/teams`)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  getTeam(teamId: string): Promise<Team> {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${this.envService.base_url}/teams/${teamId}`)
         .then((response) => {
           resolve(response.data);
         })

@@ -3,14 +3,26 @@
     <div *ngFor="let field of fields">
       <mat-form-field appearance="fill">
         <mat-label>{{ field.placeholder }}</mat-label>
-        <input
-          matInput
-          [type]="field.type"
-          [placeholder]="field.placeholder"
-          [id]="field.id"
-          [formControlName]="field.name"
-          required
-        />
+        <ng-container *ngIf="field.type === 'select'; else inputField">
+          <mat-select [formControlName]="field.name" required>
+            <mat-option
+              *ngFor="let option of field.options"
+              [value]="option.value"
+            >
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </ng-container>
+        <ng-template #inputField>
+          <input
+            matInput
+            [type]="field.type"
+            [placeholder]="field.placeholder"
+            [id]="field.id"
+            [formControlName]="field.name"
+            required
+          />
+        </ng-template>
       </mat-form-field>
     </div>
     <div class="btn-con">

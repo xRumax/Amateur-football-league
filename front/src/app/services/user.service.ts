@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormField } from '../app.component';
+import { Environment } from '../../environments/environment';
 
 export interface UserResponse {
   id: number;
@@ -15,7 +16,7 @@ export interface UserResponse {
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar, private envService: Environment) {}
 
   generateUserFields(user: UserResponse): FormField[] {
     return [
@@ -36,11 +37,25 @@ export class UserService {
     ];
   }
 
+  async getUserDataAndFields(): Promise<{ user: UserResponse; fields: any[] }> {
+    const data = await this.getUserId();
+    const userId = data.user_id; // Get the user id
+    // Request to get user data
+    const user = await this.getUser(userId);
+
+    let fields: any[] = [];
+    if (user !== null) {
+      fields = this.generateUserFields(user);
+    }
+
+    return { user, fields };
+  }
+
   getUser(userId: number): Promise<UserResponse> {
     return new Promise((resolve, reject) => {
-      const token = localStorage.getItem('access_token'); // Get the token from sessionStorage
+      const token = localStorage.getItem('access_token'); // Get the token from localStorage
       axios
-        .get(`http://127.0.0.1:8000/users/${userId}/`, {
+        .get(`${this.envService.base_url}/users/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -57,7 +72,7 @@ export class UserService {
   getAllUsers(): Promise<any> {
     return new Promise((resolve, reject) => {
       axios
-        .get('http://127.0.0.1:8000/users/')
+        .get(`${this.envService.base_url}/users`)
         .then((response) => {
           resolve(response.data);
         })
@@ -71,7 +86,7 @@ export class UserService {
     return new Promise((resolve, reject) => {
       const token = localStorage.getItem('access_token'); // Get the token from localStorage
       axios
-        .get('http://127.0.0.1:8000/users/me/', {
+        .get(`${this.envService.base_url}/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -87,11 +102,11 @@ export class UserService {
 
   getUpdateForm(userId: number): Promise<FormField[]> {
     return axios
-      .get(`http://127.0.0.1:8000/users/${userId}/`)
+      .get(`${this.envService.base_url}/users/${userId}`)
       .then((response) => {
         const userData = response.data.data;
 
-        // Dynamiczne generowanie pól formularza
+        // Generate dynamic date fields
         return Object.keys(userData).map((key) => ({
           type: typeof userData[key] === 'number' ? 'number' : 'text',
           name: key,
@@ -110,7 +125,7 @@ export class UserService {
     return new Promise((resolve, reject) => {
       const token = localStorage.getItem('access_token');
       axios
-        .put(`http://127.0.0.1:8000/users/${userId}/`, data, {
+        .put(`${this.envService.base_url}/users/${userId}/`, data, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -136,7 +151,7 @@ export class UserService {
   deleteUser(userId: string): Promise<any> {
     return new Promise((resolve, reject) => {
       axios
-        .delete(`http://127.0.0.1:8000/users/${userId}`)
+        .delete(`${this.envService.base_url}/users/${userId}`)
         .then((response) => {
           setTimeout(() => {
             resolve(response.data);

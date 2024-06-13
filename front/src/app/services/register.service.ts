@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import { Environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RegisterService {
-  private registerUrl = 'http://127.0.0.1:8000/users/';
+  constructor(private envService: Environment) {}
 
   register(
     username: string,
@@ -14,6 +15,6 @@ export class RegisterService {
     confirmPassword: string
   ) {
     const user = { username, email, password, confirmPassword };
-    return axios.post(this.registerUrl, user);
+    return axios.post(this.envService.registerUrl, user);
   }
 }

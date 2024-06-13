@@ -1,4 +1,3 @@
-import { DialogRef } from '@angular/cdk/dialog';
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 

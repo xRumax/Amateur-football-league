@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { Observable } from 'rxjs';
+import { Environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -8,12 +9,12 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private isUserLoggedIn: boolean = false;
 
-  constructor() {}
+  constructor(private envService: Environment) {}
 
   login(email: string, password: string): Observable<any> {
     return new Observable((observer) => {
       axios
-        .post('http://127.0.0.1:8000/users/login', {
+        .post(`${this.envService.base_url}/users/login`, {
           email,
           password,
         })
@@ -23,9 +24,8 @@ export class AuthService {
             localStorage.setItem('isLoggedIn', 'true'); // Set the login state
             localStorage.setItem('access_token', response.data.access_token); // Save the JWT to localStorage
 
-
             axios
-              .get('http://127.0.0.1:8000/users/me', {
+              .get(`${this.envService.base_url}/users/me`, {
                 headers: {
                   Authorization: `Bearer ${response.data.access_token}`,
                 },

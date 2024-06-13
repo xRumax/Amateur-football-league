@@ -27,6 +27,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { TableModule } from './components/table/table.module';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -55,6 +57,8 @@ import { TableModule } from './components/table/table.module';
     MatTableModule,
     TableModule,
     FormModule,
+    MatOption,
+    MatSelect,
   ],
   providers: [
     provideAnimationsAsync(),

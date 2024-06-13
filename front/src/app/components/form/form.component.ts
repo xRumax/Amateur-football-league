@@ -2,9 +2,7 @@ import { Component, OnInit, Input, Optional, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { UserService, UserResponse } from '../../services/user.service';
 import { TeamService, Team } from '../../services/team.service';
-import { SessionService } from '../../services/session.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form',
@@ -19,16 +17,14 @@ export class FormComponent implements OnInit {
   fields: any[] = [];
   user: UserResponse | null = null;
   team: Team | null = null;
-
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private sessionService: SessionService,
     @Optional() public dialogRef: MatDialogRef<FormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
-    private teamService: TeamService,
-    private router: Router
+    private teamService: TeamService
   ) {
+    const group: { [key: string]: FormControl } = {};
     this.form = this.formBuilder.group({});
     if (dialogData) {
       this.formType = dialogData.formType;
@@ -37,53 +33,32 @@ export class FormComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.form = new FormGroup({});
+    if (this.formType === 'user') {
+      const { user, fields } = await this.userService.getUserDataAndFields();
+      this.user = user;
+      this.fields = fields;
 
+      if (this.user !== null) {
+        this.fields = this.userService.generateUserFields(this.user);
+        const group: { [key: string]: FormControl } = {};
+        this.fields.forEach((field) => {
+          group[field.name] = new FormControl(field.value || '');
+        });
+        this.form = new FormGroup(group);
+      }
+    }
     if (this.formType === 'team') {
       this.fields = this.teamService.generateTeamFields();
       this.fields = this.fields.filter(
         (field) => field.name === 'name' || field.name === 'league_id'
       );
-    } else if (this.formType === 'user') {
-      if (this.data) {
-        this.user = this.data.user;
-        if (this.user !== null) {
-          this.fields = this.userService.generateUserFields(this.user);
-          this.addFormControls();
-          this.setFormValues(this.user);
-        }
-      } else {
-        const userId = this.sessionService.getUserId();
-        if (userId !== null) {
-          const user = await this.userService.getUser(+userId);
-          if (user !== null) {
-            this.fields = this.userService.generateUserFields(user);
-            this.addFormControls();
-            this.setFormValues(user);
-          }
-        }
-      }
+
+      let group: Record<string, any> = {}; // Declare the type for group
+      this.fields.forEach((field) => {
+        group[field.name] = new FormControl(field.value || '');
+      });
+      this.form = new FormGroup(group);
     }
-
-    if (this.formType === 'team') {
-      this.addFormControls(); // Add controls for team form as well
-    }
-  }
-
-  addFormControls(): void {
-    this.fields.forEach((field) => {
-      if (!this.form.contains(field.name)) {
-        this.form.addControl(field.name, new FormControl(''));
-      }
-    });
-  }
-
-  setFormValues(user: UserResponse): void {
-    this.form.patchValue({
-      username: user.username,
-      email: user.email,
-      // password: user.password, // Usually, you don't pre-fill the password for security reasons
-    });
   }
 
   submitForm(): void {

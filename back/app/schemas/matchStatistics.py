@@ -1,67 +1,43 @@
 from pydantic import BaseModel
 
 class MatchStatisticsBase(BaseModel):
-# Drużyna pierwsza
-    home_shots: int
-    home_shots_on_target: int
-    home_possession: int
-    home_passes: int
-    home_pass_accuarcy: int
-    home_fouls: int
-    home_yellow_cards: int
-    home_red_cards: int
-    home_offsides: int
-    home_corners: int
-
-
-# Drużyna druga
-    away_shots: int
-    away_shots_on_target: int
-    away_possession: int
-    away_passes: int
-    away_pass_accuarcy: int
-    away_fouls: int
-    away_yellow_cards: int
-    away_red_cards: int
-    away_offsides: int
-    away_corners: int
+    goals_scored : int
+    shots: int
+    shots_on_target: int
+    possession : int
+    passes : int
+    pass_accuracy : int
+    fouls : int
+    yellow_cards : int
+    red_cards : int
+    offsides : int
+    corners : int
 
 
 class MatchStatisticsCreate(MatchStatisticsBase):
-    pass
+    match_id: int
+    team_id: int
 
 class MatchStatisticsUpdate(MatchStatisticsBase):
-    pass
+    match_id: int
+    team_id: int
 
 class MatchStatistics(BaseModel):
     id: int
 
-# Drużyna pierwsza   
-    home_shots: int
-    home_shots_on_target: int
-    home_possession: int
-    home_passes: int
-    home_pass_accuarcy: int
-    home_fouls: int
-    home_yellow_cards: int
-    home_red_cards: int
-    home_offsides: int
-    home_corners: int
-
-
-# Drużyna druga
-    away_shots: int
-    away_shots_on_target: int
-    away_possession: int
-    away_passes: int
-    away_pass_accuarcy: int
-    away_fouls: int
-    away_yellow_cards: int
-    away_red_cards: int
-    away_offsides: int
-    away_corners: int
+    goals_scored : int
+    shots: int
+    shots_on_target: int
+    possession : int
+    passes : int
+    pass_accuracy : int
+    fouls : int
+    yellow_cards : int
+    red_cards : int
+    offsides : int
+    corners : int
 
     match_id: int
-
+    team_id: int
     class Config:
         from_attributes = True

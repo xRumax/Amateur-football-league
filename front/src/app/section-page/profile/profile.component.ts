@@ -2,34 +2,23 @@ import { Component } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserResponse } from '../../services/user.service';
-import { SessionService } from '../../services/session.service';
 import { PopupContentComponent } from '../../components/popup-content/popup-content.component';
 import { FormComponent } from '../../components/form/form.component';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent {
-  displayedColumns: string[] = ['login', 'email', 'password', 'isAdmin'];
-
+  fields: any[] = [];
   user: UserResponse | null = null;
 
-  constructor(
-    private userService: UserService,
-    private dialog: MatDialog,
-    private sessionService: SessionService
-  ) {}
-
-  ngOnInit(): void {
-    this.userService.getUserId().then((data) => {
-      const userId = data.user_id; // Get the user id
-
-      // Now make another request to get the full user data
-      this.userService.getUser(userId).then((userData) => {
-        this.user = userData; // Assign the user data to this.user
-      });
-    });
+  constructor(private userService: UserService, private dialog: MatDialog) {}
+  async ngOnInit(): Promise<void> {
+    const { user, fields } = await this.userService.getUserDataAndFields();
+    this.user = user;
+    this.fields = fields;
   }
 
   openDialog(): void {
@@ -43,7 +32,11 @@ export class ProfileComponent {
 
   openEditDialog(): void {
     const dialogRef = this.dialog.open(FormComponent, {
-      data: { title: 'Edit Form', formType: 'user', data: { user: this.user } },
+      data: {
+        title: 'Edit Form',
+        formType: 'user',
+        data: { fields: this.fields },
+      },
       height: '500px',
       width: '600px',
     });
