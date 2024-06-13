@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { UserService, UserResponse } from '../../services/user.service';
 import { TeamService, Team } from '../../services/team.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { LeagueService, League } from '../../services/league.service';
 
 @Component({
   selector: 'app-form',
@@ -17,9 +18,12 @@ export class FormComponent implements OnInit {
   fields: any[] = [];
   user: UserResponse | null = null;
   team: Team | null = null;
+  leagues: League[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private leagueService: LeagueService,
     @Optional() public dialogRef: MatDialogRef<FormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private teamService: TeamService
@@ -48,7 +52,10 @@ export class FormComponent implements OnInit {
       }
     }
     if (this.formType === 'team') {
-      this.fields = this.teamService.generateTeamFields();
+      // Fetch the leagues
+      this.leagues = await this.leagueService.getLeagues();
+
+      this.fields = this.teamService.generateTeamFields(this.leagues);
       this.fields = this.fields.filter(
         (field) => field.name === 'name' || field.name === 'league_id'
       );

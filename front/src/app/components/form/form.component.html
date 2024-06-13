@@ -3,8 +3,12 @@
     <div *ngFor="let field of fields">
       <mat-form-field appearance="fill">
         <mat-label>{{ field.placeholder }}</mat-label>
-        <ng-container *ngIf="field.type === 'select'; else inputField">
-          <mat-select [formControlName]="field.name" required>
+        <ng-container [ngSwitch]="field.type">
+          <mat-select
+            *ngSwitchCase="'select'"
+            [formControlName]="field.name"
+            required
+          >
             <mat-option
               *ngFor="let option of field.options"
               [value]="option.value"
@@ -12,9 +16,8 @@
               {{ option.label }}
             </mat-option>
           </mat-select>
-        </ng-container>
-        <ng-template #inputField>
           <input
+            *ngSwitchDefault
             matInput
             [type]="field.type"
             [placeholder]="field.placeholder"
@@ -22,12 +25,12 @@
             [formControlName]="field.name"
             required
           />
-        </ng-template>
+        </ng-container>
       </mat-form-field>
     </div>
     <div class="btn-con">
-      <button mat-button (click)="submitForm()">Submit</button>
-      <button mat-button (click)="cancel()">Cancel</button>
+      <button mat-button type="submit">Submit</button>
+      <button mat-button type="button" (click)="cancel()">Cancel</button>
     </div>
   </form>
 </div>
