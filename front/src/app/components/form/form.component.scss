@@ -5,6 +5,13 @@
   align-items: center;
   height: 100%;
   width: 100%;
+
+  .header {
+    position: absolute;
+    top: 10px;
+    font-size: 30px;
+    padding: 2rem;
+  }
 }
 
 .btn-con {

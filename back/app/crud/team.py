@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.schemas.team import TeamCreate, TeamUpdate
 from app.models import team as models
-
+from sqlalchemy.orm import joinedload
 
 def create_team(db: Session, team: TeamCreate, creator_id: str):
     db_team = models.Team(creator_id = creator_id, **team.dict())
@@ -14,7 +14,7 @@ def get_all_teams(db: Session):
     return db.query(models.Team).all()
 
 def get_team(db: Session, team_id: int):
-    return db.query(models.Team).filter(models.Team.id == team_id).first()
+    return db.query(models.Team).options(joinedload(models.Team.statics)).filter(models.Team.id == team_id).first()
 
 def update_team(db: Session, team: TeamUpdate, team_id: int):
     db.query(models.Team).filter(models.Team.id == team_id).update(team.dict())

@@ -23,7 +23,7 @@ export class ProfileComponent {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(PopupContentComponent, {
-      width: '600px',
+      width: '700px',
       height: '200px',
     });
 

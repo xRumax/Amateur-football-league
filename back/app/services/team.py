@@ -3,6 +3,8 @@ from app.models import team as models
 from app.crud.team import create_team, get_all_teams, get_team, update_team, delete_team
 from sqlalchemy.orm import Session
 from typing import Optional
+from sqlalchemy import select
+from app.models.team import Team
 
 class TeamService:
     def __init__(self, db: Session):
@@ -22,3 +24,8 @@ class TeamService:
 
     def delete_team(self, team_id: int) -> Optional[models.Team]:
         return delete_team(self.db, team_id)
+
+    def get_team_by_user_id(self, user_id: str) -> Optional[models.Team]:
+        stmt = select(Team).where(Team.creator_id == user_id)
+        result = self.db.execute(stmt)
+        return result.scalars().first()

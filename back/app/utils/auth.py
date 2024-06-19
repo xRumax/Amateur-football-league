@@ -1,9 +1,9 @@
 from jose import jwt, JWTError
-from datetime import datetime
+from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from fastapi import HTTPException, status, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from app.settings import SECRET_KEY, TOKEN_EXPIRATION, ALGORITHM
+from app.settings import SECRET_KEY, TOKEN_EXPIRATION, ALGORITHM, REFRESH_TOKEN_EXPIRE_DAYS
 
 
 oauth2_scheme = HTTPBearer()
@@ -27,12 +27,16 @@ def create_access_token(user_id: int) -> str:
     }
     return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
+
 def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except JWTError:
-        raise Exception("Could not validate credentials")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials",
+        )
 
 def decode_token(token: str):
     try:
@@ -42,7 +46,6 @@ def decode_token(token: str):
         return None
     except jwt.InvalidTokenError:
         return None
-
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

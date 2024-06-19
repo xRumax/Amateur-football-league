@@ -1,5 +1,6 @@
 <div class="form-container">
-  <form [formGroup]="form">
+  <h1 *ngIf="formType === 'user'" class="header">Edit Profile</h1>
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
     <div *ngFor="let field of fields">
       <mat-form-field appearance="fill">
         <mat-label>{{ field.placeholder }}</mat-label>
@@ -30,7 +31,14 @@
     </div>
     <div class="btn-con">
       <button mat-button type="submit">Submit</button>
-      <button mat-button type="button" (click)="cancel()">Cancel</button>
+      <button
+        mat-button
+        type="button"
+        *ngIf="formType !== 'team'"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
     </div>
   </form>
 </div>

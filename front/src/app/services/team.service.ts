@@ -4,6 +4,7 @@ import { Environment } from '../../environments/environment';
 import { FormField } from '../app.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { League } from './league.service';
+import { SessionService } from './session.service';
 export interface Team {
   id: number;
   name: string;
@@ -22,7 +23,11 @@ export interface TeamColumns {
   providedIn: 'root',
 })
 export class TeamService {
-  constructor(private envService: Environment, private snackBar: MatSnackBar) {}
+  constructor(
+    private envService: Environment,
+    private snackBar: MatSnackBar,
+    private sessionService: SessionService
+  ) {}
 
   generateTeamFields(leagues: League[]): FormField[] {
     return [
@@ -84,7 +89,7 @@ export class TeamService {
   ];
 
   createTeam(team: Team): Promise<Team> {
-    const token = localStorage.getItem('access_token');
+    const token = this.sessionService.getToken();
 
     return axios
       .post(`${this.envService.base_url}/teams`, team, {
@@ -102,11 +107,16 @@ export class TeamService {
         return response.data;
       })
       .catch((error) => {
-        console.error('Error creating team:', error);
+        if (error.response && error.response.status === 400) {
+          this.snackBar.open('You already have a team', 'Close', {
+            duration: 5000,
+          });
+        } else {
+          console.error('Error creating team:', error);
+        }
         throw error;
       });
   }
-
   getAllTeams(): Promise<Team[]> {
     return new Promise((resolve, reject) => {
       axios
@@ -131,5 +141,10 @@ export class TeamService {
           reject(error);
         });
     });
+  }
+
+  async teamExists(name: string): Promise<boolean> {
+    const teams = await this.getAllTeams();
+    return teams.some((team) => team.name === name);
   }
 }

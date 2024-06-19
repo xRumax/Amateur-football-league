@@ -1,14 +1,16 @@
-.btn-change-pass {
+.main-container {
   display: flex;
   justify-content: center;
-  flex-direction: row;
-  p {
-    padding-right: 100px;
-  }
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 .btn-con {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  margin: 1.5rem;
+
+  .yes-btn {
+    color: rgb(255, 0, 0);
+  }
 }

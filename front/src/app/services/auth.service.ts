@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { Observable } from 'rxjs';
 import { Environment } from '../../environments/environment';
+import { SessionService } from './session.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +11,11 @@ import { Environment } from '../../environments/environment';
 export class AuthService {
   private isUserLoggedIn: boolean = false;
 
-  constructor(private envService: Environment) {}
+  constructor(
+    private envService: Environment,
+    private sessionService: SessionService,
+    private router: Router
+  ) {}
 
   login(email: string, password: string): Observable<any> {
     return new Observable((observer) => {
@@ -59,5 +65,7 @@ export class AuthService {
   logout(): void {
     this.isUserLoggedIn = false;
     localStorage.setItem('isLoggedIn', 'false');
+    this.sessionService.clearSession();
+    this.router.navigate(['/login']);
   }
 }

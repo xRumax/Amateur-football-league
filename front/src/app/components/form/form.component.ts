@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Optional, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { UserService, UserResponse } from '../../services/user.service';
-import { TeamService, Team } from '../../services/team.service';
+import { TeamService } from '../../services/team.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LeagueService, League } from '../../services/league.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-form',
@@ -17,7 +18,6 @@ export class FormComponent implements OnInit {
   form: FormGroup;
   fields: any[] = [];
   user: UserResponse | null = null;
-  team: Team | null = null;
   leagues: League[] = [];
 
   constructor(
@@ -26,9 +26,9 @@ export class FormComponent implements OnInit {
     private leagueService: LeagueService,
     @Optional() public dialogRef: MatDialogRef<FormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
-    private teamService: TeamService
+    private teamService: TeamService,
+    private snackBar: MatSnackBar
   ) {
-    const group: { [key: string]: FormControl } = {};
     this.form = this.formBuilder.group({});
     if (dialogData) {
       this.formType = dialogData.formType;
@@ -41,58 +41,43 @@ export class FormComponent implements OnInit {
       const { user, fields } = await this.userService.getUserDataAndFields();
       this.user = user;
       this.fields = fields;
-
-      if (this.user !== null) {
-        this.fields = this.userService.generateUserFields(this.user);
-        const group: { [key: string]: FormControl } = {};
-        this.fields.forEach((field) => {
-          group[field.name] = new FormControl(field.value || '');
-        });
-        this.form = new FormGroup(group);
-      }
+      this.initializeForm(this.fields);
     }
     if (this.formType === 'team') {
-      // Fetch the leagues
       this.leagues = await this.leagueService.getLeagues();
-
       this.fields = this.teamService.generateTeamFields(this.leagues);
       this.fields = this.fields.filter(
         (field) => field.name === 'name' || field.name === 'league_id'
       );
-
-      let group: Record<string, any> = {}; // Declare the type for group
-      this.fields.forEach((field) => {
-        group[field.name] = new FormControl(field.value || '');
-      });
-      this.form = new FormGroup(group);
+      this.initializeForm(this.fields);
     }
   }
 
-  submitForm(): void {
+  initializeForm(fields: any[]): void {
+    let group: Record<string, any> = {};
+    fields.forEach((field) => {
+      group[field.name] = new FormControl(field.value || '');
+    });
+    this.form = new FormGroup(group);
+  }
+
+  async submitForm(): Promise<void> {
     if (this.form.valid) {
       if (this.formType === 'user') {
-        if (this.user) {
-          this.userService
-            .updateUser(this.user.id, this.form.value)
-            .then((response) => {
-              // Handle user update response
-            })
-            .catch((error) => {
-              console.error('Error updating user:', error);
-            });
-        }
+        this.user && this.userService.updateUser(this.user.id, this.form.value);
       } else if (this.formType === 'team') {
-        this.teamService
-          .createTeam(this.form.value)
-          .then((response) => {
-            // Handle team creation response
-          })
-          .catch((error) => {
-            console.error('Error creating team:', error);
+        const teamName = this.form.value.name;
+        const teamExists = await this.teamService.teamExists(teamName);
+        if (teamExists) {
+          this.snackBar.open('Team already exist', 'Close', {
+            duration: 2000,
           });
+          return;
+        }
+        this.teamService.createTeam(this.form.value);
+      } else {
+        console.error('Form is not valid');
       }
-    } else {
-      console.error('Form is not valid');
     }
   }
 

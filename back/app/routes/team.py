@@ -12,7 +12,15 @@ def create_team(team: TeamCreate, db: Session = Depends(get_db), current_user: s
     if 'user_id' not in current_user:
         raise HTTPException(status_code=400, detail="User ID not found")
     team_service = TeamService(db)
+
+    # Sprawdź, czy użytkownik już posiada drużynę
+    existing_team = team_service.get_team_by_user_id(current_user['user_id'])
+    if existing_team is not None:
+        raise HTTPException(status_code=400, detail="Posiadasz już drużynę")
+
+    # Jeśli użytkownik nie posiada drużyny, stwórz nową
     return team_service.create_team(team, creator_id=current_user['user_id'])
+
 
 @router.get("/", response_model=list[Team])
 def read_teams(db: Session = Depends(get_db)):
