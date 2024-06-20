@@ -7,7 +7,7 @@ class TeamBase(BaseModel):
 
 class TeamCreate(TeamBase):
     league_id: int
-
+    logo: Optional[str] = None
 
 class TeamUpdate(TeamBase):
     league_id: int
@@ -21,6 +21,7 @@ class Team(BaseModel):
     statics: Optional[List[PlayerStats]] = None
     league_id: int
     creator_id: int
+    logo: Optional[str] = None
 
     class Config:
         from_attributes = True

@@ -1,16 +1,25 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File
 from sqlalchemy.orm import Session
 from app.schemas.team import TeamCreate, TeamUpdate, Team
 from app.services.team import TeamService
 from app.database import get_db
 from app.utils.auth import get_current_user
+from app.services.upload_service import UploadService
+from typing import Optional
 
 router = APIRouter(prefix="/teams", tags=["teams"])
 
 @router.post("/", response_model=Team)
-def create_team(team: TeamCreate, db: Session = Depends(get_db), current_user: str = Depends(get_current_user)):
+def create_team(
+    name: str = Form(...),
+    league_id: int = Form(...),
+    logo: Optional[UploadFile] = File(None),
+    db: Session = Depends(get_db), 
+    current_user: dict = Depends(get_current_user)
+):
     if 'user_id' not in current_user:
         raise HTTPException(status_code=400, detail="User ID not found")
+
     team_service = TeamService(db)
 
     # Sprawdź, czy użytkownik już posiada drużynę
@@ -18,9 +27,18 @@ def create_team(team: TeamCreate, db: Session = Depends(get_db), current_user: s
     if existing_team is not None:
         raise HTTPException(status_code=400, detail="Posiadasz już drużynę")
 
-    # Jeśli użytkownik nie posiada drużyny, stwórz nową
-    return team_service.create_team(team, creator_id=current_user['user_id'])
+    # Tworzymy obiekt TeamCreate z danych formularza
+    team_create = TeamCreate(name=name, league_id=league_id)
 
+    # Jeśli użytkownik nie posiada drużyny, stwórz nową
+    upload_service = UploadService()
+    upload_result = upload_service.validate_and_save(logo, name)
+    if "error" in upload_result:
+        raise HTTPException(status_code=400, detail=upload_result["error"])
+    
+    team_create.logo = upload_result["info"]
+
+    return team_service.create_team_with_logo(team_create, creator_id=current_user['user_id'], logo=logo)
 
 @router.get("/", response_model=list[Team])
 def read_teams(db: Session = Depends(get_db)):

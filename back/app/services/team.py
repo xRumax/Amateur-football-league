@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from typing import Optional
 from sqlalchemy import select
 from app.models.team import Team
+from fastapi import UploadFile, HTTPException
+from app.services.upload_service import UploadService
 
 class TeamService:
     def __init__(self, db: Session):
@@ -29,3 +31,13 @@ class TeamService:
         stmt = select(Team).where(Team.creator_id == user_id)
         result = self.db.execute(stmt)
         return result.scalars().first()
+    
+    def create_team_with_logo(self, team: TeamCreate, creator_id: int, logo: Optional[UploadFile] = None):
+        if logo:
+            upload_service = UploadService()
+            upload_result = upload_service.validate_and_save(logo, team.name)
+            if "error" in upload_result:
+                raise HTTPException(status_code=400, detail=upload_result["error"])
+            team.logo = upload_result["info"]
+
+        return self.create_team(team, creator_id)
