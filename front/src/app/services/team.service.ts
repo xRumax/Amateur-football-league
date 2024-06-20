@@ -5,13 +5,19 @@ import { FormField } from '../app.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { League } from './league.service';
 import { SessionService } from './session.service';
+import { Request, Response } from 'express';
+import { Player } from './player.service';
+
 export interface Team {
   id: number;
   name: string;
   matches_played: number;
+  players: Player[];
+  statics: number;
   league_id: number;
   creator_id: number;
   league_name?: string;
+  logo?: string;
 }
 
 export interface TeamColumns {
@@ -77,6 +83,13 @@ export class TeamService {
         placeholder: 'Creator ID',
         value: '',
       },
+      {
+        type: 'file',
+        name: 'logo',
+        id: 'logo',
+        placeholder: 'Logo',
+        value: '',
+      },
     ];
   }
 
@@ -84,21 +97,21 @@ export class TeamService {
     { key: 'id', header: 'ID' },
     { key: 'name', header: 'Name' },
     { key: 'matches_played', header: 'Matches Played' },
-    { key: 'league_name', header: 'League Name' },
-    { key: 'creator_id', header: 'Creator ID' },
+    { key: 'league_name', header: 'League' },
   ];
 
-  createTeam(team: Team): Promise<Team> {
+  createTeam(formData: FormData): Promise<Team> {
     const token = this.sessionService.getToken();
 
     return axios
-      .post(`${this.envService.base_url}/teams`, team, {
+      .post(`${this.envService.base_url}/teams`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
       })
       .then((response) => {
-        this.snackBar.open('Team create successfully', 'Close', {
+        this.snackBar.open('Team created successfully', 'Close', {
           duration: 5000,
         });
         setTimeout(() => {
@@ -107,6 +120,7 @@ export class TeamService {
         return response.data;
       })
       .catch((error) => {
+        console.log(error.response.data);
         if (error.response && error.response.status === 400) {
           this.snackBar.open('You already have a team', 'Close', {
             duration: 5000,
@@ -117,6 +131,7 @@ export class TeamService {
         throw error;
       });
   }
+
   getAllTeams(): Promise<Team[]> {
     return new Promise((resolve, reject) => {
       axios
@@ -130,7 +145,7 @@ export class TeamService {
     });
   }
 
-  getTeam(teamId: string): Promise<Team> {
+  getTeam(teamId: number): Promise<Team> {
     return new Promise((resolve, reject) => {
       axios
         .get(`${this.envService.base_url}/teams/${teamId}`)
@@ -146,5 +161,16 @@ export class TeamService {
   async teamExists(name: string): Promise<boolean> {
     const teams = await this.getAllTeams();
     return teams.some((team) => team.name === name);
+  }
+
+  getCurrentTeam(req: Request, res: Response): void {
+    const teamId = Number(req.params['id']);
+    this.getTeam(teamId)
+      .then((team) => {
+        res.json(team);
+      })
+      .catch((error) => {
+        res.status(500).send(error);
+      });
   }
 }

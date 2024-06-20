@@ -1,4 +1,4 @@
-from fastapi import UploadFile
+from fastapi import UploadFile, HTTPException
 from PIL import Image
 import os
 import re
@@ -6,9 +6,9 @@ import re
 class UploadService:
     @staticmethod
     def validate_and_save(logo: UploadFile, team_name: str):
-        # If logo is None, just return
+        # If logo is None, just return None
         if logo is None:
-            return
+            return None
 
         # Check if the file type is correct
         if logo.content_type not in ["image/png", "image/jpeg"]:

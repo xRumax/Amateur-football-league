@@ -1,8 +1,12 @@
 <div class="form-container">
   <h1 *ngIf="formType === 'user'" class="header">Edit Profile</h1>
-  <form [formGroup]="form" (ngSubmit)="submitForm()">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submitForm()"
+    enctype="multipart/form-data"
+  >
     <div *ngFor="let field of fields">
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="fill" *ngIf="field.type !== 'file'">
         <mat-label>{{ field.placeholder }}</mat-label>
         <ng-container [ngSwitch]="field.type">
           <mat-select
@@ -28,6 +32,22 @@
           />
         </ng-container>
       </mat-form-field>
+      <div *ngIf="field.type === 'file'">
+        <mat-form-field class="no-transition">
+          <mat-label>{{ fileName || "Logo: Select a file" }}</mat-label>
+          <button mat-icon-button matPrefix (click)="fileInput.click()">
+            <mat-icon>attach_file</mat-icon>
+          </button>
+          <input
+            type="text"
+            readonly
+            matInput
+            [formControl]="display"
+            (click)="fileInput.click()"
+          />
+          <input type="file" #fileInput (change)="onFileChange($event)" />
+        </mat-form-field>
+      </div>
     </div>
     <div class="btn-con">
       <button mat-button type="submit">Submit</button>

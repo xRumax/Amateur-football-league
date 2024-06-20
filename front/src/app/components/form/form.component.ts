@@ -5,6 +5,7 @@ import { TeamService } from '../../services/team.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LeagueService, League } from '../../services/league.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-form',
@@ -12,6 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./form.component.scss'],
 })
 export class FormComponent implements OnInit {
+  fileName: string = '';
+  display: FormControl = new FormControl('', Validators.required);
   @Input() data: any;
   @Input() formType!: 'user' | 'team';
 
@@ -19,6 +22,7 @@ export class FormComponent implements OnInit {
   fields: any[] = [];
   user: UserResponse | null = null;
   leagues: League[] = [];
+  selectedFile: File | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,7 +51,10 @@ export class FormComponent implements OnInit {
       this.leagues = await this.leagueService.getLeagues();
       this.fields = this.teamService.generateTeamFields(this.leagues);
       this.fields = this.fields.filter(
-        (field) => field.name === 'name' || field.name === 'league_id'
+        (field) =>
+          field.name === 'name' ||
+          field.name === 'league_id' ||
+          field.name === 'logo'
       );
       this.initializeForm(this.fields);
     }
@@ -60,6 +67,13 @@ export class FormComponent implements OnInit {
     });
     this.form = new FormGroup(group);
   }
+  onFileChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      const file = target.files[0];
+      this.fileName = file.name;
+    }
+  }
 
   async submitForm(): Promise<void> {
     if (this.form.valid) {
@@ -69,12 +83,18 @@ export class FormComponent implements OnInit {
         const teamName = this.form.value.name;
         const teamExists = await this.teamService.teamExists(teamName);
         if (teamExists) {
-          this.snackBar.open('Team already exist', 'Close', {
+          this.snackBar.open('Team already exists', 'Close', {
             duration: 2000,
           });
           return;
         }
-        this.teamService.createTeam(this.form.value);
+        const formData = new FormData();
+        formData.append('name', this.form.value.name);
+        formData.append('league_id', this.form.value.league_id);
+        if (this.selectedFile) {
+          formData.append('logo', this.selectedFile, this.selectedFile.name);
+        }
+        this.teamService.createTeam(formData);
       } else {
         console.error('Form is not valid');
       }

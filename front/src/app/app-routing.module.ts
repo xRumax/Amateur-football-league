@@ -8,6 +8,7 @@ import { routes_profile } from './features/profile/profile-routing.module';
 import { routes_register } from './features/register/register-routing.module';
 import { routes_teams_base } from './features/team/teams-base/teams-base-routing.module';
 import { routes_team_create } from './features/team/team-create/team-create-routing.module';
+import { routes_team_details } from './features/team/team-details/team-details-routing.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -17,6 +18,7 @@ const routes: Routes = [
   ...routes_profile,
   ...routes_teams_base,
   ...routes_team_create,
+  ...routes_team_details,
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

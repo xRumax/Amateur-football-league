@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { TeamService, Team } from '../../services/team.service';
 import { MatSort } from '@angular/material/sort';
 import { LeagueService } from '../../services/league.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-table',
@@ -19,7 +20,8 @@ export class TableComponent implements OnInit {
 
   constructor(
     private teamService: TeamService,
-    private leagueService: LeagueService
+    private leagueService: LeagueService,
+    private router: Router
   ) {
     this.columns = this.teamService.teamcolumns;
   }
@@ -58,5 +60,9 @@ export class TableComponent implements OnInit {
     if (this.data) {
       this.data.filter = filterValue.trim().toLowerCase();
     }
+  }
+
+  onRowClicked(row: Team) {
+    this.router.navigate(['/team', row.id]);
   }
 }

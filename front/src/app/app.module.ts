@@ -29,9 +29,8 @@ import { MatTableModule } from '@angular/material/table';
 import { TableModule } from './components/table/table.module';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
-import { FormFieldComponent } from './components/form-field/form-field.component';
-import { PopupContentComponent } from './components/popup-content/popup-content.component';
 import { PopupContentModule } from './components/popup-content/popup-content.module';
+import { TeamDetailsComponent } from './features/team/team-details/team-details.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +42,7 @@ import { PopupContentModule } from './components/popup-content/popup-content.mod
     RegisterComponent,
     TeamsBaseComponent,
     TeamCreateComponent,
-    FormFieldComponent,
+    TeamDetailsComponent,
   ],
   bootstrap: [AppComponent],
   imports: [

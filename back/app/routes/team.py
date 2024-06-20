@@ -13,7 +13,7 @@ router = APIRouter(prefix="/teams", tags=["teams"])
 def create_team(
     name: str = Form(...),
     league_id: int = Form(...),
-    logo: Optional[UploadFile] = File(None),
+    logo: UploadFile = File(None),
     db: Session = Depends(get_db), 
     current_user: dict = Depends(get_current_user)
 ):
@@ -30,14 +30,15 @@ def create_team(
     # Tworzymy obiekt TeamCreate z danych formularza
     team_create = TeamCreate(name=name, league_id=league_id)
 
-    # Jeśli użytkownik nie posiada drużyny, stwórz nową
-    upload_service = UploadService()
-    upload_result = upload_service.validate_and_save(logo, name)
-    if "error" in upload_result:
-        raise HTTPException(status_code=400, detail=upload_result["error"])
-    
-    team_create.logo = upload_result["info"]
+    # Próbujemy zapisać logo, jeśli jest dostarczone
+    if logo:
+        upload_service = UploadService()
+        upload_result = upload_service.validate_and_save(logo, name)
+        if upload_result and "error" in upload_result:
+            raise HTTPException(status_code=400, detail=upload_result["error"])
+        team_create.logo = upload_result["info"] if upload_result else None
 
+    team_service = TeamService(db)
     return team_service.create_team_with_logo(team_create, creator_id=current_user['user_id'], logo=logo)
 
 @router.get("/", response_model=list[Team])

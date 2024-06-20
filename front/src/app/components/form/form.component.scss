@@ -19,3 +19,12 @@
   justify-content: center;
   margin-top: 20px;
 }
+
+.no-transition {
+  cursor: pointer;
+  width: 215px;
+
+  input {
+    display: none;
+  }
+}
