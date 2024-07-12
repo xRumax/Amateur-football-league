@@ -16,10 +16,6 @@ class PlayerCreate(PlayerBase):
     last_name: str
     date_of_birth : datetime
     sex : SexEnum
-    num_of_goals : Optional[int] = Field(0)
-    num_of_assists : Optional[int] = Field(0)
-    num_of_yellow_cards : Optional[int] = Field(0)
-    num_of_red_cards : Optional[int] = Field(0)
     team_id: int = Field(default=None)
 
 class PlayerUpdate(PlayerBase):

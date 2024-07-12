@@ -31,6 +31,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { PopupContentModule } from './components/popup-content/popup-content.module';
 import { TeamDetailsComponent } from './features/team/team-details/team-details.component';
+import { PlayerCreateComponent } from './features/player/player-create/player-create.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { TeamDetailsComponent } from './features/team/team-details/team-details.
     TeamsBaseComponent,
     TeamCreateComponent,
     TeamDetailsComponent,
+    PlayerCreateComponent,
   ],
   bootstrap: [AppComponent],
   imports: [

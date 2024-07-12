@@ -35,7 +35,7 @@
       <div *ngIf="field.type === 'file'">
         <mat-form-field class="no-transition">
           <mat-label>{{ fileName || "Logo: Select a file" }}</mat-label>
-          <button mat-icon-button matPrefix (click)="fileInput.click()">
+          <button mat-icon-button matPrefix type="button" disabled>
             <mat-icon>attach_file</mat-icon>
           </button>
           <input
@@ -47,6 +47,13 @@
           />
           <input type="file" #fileInput (change)="onFileChange($event)" />
         </mat-form-field>
+        <div *ngIf="fileName">
+          <img
+            [src]="'http://localhost:8000/upload/' + fileName"
+            alt="Team Logo"
+            style="max-width: 200px; max-height: 200px"
+          />
+        </div>
       </div>
     </div>
     <div class="btn-con">

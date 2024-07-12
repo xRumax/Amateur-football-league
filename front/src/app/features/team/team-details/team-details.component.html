@@ -1,11 +1,19 @@
 <div class="main-container">
   <div *ngIf="team" class="team-details-container">
-    <h2 class="team-details-title">Team {{ team.id }}</h2>
+    <div class="team-details-logo">
+      <img class="team-details-logo-image" />img
+    </div>
+    <div class="team-details-main-content">
+      <ng-container *ngFor="let detail of teamDetails">
+        <p>{{ detail.label }}: {{ team[detail.key] }}</p>
+      </ng-container>
+    </div>
   </div>
-  <div class="team-details-content">
-    <p class="team-details-content-item">Name: {{ team?.name }}</p>
-  </div>
-  <div class="team-details-content">
+  <p class="team-details-content-item">Players:</p>
+  <div
+    *ngIf="dataSource?.data?.length; else noPlayers"
+    class="team-details-content"
+  >
     <table mat-table [dataSource]="dataSource">
       <!-- Dynamic Columns -->
       <ng-container
@@ -18,6 +26,37 @@
 
       <tr mat-header-row *matHeaderRowDef="playerColumnKeys"></tr>
       <tr mat-row *matRowDef="let row; columns: playerColumnKeys"></tr>
+    </table>
+  </div>
+  <ng-template #noPlayers>
+    <p>No Players</p>
+  </ng-template>
+  <p class="team-details-content-item">Team Statics:</p>
+
+  <div class="team-details-content">
+    <table mat-table [dataSource]="staticsDataSource">
+      <!-- Dynamic Columns -->
+      <ng-container
+        *ngFor="let column of staticsColumns"
+        [matColumnDef]="column.key"
+      >
+        <th mat-header-cell *matHeaderCellDef>{{ column.header }}</th>
+        <td mat-cell *matCellDef="let statics">{{ statics[column.key] }}</td>
+        <td mat-footer-cell *matFooterCellDef>
+          {{
+            column.key === "num_of_goals"
+              ? totalNumOfGoals
+              : column.key === "num_of_yellow_cards"
+              ? totalNumOfYellowCards
+              : column.key === "num_of_red_cards"
+              ? totalNumOfRedCards
+              : ""
+          }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="staticsColumnKeys"></tr>
+      <tr mat-row *matRowDef="let row; columns: staticsColumnKeys"></tr>
     </table>
   </div>
 </div>

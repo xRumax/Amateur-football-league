@@ -16,6 +16,7 @@ export interface Team {
   statics: number;
   league_id: number;
   creator_id: number;
+  creator_username?: string;
   league_name?: string;
   logo?: string;
 }
@@ -81,6 +82,20 @@ export class TeamService {
         name: 'creator_id',
         id: 'creator_id',
         placeholder: 'Creator ID',
+        value: '',
+      },
+      {
+        type: 'text',
+        name: 'creator_username',
+        id: 'creator_username',
+        placeholder: 'Creator Username',
+        value: '',
+      },
+      {
+        type: 'number',
+        name: 'statics',
+        id: 'statics',
+        placeholder: 'Statics',
         value: '',
       },
       {
@@ -150,7 +165,10 @@ export class TeamService {
       axios
         .get(`${this.envService.base_url}/teams/${teamId}`)
         .then((response) => {
-          resolve(response.data);
+          const team: Team = response.data;
+          // Checking and switching the value of matches_played to 0 if it is undefined
+          team.matches_played = team.matches_played ?? 0;
+          resolve(team);
         })
         .catch((error) => {
           reject(error);
@@ -171,6 +189,25 @@ export class TeamService {
       })
       .catch((error) => {
         res.status(500).send(error);
+      });
+  }
+
+  getLeagueNameById(leagueId: number): Promise<string> {
+    return axios
+      .get(`${this.envService.base_url}/leagues/${leagueId}`)
+      .then((response) => response.data.name)
+      .catch((error) => {
+        console.error('Error fetching league name:', error);
+        throw error;
+      });
+  }
+  async getCreatorUsernameById(creatorId: number): Promise<string> {
+    return axios
+      .get(`${this.envService.base_url}/users/${creatorId}`)
+      .then((response) => response.data.username)
+      .catch((error) => {
+        console.error('Error fetching creator username:', error);
+        throw error;
       });
   }
 }

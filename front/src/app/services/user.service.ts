@@ -3,12 +3,15 @@ import axios from 'axios';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormField } from '../app.component';
 import { Environment } from '../../environments/environment';
+import { SessionService } from './session.service';
+import { TeamService } from './team.service';
 
 export interface UserResponse {
   id: number;
   username: string;
   email: string;
   password: string;
+  team?: { team_id: number };
   is_superuser: boolean;
 }
 
@@ -16,7 +19,12 @@ export interface UserResponse {
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private snackBar: MatSnackBar, private envService: Environment) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    private envService: Environment,
+    private sessionService: SessionService,
+    private teamService: TeamService
+  ) {}
 
   generateUserFields(user: UserResponse): FormField[] {
     return [
@@ -38,10 +46,11 @@ export class UserService {
   }
 
   async getUserDataAndFields(): Promise<{ user: UserResponse; fields: any[] }> {
-    const data = await this.getUserId();
-    const userId = data.user_id; // Get the user id
-    // Request to get user data
-    const user = await this.getUser(userId);
+    const userId = this.sessionService.getUserId(); // Use getUserId from sessionService
+    if (!userId) {
+      throw new Error('User ID not found');
+    }
+    const user = await this.getUser(Number(userId));
 
     let fields: any[] = [];
     if (user !== null) {
@@ -50,7 +59,6 @@ export class UserService {
 
     return { user, fields };
   }
-
   getUser(userId: number): Promise<UserResponse> {
     return new Promise((resolve, reject) => {
       const token = localStorage.getItem('access_token'); // Get the token from localStorage
@@ -73,24 +81,6 @@ export class UserService {
     return new Promise((resolve, reject) => {
       axios
         .get(`${this.envService.base_url}/users`)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
-  getUserId(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const token = localStorage.getItem('access_token'); // Get the token from localStorage
-      axios
-        .get(`${this.envService.base_url}/users/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
         .then((response) => {
           resolve(response.data);
         })
@@ -165,5 +155,22 @@ export class UserService {
           reject(error);
         });
     });
+  }
+
+  async getUserTeamDetails(userId: number): Promise<any> {
+    const user = await this.getUser(userId); // Assuming getUser() fetches user details
+    if (!user.team || !user.team.team_id) {
+      // No team ID found for the user
+      return {
+        error: 'No team ID found for the user. Please join or create a team.',
+      };
+    }
+    try {
+      const teamDetails = await this.teamService.getTeam(user.team.team_id);
+      return teamDetails;
+    } catch (error) {
+      console.error('Error fetching team details:', error);
+      throw error;
+    }
   }
 }

@@ -16,7 +16,7 @@ export class FormComponent implements OnInit {
   fileName: string = '';
   display: FormControl = new FormControl('', Validators.required);
   @Input() data: any;
-  @Input() formType!: 'user' | 'team';
+  @Input() formType!: 'user' | 'team' | 'player';
 
   form: FormGroup;
   fields: any[] = [];
@@ -67,11 +67,12 @@ export class FormComponent implements OnInit {
     });
     this.form = new FormGroup(group);
   }
+
   onFileChange(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
-      const file = target.files[0];
-      this.fileName = file.name;
+      this.selectedFile = target.files[0];
+      this.fileName = this.selectedFile.name;
     }
   }
 

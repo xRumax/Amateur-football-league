@@ -1,3 +1,4 @@
+# upload_service.py
 from fastapi import UploadFile, HTTPException
 from PIL import Image
 import os
@@ -22,7 +23,10 @@ class UploadService:
         # Generate a file name based on team name
         sanitized_team_name = re.sub(r'\W+', '', team_name)  # Remove non-alphanumeric characters
         file_extension = os.path.splitext(logo.filename)[1]
-        file_location = f"uploads/{sanitized_team_name}{file_extension}"
+        file_location = f"./uploads/{sanitized_team_name}{file_extension}"
+
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(file_location), exist_ok=True)
 
         # Save the file
         with open(file_location, "wb+") as file_object:

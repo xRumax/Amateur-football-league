@@ -17,7 +17,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     user_service = UserService(db)
     return user_service.create_user(user)
 
-@router.get("/{user_id}")
+@router.get("/{user_id}", response_model=User)
 async def read_user(user_id: int, db: Session = Depends(get_db)):
     user_service = UserService(db)
     return user_service.get_user(user_id)

@@ -5,7 +5,6 @@ from app.services.team import TeamService
 from app.database import get_db
 from app.utils.auth import get_current_user
 from app.services.upload_service import UploadService
-from typing import Optional
 
 router = APIRouter(prefix="/teams", tags=["teams"])
 

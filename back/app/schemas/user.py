@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
-
+from typing import Optional
+from app.schemas.team import Team
 class UserBase(BaseModel):
     username: str
     email: str
@@ -22,6 +23,7 @@ class User(BaseModel):
     username: str
     email: str
     password: str
+    team: Optional[Team] = None
     is_superuser: bool
 
     class Config:

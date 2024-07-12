@@ -66,7 +66,7 @@
                 >
               </li>
               <li *ngIf="isLoggedIn">
-                <a routerLink="/my-team"
+                <a (click)="navigateToMyTeam()"
                   ><div
                     [ngClass]="{
                       'active-link': isActive('/my-team')
@@ -99,7 +99,7 @@
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
               <li *ngIf="isLoggedIn">
-                <a routerLink="/players">Add Player</a>
+                <a routerLink="/player-create">Add Player</a>
               </li>
               <li><a routerLink="/players">Players Base</a></li>
             </ul>
