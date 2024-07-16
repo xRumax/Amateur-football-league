@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from datetime import datetime
+from datetime import date
 from enum import Enum
 from typing import Optional
 
@@ -14,13 +14,13 @@ class PlayerBase(BaseModel):
 class PlayerCreate(PlayerBase):
     name: str
     last_name: str
-    date_of_birth : datetime
-    sex : SexEnum
-    team_id: int = Field(default=None)
+    date_of_birth : Optional[date] = None
+    sex : Optional[SexEnum] = None
+    team_id: Optional[int] = None
 
 class PlayerUpdate(PlayerBase):
     last_name: str
-    date_of_birth : datetime
+    date_of_birth : date
     num_of_goals : Optional[int] = Field(0)
     num_of_assists : Optional[int] = Field(0)
     num_of_yellow_cards : Optional[int] = Field(0)
@@ -37,11 +37,11 @@ class Player(BaseModel):
     id :int
     name: str
     last_name: str
-    date_of_birth : datetime
-    sex : SexEnum
+    date_of_birth : Optional[date] = None
+    sex : Optional[SexEnum] = None
 
     # Relacja z druzyna
-    team_id : int
+    team_id : Optional[int] = None
 
     # Statystyki
     num_of_goals: Optional[int] = Field(0)
