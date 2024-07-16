@@ -26,7 +26,7 @@ export class UserService {
     private teamService: TeamService
   ) {}
 
-  generateUserFields(user: UserResponse): FormField[] {
+  async generateUserFields(user: UserResponse): Promise<FormField[]> {
     return [
       {
         type: 'text',
@@ -45,122 +45,99 @@ export class UserService {
     ];
   }
 
-  async getUserDataAndFields(): Promise<{ user: UserResponse; fields: any[] }> {
-    const userId = this.sessionService.getUserId(); // Use getUserId from sessionService
-    if (!userId) {
-      throw new Error('User ID not found');
-    }
+  async getUserDataAndFields(): Promise<{
+    user: UserResponse;
+    fields: FormField[];
+  }> {
+    const userId = this.sessionService.getUserId();
+    if (!userId) throw new Error('User ID not found');
     const user = await this.getUser(Number(userId));
-
-    let fields: any[] = [];
-    if (user !== null) {
-      fields = this.generateUserFields(user);
-    }
-
+    const fields = await this.generateUserFields(user);
     return { user, fields };
   }
-  getUser(userId: number): Promise<UserResponse> {
-    return new Promise((resolve, reject) => {
-      const token = localStorage.getItem('access_token'); // Get the token from localStorage
-      axios
-        .get(`${this.envService.base_url}/users/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
 
-  getAllUsers(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`${this.envService.base_url}/users`)
-        .then((response) => {
-          resolve(response.data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
-  getUpdateForm(userId: number): Promise<FormField[]> {
-    return axios
-      .get(`${this.envService.base_url}/users/${userId}`)
-      .then((response) => {
-        const userData = response.data.data;
-
-        // Generate dynamic date fields
-        return Object.keys(userData).map((key) => ({
-          type: typeof userData[key] === 'number' ? 'number' : 'text',
-          name: key,
-          id: key,
-          placeholder: `Podaj ${key}`,
-          value: userData[key],
-        }));
-      })
-      .catch((error) => {
-        console.error('Error fetching user data:', error);
-        throw error;
-      });
-  }
-
-  updateUser(userId: number, data: any): Promise<any> {
-    return new Promise((resolve, reject) => {
+  async getUser(userId: number): Promise<UserResponse> {
+    try {
       const token = localStorage.getItem('access_token');
-      axios
-        .put(`${this.envService.base_url}/users/${userId}/`, data, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          this.snackBar.open('User updated successfully', 'Close', {
-            duration: 5000,
-          });
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-          resolve(response.data);
-        })
-        .catch((error) => {
-          console.error('Error updating user:', error);
-          this.snackBar.open('Error updating user', 'Close', {
-            duration: 5000,
-          });
-          reject(error);
-        });
-    });
+      const response = await axios.get(
+        `${this.envService.base_url}/users/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      throw error;
+    }
   }
-  deleteUser(userId: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      axios
-        .delete(`${this.envService.base_url}/users/${userId}`)
-        .then((response) => {
-          setTimeout(() => {
-            resolve(response.data);
-          }, 500);
-        })
-        .catch((error) => {
-          console.error('Error deleting user:', error);
-          this.snackBar.open('Error deleting user', 'Close', {
+
+  async getAllUsers(): Promise<UserResponse[]> {
+    try {
+      const response = await axios.get(`${this.envService.base_url}/users`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      throw error;
+    }
+  }
+
+  async getUpdateForm(userId: number): Promise<FormField[]> {
+    try {
+      const response = await axios.get(
+        `${this.envService.base_url}/users/${userId}`
+      );
+      const userData = response.data.data;
+      return Object.keys(userData).map((key) => ({
+        type: typeof userData[key] === 'number' ? 'number' : 'text',
+        name: key,
+        id: key,
+        placeholder: `Enter ${key}`,
+        value: userData[key],
+      }));
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      throw error;
+    }
+  }
+
+  async updateUser(userId: number, data: any): Promise<void> {
+    try {
+      const token = localStorage.getItem('access_token');
+      await axios.put(`${this.envService.base_url}/users/${userId}/`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      this.snackBar.open('User updated successfully', 'Close', {
+        duration: 5000,
+      });
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      console.error('Error updating user:', error);
+      this.snackBar.open('Error updating user', 'Close', { duration: 5000 });
+      throw error;
+    }
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    try {
+      await axios.delete(`${this.envService.base_url}/users/${userId}`);
+      setTimeout(
+        () =>
+          this.snackBar.open('User deleted successfully', 'Close', {
             duration: 5000,
-          });
-          reject(error);
-        });
-    });
+          }),
+        500
+      );
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      this.snackBar.open('Error deleting user', 'Close', { duration: 5000 });
+      throw error;
+    }
   }
 
   async getUserTeamDetails(userId: number): Promise<any> {
-    const user = await this.getUser(userId); // Assuming getUser() fetches user details
+    const user = await this.getUser(userId);
     if (!user.team || !user.team.team_id) {
-      // No team ID found for the user
       return {
         error: 'No team ID found for the user. Please join or create a team.',
       };

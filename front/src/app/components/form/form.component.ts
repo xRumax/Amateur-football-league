@@ -6,6 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LeagueService, League } from '../../services/league.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Validators } from '@angular/forms';
+import { PlayerService } from '../../services/player.service';
 
 @Component({
   selector: 'app-form',
@@ -31,6 +32,7 @@ export class FormComponent implements OnInit {
     @Optional() public dialogRef: MatDialogRef<FormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private teamService: TeamService,
+    private playerService: PlayerService,
     private snackBar: MatSnackBar
   ) {
     this.form = this.formBuilder.group({});
@@ -55,6 +57,18 @@ export class FormComponent implements OnInit {
           field.name === 'name' ||
           field.name === 'league_id' ||
           field.name === 'logo'
+      );
+      this.initializeForm(this.fields);
+    }
+    if (this.formType === 'player') {
+      this.fields = this.playerService.generatePlayerFields();
+      this.fields = this.fields.filter(
+        (field) =>
+          field.name === 'name' ||
+          field.name === 'last_name' ||
+          field.name === 'date_of_birth' ||
+          field.name === 'sex' ||
+          field.name === 'team_id'
       );
       this.initializeForm(this.fields);
     }
@@ -96,6 +110,23 @@ export class FormComponent implements OnInit {
           formData.append('logo', this.selectedFile, this.selectedFile.name);
         }
         this.teamService.createTeam(formData);
+      } else if (this.formType === 'player') {
+        const playerName = this.form.value.name;
+        const playerLastName = this.form.value.last_name;
+        const playerDOB = this.form.value.date_of_birth;
+        const playerExists = await this.playerService.playerExists(
+          playerName,
+          playerLastName,
+          playerDOB
+        );
+
+        if (playerExists) {
+          this.snackBar.open('Player already exists', 'Close', {
+            duration: 2000,
+          });
+          return;
+        }
+        this.playerService.createPlayer(this.form.value);
       } else {
         console.error('Form is not valid');
       }

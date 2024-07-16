@@ -25,5 +25,5 @@ class Player(Base):
     minutes_played = Column(Integer)
 
     # Relacja z drużyną
-    team_id  = Column(String, ForeignKey("teams.id"))
+    team_id  = Column(Integer, ForeignKey("teams.id"))
     team = relationship("Team", back_populates="players")

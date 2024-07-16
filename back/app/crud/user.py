@@ -30,12 +30,20 @@ def update_user(db: Session, user: UserUpdate, user_id: int):
     return get_user(db=db, user_id=user_id)
 
 def delete_user(db: Session, user_id: int):
-    db_user = get_user(db=db, user_id=user_id)
+    # Pobierz użytkownika po ID wraz z przypisaną drużyną
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
+    
+    # Usuń drużynę przypisaną do użytkownika, jeśli istnieje
+    if db_user.team:
+        db.delete(db_user.team)
+    
+    # Usuń użytkownika
     db.delete(db_user)
     db.commit()
-    return db_user
+
+    return {"detail": "User deleted successfully"}
 
 def authenticate_user(db: Session, email: str, password: str):
     user = db.query(models.User).filter(models.User.email == email).first()
