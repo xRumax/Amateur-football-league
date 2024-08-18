@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { TeamService, Team } from '../../services/team.service';
 import { MatSort } from '@angular/material/sort';
-import { LeagueService } from '../../services/league.service';
 import { Router } from '@angular/router';
+import { TeamService, Team } from '../../services/team.service';
+import { PlayerService, Player } from '../../services/player.service';
 
 @Component({
   selector: 'app-table',
@@ -12,47 +12,64 @@ import { Router } from '@angular/router';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
-  @Input() data: MatTableDataSource<Team> = new MatTableDataSource<Team>([]);
+  @Input() dataType: 'team' | 'player' = 'team';
   @Input() columns: { key: string; header: string }[] = [];
   @ViewChild(MatSort) sort!: MatSort;
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  data: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
   constructor(
     private teamService: TeamService,
-    private leagueService: LeagueService,
+    private playerService: PlayerService,
     private router: Router
-  ) {
-    this.columns = this.teamService.teamcolumns;
-  }
+  ) {}
 
   ngOnInit() {
-    this.teamService
-      .getAllTeams()
-      .then((teams: Team[]) => {
-        const promises = teams.map((team) =>
-          this.leagueService.getLeagueName(team.league_id).then((name) => {
-            team.league_name = name;
-            return team;
-          })
-        );
-        return Promise.all(promises);
-      })
-      .then((teams: Team[]) => {
-        this.data = new MatTableDataSource<Team>(teams);
-        this.data.paginator = this.paginator;
-        this.data.sort = this.sort;
-      })
-      .catch((error) => {
-        console.error('Error fetching teams:', error);
-      });
+    if (this.dataType === 'team') {
+      this.loadTeamData();
+    } else if (this.dataType === 'player') {
+      this.loadPlayerData();
+    }
   }
+
+  private async loadTeamData() {
+    this.columns = this.teamService.teamcolumns;
+
+    try {
+      const teams = await this.teamService.getAllTeamsWithLeagueName();
+      this.data = new MatTableDataSource<Team>(teams);
+      this.data.paginator = this.paginator;
+      this.data.sort = this.sort;
+    } catch (error) {
+      console.error('Error fetching teams:', error);
+    }
+  }
+
+  private async loadPlayerData() {
+    this.columns = this.playerService.playercolumns;
+
+    try {
+      const players = await this.playerService.getAllPlayers();
+      const playerPromises = players.map(async (player) => {
+        player.team_name = await this.playerService.getTeamName(player.team_id);
+        return player;
+      });
+      const updatedPlayers = await Promise.all(playerPromises);
+      this.data = new MatTableDataSource<Player>(updatedPlayers);
+      this.data.paginator = this.paginator;
+      this.data.sort = this.sort;
+    } catch (error) {
+      console.error('Error fetching players:', error);
+    }
+  }
+
   getDisplayedColumns(): string[] {
     return this.columns.map((column) => column.key);
   }
 
-  getItemValue(item: Team, key: string): any {
-    return item[key as keyof Team];
+  getItemValue(item: any, key: string): any {
+    return item[key as keyof typeof item];
   }
 
   applyFilter(event: Event) {
@@ -62,7 +79,11 @@ export class TableComponent implements OnInit {
     }
   }
 
-  onRowClicked(row: Team) {
-    this.router.navigate(['/team', row.id]);
+  onRowClicked(row: any) {
+    if (this.dataType === 'team') {
+      this.router.navigate(['/team', row.id]);
+    } else if (this.dataType === 'player') {
+      this.router.navigate(['/player', row.id]);
+    }
   }
 }

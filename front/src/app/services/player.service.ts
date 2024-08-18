@@ -13,11 +13,17 @@ export interface Player {
   date_of_birth: string;
   sex: string;
   team_id: number;
+  team_name?: string;
   num_of_goals?: number;
   num_of_assists?: number;
   num_of_yellow_cards?: number;
   num_of_red_cards?: number;
   num_of_matches_played?: number;
+}
+
+export interface PlayerColumns {
+  key: keyof Player;
+  header: string;
 }
 
 @Injectable({
@@ -80,6 +86,13 @@ export class PlayerService {
         value: '',
       },
       {
+        type: 'string',
+        name: 'team_name',
+        id: 'team_name',
+        placeholder: 'Team Name',
+        value: '',
+      },
+      {
         type: 'number',
         name: 'num_of_goals',
         id: 'num_of_goals',
@@ -116,6 +129,13 @@ export class PlayerService {
       },
     ];
   }
+
+  playercolumns: PlayerColumns[] = [
+    { key: 'name', header: 'Name' },
+    { key: 'last_name', header: 'Last Name' },
+    { key: 'team_name', header: 'Team' },
+    { key: 'sex', header: 'Sex' },
+  ];
 
   async playerExists(
     name: string,
@@ -191,5 +211,19 @@ export class PlayerService {
         console.error('Error creating player:', error);
         throw error;
       });
+  }
+
+  async getTeamName(teamId: number): Promise<string> {
+    if (!teamId) return 'No Team';
+
+    try {
+      const response = await axios.get(
+        `${this.envService.base_url}/teams/${teamId}`
+      );
+      return response.data.name;
+    } catch (error) {
+      console.error(`Error fetching team name for team ID ${teamId}:`, error);
+      return 'No Team';
+    }
   }
 }

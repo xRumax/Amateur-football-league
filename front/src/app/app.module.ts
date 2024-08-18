@@ -32,6 +32,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { PopupContentModule } from './components/popup-content/popup-content.module';
 import { TeamDetailsComponent } from './features/team/team-details/team-details.component';
 import { PlayerCreateComponent } from './features/player/player-create/player-create.component';
+import { PlayersBaseComponent } from './features/player/players-base/players-base.component';
 
 @NgModule({
   declarations: [
@@ -45,12 +46,12 @@ import { PlayerCreateComponent } from './features/player/player-create/player-cr
     TeamCreateComponent,
     TeamDetailsComponent,
     PlayerCreateComponent,
+    PlayersBaseComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
     MatButtonModule,
     BrowserModule,
-    AppRoutingModule,
     MatCheckboxModule,
     FormsModule,
     MatToolbarModule,
@@ -68,8 +69,6 @@ import { PlayerCreateComponent } from './features/player/player-create/player-cr
   ],
   providers: [
     provideAnimationsAsync(),
-    TeamCreateComponent,
-    ProfileComponent,
     provideHttpClient(withInterceptorsFromDi()),
   ],
 })

@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" class="nav-bar">
+<mat-toolbar color="primary " class="nav-bar">
   <span class="nav-bar-logo">AFL</span>
   <div class="nav-bar-links">
     <ul>
@@ -90,7 +90,7 @@
       </li>
       <li class="dropdown">
         <a
-          routerLink="/players"
+          routerLink="/players-base"
           [class.active]="isActive('/players')"
           routerLinkActive="active"
           >Players</a
@@ -101,7 +101,7 @@
               <li *ngIf="isLoggedIn">
                 <a routerLink="/player-create">Add Player</a>
               </li>
-              <li><a routerLink="/players">Players Base</a></li>
+              <li><a routerLink="/players-base">Players Base</a></li>
             </ul>
           </div>
         </div>

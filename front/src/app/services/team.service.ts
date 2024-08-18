@@ -60,7 +60,7 @@ export class TeamService {
         value: '',
       },
       {
-        type: 'number',
+        type: 'string',
         name: 'league_name',
         id: 'league_name',
         placeholder: 'League Name',
@@ -166,7 +166,6 @@ export class TeamService {
         .get(`${this.envService.base_url}/teams/${teamId}`)
         .then((response) => {
           const team: Team = response.data;
-          // Checking and switching the value of matches_played to 0 if it is undefined
           team.matches_played = team.matches_played ?? 0;
           resolve(team);
         })
@@ -179,6 +178,17 @@ export class TeamService {
   async teamExists(name: string): Promise<boolean> {
     const teams = await this.getAllTeams();
     return teams.some((team) => team.name === name);
+  }
+
+  async teamExistsById(teamId: number): Promise<boolean> {
+    try {
+      const response = await axios.get(
+        `${this.envService.base_url}/teams/${teamId}`
+      );
+      return response.status === 200;
+    } catch (error) {
+      return false;
+    }
   }
 
   getCurrentTeam(req: Request, res: Response): void {
@@ -209,5 +219,19 @@ export class TeamService {
         console.error('Error fetching creator username:', error);
         throw error;
       });
+  }
+
+  async getAllTeamsWithLeagueName(): Promise<Team[]> {
+    try {
+      const teams = await this.getAllTeams();
+      const teamPromises = teams.map(async (team) => {
+        team.league_name = await this.getLeagueNameById(team.league_id);
+        return team;
+      });
+      return Promise.all(teamPromises);
+    } catch (error) {
+      console.error('Error fetching teams with league names:', error);
+      throw error;
+    }
   }
 }

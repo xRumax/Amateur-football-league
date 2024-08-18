@@ -1,18 +1,20 @@
 .main-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   padding-top: 60px; // Dodaj padding na górze, zastąp 60px wysokością navbara
 
   h1 {
     margin-bottom: 20px;
-    font-size: 2rem;
-    text-align: center;
+    font-size: 2rem; // Zwiększ rozmiar czcionki
+    text-align: center; // Wyśrodkuj tekst
     font-style: italic;
     font-weight: 600;
   }
 }
 
-.form-container {
-  margin-top: 30px;
+.table-con {
+  width: 70vw;
+  margin-bottom: 2rem;
 }
