@@ -10,10 +10,10 @@ class Match(Base):
     result = Column(String)
 
 
-    # Relacja z drużyną gospodarzy
+    # Relationship with the home team
     team_1_id = Column(Integer, ForeignKey("teams.id"))
     team_1 = relationship("Team", foreign_keys=[team_1_id], back_populates="matches_as_home")
 
-    # Relacja z drużyną gości
+    # Relationship with the guest team
     team_2_id = Column(Integer, ForeignKey("teams.id"))
     team_2 = relationship("Team", foreign_keys=[team_2_id], back_populates="matches_as_guest")

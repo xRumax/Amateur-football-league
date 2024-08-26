@@ -11,6 +11,7 @@ import { routes_team_create } from './features/team/team-create/team-create-rout
 import { routes_team_details } from './features/team/team-details/team-details-routing.module';
 import { routes_player_create } from './features/player/player-create/player-create-routing.module';
 import { routes_players_base } from './features/player/players-base/players-base-routing.module';
+import { routes_player_details } from './features/player/player-details/player-details-routing.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -23,6 +24,7 @@ const routes: Routes = [
   ...routes_team_details,
   ...routes_player_create,
   ...routes_players_base,
+  ...routes_player_details,
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -12,16 +12,16 @@ class Team(Base):
     statics = relationship("Player", viewonly=True)
     logo = Column(String, nullable=True)
 
-    # Relacja z meczami jako drużyna gospodarzy
+     # Relationship with matches as home team
     matches_as_home = relationship("Match", foreign_keys="Match.team_1_id", back_populates="team_1")
 
-    # Relacja z meczami jako drużyna gości
+    # Relationship with matches as guest team
     matches_as_guest = relationship("Match", foreign_keys="Match.team_2_id", back_populates="team_2")
 
-    # Relacja z ligą
+    # Relationship with league
     league_id = Column(Integer, ForeignKey("leagues.id"))
     league = relationship("League", back_populates="teams")
 
-    # Relacja do twórcy drużyny
+    # Relationship with the creator of the team
     creator = relationship("User", back_populates="team", uselist=False)
     creator_id = Column(Integer, ForeignKey("users.id"))

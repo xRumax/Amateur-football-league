@@ -8,22 +8,22 @@
   margin: auto;
 
   h1 {
-    margin-bottom: 20px; // Dodaj odstęp na dole h1
-    font-size: 2rem; // Zwiększ rozmiar czcionki
-    text-align: center; // Wyśrodkuj tekst
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-align: center;
     font-style: italic;
     font-weight: 600;
   }
 
   mat-card {
-    width: 50vw; // Zwiększ szerokość karty
-    height: 70vh; // Zwiększ wysokość karty
+    width: 50vw;
+    height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); // Dodaj cień do karty
-    border-radius: 10px; // Dodaj zaokrąglenie krawędzi karty
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
   }
 }
 
@@ -36,12 +36,12 @@
 }
 
 .table-con td {
-  padding: 0 20px; // Dodaje odstęp 10px z lewej i prawej strony komórki
-  border-bottom: 1px solid #ddd; // Dodaj linię na dole każdej komórki
+  padding: 0 20px;
+  border-bottom: 1px solid #ddd;
   font-size: 20px;
 }
 
 .table-con th {
-  padding: 0 20px; // Dodaje odstęp 10px z lewej i prawej strony komórki
-  border-bottom: 2px solid #ddd; // Dodaj grubsza linię na dole każdej komórki nagłówka
+  padding: 0 20px;
+  border-bottom: 2px solid #ddd;
 }

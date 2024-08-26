@@ -19,6 +19,7 @@ export interface Player {
   num_of_yellow_cards?: number;
   num_of_red_cards?: number;
   num_of_matches_played?: number;
+  minutes_played?: number;
 }
 
 export interface PlayerColumns {
@@ -130,7 +131,7 @@ export class PlayerService {
     ];
   }
 
-  playercolumns: PlayerColumns[] = [
+  playerColumns: PlayerColumns[] = [
     { key: 'name', header: 'Name' },
     { key: 'last_name', header: 'Last Name' },
     { key: 'team_name', header: 'Team' },
@@ -180,7 +181,7 @@ export class PlayerService {
   createPlayer(playerData: any): Promise<Player> {
     const token = this.sessionService.getToken();
 
-    // Mapowanie wartości sex z liczbowych na tekstowe
+    // Mapping values from int to string
     if (playerData.sex === 1) {
       playerData.sex = 'Male';
     } else if (playerData.sex === 2) {

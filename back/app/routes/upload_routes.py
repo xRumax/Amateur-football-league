@@ -15,7 +15,7 @@ async def upload_logo(logo: UploadFile, team_name: str = Form(...)):
         raise HTTPException(status_code=400, detail=result["error"])
     return result
 
-# Serwowanie plików statycznych z katalogu 'uploads'
+# Serving static files from the 'uploads' directory
 @router.get("/{file_path:path}")
 async def serve_uploads(file_path: str):
     return FileResponse(os.path.join("uploads", file_path))

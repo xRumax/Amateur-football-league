@@ -108,7 +108,7 @@ export class TeamService {
     ];
   }
 
-  teamcolumns: TeamColumns[] = [
+  teamColumns: TeamColumns[] = [
     { key: 'id', header: 'ID' },
     { key: 'name', header: 'Name' },
     { key: 'matches_played', header: 'Matches Played' },
@@ -232,6 +232,18 @@ export class TeamService {
     } catch (error) {
       console.error('Error fetching teams with league names:', error);
       throw error;
+    }
+  }
+
+  async getTeamNamebyId(teamId: number): Promise<string> {
+    try {
+      const response = await axios.get(
+        `${this.envService.base_url}/teams/${teamId}`
+      );
+      return response.data.name;
+    } catch (error) {
+      console.error(`Error fetching team name for team ID ${teamId}:`, error);
+      return 'No Team';
     }
   }
 }

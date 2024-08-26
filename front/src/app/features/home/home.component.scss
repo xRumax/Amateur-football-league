@@ -22,7 +22,7 @@
   .title-s,
   .title-t {
     font-size: 7em;
-    color: rgba(255, 255, 255, 0.685);
+    color: rgba(255, 255, 255, 0.897);
     text-shadow: 2px 2px 0 #00000046, -2px 2px 0 #00000033, 2px -2px 0 #0000001f,
       -2px -2px 0 #00000023, 2px 0px 0 #0000002d, -2px 0px 0 #0000003a,
       0px 2px 0 #0000002c, 0px -2px 0 #00000025;
@@ -48,18 +48,4 @@
     margin: 20px;
     z-index: 3;
   }
-}
-
-.player-home {
-  position: absolute;
-  z-index: 2;
-  transition: transform 0.3s ease;
-  margin-left: 220px;
-  margin-top: 30px;
-}
-
-.ball-img {
-  position: absolute;
-  z-index: 1; // Ensure it appears below player-home
-  transition: transform 0.3s ease; // Smooth transition for the rotation
 }

@@ -20,4 +20,4 @@ class MatchStatistics(Base):
     corners = Column(Integer, default=0)
 
     match_id = Column(Integer, ForeignKey('matches.id'))
-    team_id = Column(Integer, ForeignKey('teams.id'))  # odwołanie do drużyny
+    team_id = Column(Integer, ForeignKey('teams.id'))

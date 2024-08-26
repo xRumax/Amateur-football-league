@@ -18,7 +18,7 @@ app.include_router(upload_routes.router)
 
 origins = [
     "http://localhost:4200",  # Angular app
-    "http://127.0.0.1:4200",  # Also Angular app
+    "http://127.0.0.1:4200",  # Angular app
     "http://localhost:50662",
 ]
 

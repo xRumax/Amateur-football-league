@@ -28,7 +28,7 @@
             [placeholder]="field.placeholder"
             [id]="field.id"
             [formControlName]="field.name"
-            required
+            [required]="field.name !== 'team_id'"
           />
         </ng-container>
       </mat-form-field>
@@ -61,7 +61,7 @@
       <button
         mat-button
         type="button"
-        *ngIf="formType !== 'team'"
+        *ngIf="formType !== 'team' && formType !== 'player'"
         (click)="cancel()"
       >
         Cancel

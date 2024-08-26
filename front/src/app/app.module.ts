@@ -33,6 +33,7 @@ import { PopupContentModule } from './components/popup-content/popup-content.mod
 import { TeamDetailsComponent } from './features/team/team-details/team-details.component';
 import { PlayerCreateComponent } from './features/player/player-create/player-create.component';
 import { PlayersBaseComponent } from './features/player/players-base/players-base.component';
+import { PlayerDetailsComponent } from './features/player/player-details/player-details.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { PlayersBaseComponent } from './features/player/players-base/players-bas
     TeamDetailsComponent,
     PlayerCreateComponent,
     PlayersBaseComponent,
+    PlayerDetailsComponent,
   ],
   bootstrap: [AppComponent],
   imports: [

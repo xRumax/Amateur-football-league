@@ -25,7 +25,7 @@ export class SessionService {
         const decodedToken = helper.decodeToken(access_token);
         return decodedToken.user_id;
       } catch (error) {
-        console.error('Token decoding error:', error); // Obsłuż błędy dekodowania tokenu
+        console.error('Token decoding error:', error);
         return null;
       }
     }

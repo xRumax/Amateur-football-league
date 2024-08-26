@@ -34,7 +34,7 @@ export class TableComponent implements OnInit {
   }
 
   private async loadTeamData() {
-    this.columns = this.teamService.teamcolumns;
+    this.columns = this.teamService.teamColumns;
 
     try {
       const teams = await this.teamService.getAllTeamsWithLeagueName();
@@ -47,7 +47,7 @@ export class TableComponent implements OnInit {
   }
 
   private async loadPlayerData() {
-    this.columns = this.playerService.playercolumns;
+    this.columns = this.playerService.playerColumns;
 
     try {
       const players = await this.playerService.getAllPlayers();

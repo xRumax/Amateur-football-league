@@ -10,5 +10,5 @@ class League(Base):
     description = Column(String)
     rules = Column(String)
 
-     # Relacja z drużynami w lidze
+    # Relationship with teams in the league
     teams = relationship("Team", back_populates="league")

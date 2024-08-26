@@ -21,15 +21,15 @@ def create_team(
 
     team_service = TeamService(db)
 
-    # Sprawdź, czy użytkownik już posiada drużynę
+    # Check if the user already has a team
     existing_team = team_service.get_team_by_user_id(current_user['user_id'])
     if existing_team is not None:
         raise HTTPException(status_code=400, detail="Posiadasz już drużynę")
 
-    # Tworzymy obiekt TeamCreate z danych formularza
+    # Create a TeamCreate object from the form data
     team_create = TeamCreate(name=name, league_id=league_id)
 
-    # Próbujemy zapisać logo, jeśli jest dostarczone
+    # Try to save the logo if it is provided
     if logo:
         upload_service = UploadService()
         upload_result = upload_service.validate_and_save(logo, name)

@@ -8,44 +8,26 @@ import { Component, HostListener } from '@angular/core';
 export class HomeComponent {
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
-    const ballElements = document.querySelectorAll(
-      '.ball-img'
-    ) as NodeListOf<HTMLElement>;
     const textElements = document.querySelectorAll(
       '.title-f, .title-s, .title-t'
     ) as NodeListOf<HTMLElement>;
 
-    // Zmniejszenie ruchu napisów
+    // Reducing subtitle traffic
     const textX = (window.innerWidth / 2 - event.clientX) / 100;
     const textY = (window.innerHeight / 2 - event.clientY) / 100;
 
-    // Zwiększenie ruchu piłki
-    const ballX = (event.clientX / window.innerWidth - 0.5) * 100;
-    const ballY = (event.clientY / window.innerHeight - 0.5) * 100;
-
     textElements.forEach((element) => {
       element.style.transform = `translate(${textX}px, ${textY}px)`;
-    });
-
-    ballElements.forEach((element) => {
-      element.style.transform = `translate(${ballX}px, ${ballY}px)`;
     });
   }
 
   @HostListener('document:mouseleave', ['$event'])
   onMouseLeave() {
-    const ballElements = document.querySelectorAll(
-      '.ball-img'
-    ) as NodeListOf<HTMLElement>;
     const textElements = document.querySelectorAll(
       '.title-f, .title-s, .title-t'
     ) as NodeListOf<HTMLElement>;
 
     textElements.forEach((element) => {
-      element.style.transform = 'translate(0, 0)';
-    });
-
-    ballElements.forEach((element) => {
       element.style.transform = 'translate(0, 0)';
     });
   }

@@ -30,16 +30,16 @@ def update_user(db: Session, user: UserUpdate, user_id: int):
     return get_user(db=db, user_id=user_id)
 
 def delete_user(db: Session, user_id: int):
-    # Pobierz użytkownika po ID wraz z przypisaną drużyną
+    # Download the user by ID along with the assigned team
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     
-    # Usuń drużynę przypisaną do użytkownika, jeśli istnieje
+    # Delete the team assigned to the user if it exists
     if db_user.team:
         db.delete(db_user.team)
     
-    # Usuń użytkownika
+    # Delete user
     db.delete(db_user)
     db.commit()
 

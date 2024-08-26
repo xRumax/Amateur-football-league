@@ -1,0 +1,23 @@
+<div class="main-container">
+  <div *ngIf="player" class="player-details-container">
+    <div class="player-details-main-content">
+      <ng-container *ngFor="let detail of playerDetails">
+        <p>{{ detail.label }}: {{ player[detail.key] }}</p>
+      </ng-container>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource">
+    <!-- Dynamic Columns -->
+    <ng-container
+      *ngFor="let column of playerColumns"
+      [matColumnDef]="column.key"
+    >
+      <th mat-header-cell *matHeaderCellDef>{{ column.header }}</th>
+      <td mat-cell *matCellDef="let player">{{ player[column.key] }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="playerColumnKeys"></tr>
+    <tr mat-row *matRowDef="let row; columns: playerColumnKeys"></tr>
+  </table>
+</div>

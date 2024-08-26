@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from datetime import date
 from enum import Enum
 from typing import Optional
@@ -17,6 +17,12 @@ class PlayerCreate(PlayerBase):
     date_of_birth : Optional[date] = None
     sex : Optional[SexEnum] = None
     team_id: Optional[int] = None
+
+    @validator('team_id', pre=True, always=True)
+    def set_team_id(cls, v):
+        if v == '':
+            return None
+        return v
 
 class PlayerUpdate(PlayerBase):
     last_name: str
@@ -40,10 +46,10 @@ class Player(BaseModel):
     date_of_birth : Optional[date] = None
     sex : Optional[SexEnum] = None
 
-    # Relacja z druzyna
+    # Relationship with team
     team_id : Optional[int] = None
 
-    # Statystyki
+    # Statics
     num_of_goals: Optional[int] = Field(0)
     num_of_assists: Optional[int] = Field(0)
     num_of_yellow_cards: Optional[int] = Field(0)
