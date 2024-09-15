@@ -18,12 +18,6 @@ export class TeamDetailsComponent implements OnInit {
   staticsDataSource = new MatTableDataSource<any>([]); // Additional dataSource for statics
   id: number = 0; // Initialize id as number
   team: Team | undefined;
-  playerColumns = [
-    { key: 'name', header: 'Name' },
-    { key: 'num_of_goals', header: 'Goals' },
-    { key: 'num_of_yellow_cards', header: 'Yellow Cards' },
-    { key: 'num_of_red_cards', header: 'Red Cards' },
-  ];
 
   staticsColumns = [
     { key: 'num_of_goals', header: 'Goals' },
@@ -47,7 +41,6 @@ export class TeamDetailsComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.playerColumnKeys = this.playerColumns.map((column) => column.key);
     this.staticsColumnKeys = this.staticsColumns.map((column) => column.key);
     const routeId = this.route.snapshot.paramMap.get('id');
     if (routeId) {

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File
 from sqlalchemy.orm import Session
-from app.schemas.team import TeamCreate, TeamUpdate, Team
+from app.schemas.team import TeamCreate, TeamUpdate, Team, TeamList
 from app.services.team import TeamService
 from app.database import get_db
 from app.utils.auth import get_current_user
@@ -40,7 +40,7 @@ def create_team(
     team_service = TeamService(db)
     return team_service.create_team_with_logo(team_create, creator_id=current_user['user_id'], logo=logo)
 
-@router.get("/", response_model=list[Team])
+@router.get("/", response_model=list[TeamList])
 def read_teams(db: Session = Depends(get_db)):
     team_service = TeamService(db)
     return team_service.get_all_teams()

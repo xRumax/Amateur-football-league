@@ -1,5 +1,5 @@
 <div class="mat-elevation-z8">
-  <div class="search-bar">
+  <div *ngIf="dataType !== 'teamPlayers'" class="search-bar">
     <mat-form-field>
       <mat-label>Szukaj</mat-label>
       <input
@@ -30,6 +30,7 @@
   </table>
 
   <mat-paginator
+    *ngIf="dataType !== 'teamPlayers'"
     [pageSize]="10"
     [pageSizeOptions]="[5, 10, 20]"
     showFirstLastButtons

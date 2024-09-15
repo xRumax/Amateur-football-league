@@ -12,10 +12,11 @@ import { PlayerService, Player } from '../../services/player.service';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
-  @Input() dataType: 'team' | 'player' = 'team';
+  @Input() dataType: 'team' | 'player' | 'teamPlayers' | 'teamStatics' = 'team';
   @Input() columns: { key: string; header: string }[] = [];
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @Input() teamId: number | null = null;
 
   data: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
@@ -30,6 +31,8 @@ export class TableComponent implements OnInit {
       this.loadTeamData();
     } else if (this.dataType === 'player') {
       this.loadPlayerData();
+    } else if (this.dataType === 'teamPlayers') {
+      this.loadTeamPlayersData();
     }
   }
 
@@ -64,6 +67,24 @@ export class TableComponent implements OnInit {
     }
   }
 
+  private async loadTeamPlayersData() {
+    this.columns = this.playerService.playerColumns.filter(
+      (column) => column.key !== 'team_name'
+    );
+
+    try {
+      const players = await this.playerService.getAllPlayers();
+      const filteredPlayers = players.filter(
+        (player) => player.team_id === this.teamId
+      );
+      this.data = new MatTableDataSource<Player>(filteredPlayers);
+      this.data.paginator = this.paginator;
+      this.data.sort = this.sort;
+    } catch (error) {
+      console.error('Error fetching players for team:', error);
+    }
+  }
+
   getDisplayedColumns(): string[] {
     return this.columns.map((column) => column.key);
   }
@@ -82,7 +103,7 @@ export class TableComponent implements OnInit {
   onRowClicked(row: any) {
     if (this.dataType === 'team') {
       this.router.navigate(['/team', row.id]);
-    } else if (this.dataType === 'player') {
+    } else if (this.dataType === 'player' || this.dataType === 'teamPlayers') {
       this.router.navigate(['/player', row.id]);
     }
   }

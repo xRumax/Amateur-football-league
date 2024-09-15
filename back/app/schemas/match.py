@@ -10,7 +10,7 @@ class MatchBase(BaseModel):
     team_2_id : int
 
 class MatchCreate(MatchBase):
-    pass
+    pass    
 
 class MatchUpdate(MatchBase):
     pass

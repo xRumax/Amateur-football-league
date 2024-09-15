@@ -16,6 +16,11 @@ import { ProfileComponent } from './features/profile/profile.component';
 import { RegisterComponent } from './features/register/register.component';
 import { TeamsBaseComponent } from './features/team/teams-base/teams-base.component';
 import { TeamCreateComponent } from './features/team/team-create/team-create.component';
+import { TeamDetailsComponent } from './features/team/team-details/team-details.component';
+import { PlayerCreateComponent } from './features/player/player-create/player-create.component';
+import { PlayersBaseComponent } from './features/player/players-base/players-base.component';
+import { PlayerDetailsComponent } from './features/player/player-details/player-details.component';
+import { TournamentCreateComponent } from './features/tournament/tournament-create/tournament-create.component';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -30,10 +35,9 @@ import { TableModule } from './components/table/table.module';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { PopupContentModule } from './components/popup-content/popup-content.module';
-import { TeamDetailsComponent } from './features/team/team-details/team-details.component';
-import { PlayerCreateComponent } from './features/player/player-create/player-create.component';
-import { PlayersBaseComponent } from './features/player/players-base/players-base.component';
-import { PlayerDetailsComponent } from './features/player/player-details/player-details.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -49,6 +53,7 @@ import { PlayerDetailsComponent } from './features/player/player-details/player-
     PlayerCreateComponent,
     PlayersBaseComponent,
     PlayerDetailsComponent,
+    TournamentCreateComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -68,6 +73,9 @@ import { PlayerDetailsComponent } from './features/player/player-details/player-
     MatOptionModule,
     MatSelectModule,
     PopupContentModule,
+    ReactiveFormsModule,
+    MatStepperModule,
+    MatIconModule,
   ],
   providers: [
     provideAnimationsAsync(),

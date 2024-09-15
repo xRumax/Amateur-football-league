@@ -41,7 +41,9 @@ export class NavbarComponent {
   async navigateToMyTeam(): Promise<void> {
     const teamId = await this.getTeamIdFromUser();
     if (teamId !== null && teamId !== undefined) {
-      this.router.navigate(['/team', teamId]);
+      this.router.navigate(['/team', teamId]).then(() => {
+        window.location.reload();
+      });
     } else {
       console.error('No team ID found for the user, cannot navigate');
       this.showSnackbar("You already don't have any team");

@@ -9,28 +9,12 @@
       </ng-container>
     </div>
   </div>
-  <p class="team-details-content-item">Players:</p>
-  <div
-    *ngIf="dataSource?.data?.length; else noPlayers"
-    class="team-details-content"
-  >
-    <table mat-table [dataSource]="dataSource">
-      <!-- Dynamic Columns -->
-      <ng-container
-        *ngFor="let column of playerColumns"
-        [matColumnDef]="column.key"
-      >
-        <th mat-header-cell *matHeaderCellDef>{{ column.header }}</th>
-        <td mat-cell *matCellDef="let player">{{ player[column.key] }}</td>
-      </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="playerColumnKeys"></tr>
-      <tr mat-row *matRowDef="let row; columns: playerColumnKeys"></tr>
-    </table>
+  <p class="team-details-content-item">Players:</p>
+  <div class="table-con">
+    <app-table dataType="teamPlayers" [teamId]="id"></app-table>
   </div>
-  <ng-template #noPlayers>
-    <p>No Players</p>
-  </ng-template>
+  <!------------------------------------------------------->
   <p class="team-details-content-item">Team Statics:</p>
 
   <div class="team-details-content">
