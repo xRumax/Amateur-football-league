@@ -12,11 +12,17 @@ import { PlayerService, Player } from '../../services/player.service';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
-  @Input() dataType: 'team' | 'player' | 'teamPlayers' | 'teamStatics' = 'team';
+  @Input() dataType:
+    | 'team'
+    | 'player'
+    | 'teamPlayers'
+    | 'teamStatics'
+    | 'playerStatics' = 'team';
   @Input() columns: { key: string; header: string }[] = [];
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @Input() teamId: number | null = null;
+  @Input() playerId: number | null = null;
 
   data: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
@@ -27,13 +33,32 @@ export class TableComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.data.sort = this.sort;
+
     if (this.dataType === 'team') {
       this.loadTeamData();
     } else if (this.dataType === 'player') {
       this.loadPlayerData();
     } else if (this.dataType === 'teamPlayers') {
       this.loadTeamPlayersData();
+    } else if (this.dataType === 'teamStatics') {
+      this.columns = this.teamService.staticsColumns;
+      this.loadTeamStaticsData();
+    } else if (this.dataType === 'playerStatics') {
+      this.columns = this.playerService.playerDetailsColumns.slice(3);
+      this.loadPlayerStaticsData();
     }
+  }
+
+  private normalizePlayerStats(player: Player): Player {
+    return {
+      ...player,
+      num_of_goals: player.num_of_goals ?? 0,
+      num_of_yellow_cards: player.num_of_yellow_cards ?? 0,
+      num_of_red_cards: player.num_of_red_cards ?? 0,
+      num_of_matches_played: player.num_of_matches_played ?? 0,
+      minutes_played: player.minutes_played ?? 0,
+    };
   }
 
   private async loadTeamData() {
@@ -54,11 +79,14 @@ export class TableComponent implements OnInit {
 
     try {
       const players = await this.playerService.getAllPlayers();
-      const playerPromises = players.map(async (player) => {
-        player.team_name = await this.playerService.getTeamName(player.team_id);
-        return player;
-      });
-      const updatedPlayers = await Promise.all(playerPromises);
+      const updatedPlayers = await Promise.all(
+        players.map(async (player) => {
+          player.team_name = await this.playerService.getTeamName(
+            player.team_id
+          );
+          return this.normalizePlayerStats(player);
+        })
+      );
       this.data = new MatTableDataSource<Player>(updatedPlayers);
       this.data.paginator = this.paginator;
       this.data.sort = this.sort;
@@ -68,15 +96,16 @@ export class TableComponent implements OnInit {
   }
 
   private async loadTeamPlayersData() {
-    this.columns = this.playerService.playerColumns.filter(
+    this.columns = this.playerService.playerDetailsColumns.filter(
       (column) => column.key !== 'team_name'
     );
 
     try {
       const players = await this.playerService.getAllPlayers();
-      const filteredPlayers = players.filter(
-        (player) => player.team_id === this.teamId
-      );
+      const filteredPlayers = players
+        .filter((player) => player.team_id === this.teamId)
+        .map(this.normalizePlayerStats);
+
       this.data = new MatTableDataSource<Player>(filteredPlayers);
       this.data.paginator = this.paginator;
       this.data.sort = this.sort;
@@ -85,12 +114,61 @@ export class TableComponent implements OnInit {
     }
   }
 
+  private async loadTeamStaticsData() {
+    if (!this.teamId) {
+      console.error('Team ID not provided');
+      return;
+    }
+    try {
+      const players = await this.playerService.getPlayerByTeamId(this.teamId);
+      const totalNumOfGoals = players.reduce(
+        (sum: number, player: any) => sum + (player.num_of_goals || 0),
+        0
+      );
+      const totalNumOfYellowCards = players.reduce(
+        (sum: number, player: any) => sum + (player.num_of_yellow_cards || 0),
+        0
+      );
+      const totalNumOfRedCards = players.reduce(
+        (sum: number, player: any) => sum + (player.num_of_red_cards || 0),
+        0
+      );
+      this.data = new MatTableDataSource<any>([
+        {
+          num_of_goals: totalNumOfGoals,
+          num_of_yellow_cards: totalNumOfYellowCards,
+          num_of_red_cards: totalNumOfRedCards,
+        },
+      ]);
+      this.data.paginator = this.paginator;
+      this.data.sort = this.sort;
+    } catch (error) {
+      console.error('Error fetching team statics:', error);
+    }
+  }
+
+  private async loadPlayerStaticsData() {
+    if (!this.playerId) {
+      console.error('Player ID not provided');
+      return;
+    }
+    try {
+      const player = await this.playerService.getPlayer(this.playerId);
+      this.data = new MatTableDataSource<any>([player]);
+      this.data.paginator = this.paginator;
+      this.data.sort = this.sort;
+    } catch (error) {
+      console.error('Error fetching player statics:', error);
+    }
+  }
+
   getDisplayedColumns(): string[] {
     return this.columns.map((column) => column.key);
   }
 
   getItemValue(item: any, key: string): any {
-    return item[key as keyof typeof item];
+    const value = item[key as keyof typeof item];
+    return value !== null && value !== undefined ? value : 0;
   }
 
   applyFilter(event: Event) {

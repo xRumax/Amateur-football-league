@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { Team, TeamService } from '../../../services/team.service';
-import { Player } from '../../../services/player.service';
+import { Player, PlayerService } from '../../../services/player.service';
 
 @Component({
   selector: 'app-team-details',
@@ -19,12 +19,6 @@ export class TeamDetailsComponent implements OnInit {
   id: number = 0; // Initialize id as number
   team: Team | undefined;
 
-  staticsColumns = [
-    { key: 'num_of_goals', header: 'Goals' },
-    { key: 'num_of_yellow_cards', header: 'Yellow Cards' },
-    { key: 'num_of_red_cards', header: 'Red Cards' },
-  ];
-
   teamDetails: { key: keyof Team; label: string }[] = [
     { key: 'name', label: 'Name' },
     { key: 'matches_played', label: 'Matches played' },
@@ -37,37 +31,49 @@ export class TeamDetailsComponent implements OnInit {
 
   constructor(
     private teamService: TeamService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private playerService: PlayerService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.staticsColumnKeys = this.staticsColumns.map((column) => column.key);
+    this.staticsColumnKeys = this.teamService.staticsColumns.map(
+      (column) => column.key
+    );
     const routeId = this.route.snapshot.paramMap.get('id');
     if (routeId) {
       this.id = Number(routeId);
+      this.team = await this.teamService.getTeam(this.id);
+      const players = await this.playerService.getPlayerByTeamId(this.id);
+
+      this.dataSource.data = players;
+
+      // Calculate totals
+      this.totalNumOfGoals = players.reduce(
+        (sum: number, player: any) => sum + (player.num_of_goals || 0),
+        0
+      );
+      this.totalNumOfYellowCards = players.reduce(
+        (sum: number, player: any) => sum + (player.num_of_yellow_cards || 0),
+        0
+      );
+      this.totalNumOfRedCards = players.reduce(
+        (sum: number, player: any) => sum + (player.num_of_red_cards || 0),
+        0
+      );
+
+      // Update staticsDataSource with totals
+      this.staticsDataSource.data = [
+        {
+          num_of_goals: this.totalNumOfGoals,
+          num_of_yellow_cards: this.totalNumOfYellowCards,
+          num_of_red_cards: this.totalNumOfRedCards,
+        },
+      ];
     }
+  }
 
-    this.team = await this.teamService.getTeam(this.id);
-    if (this.team) {
-      const leagueNamePromise = this.team.league_id
-        ? this.teamService.getLeagueNameById(this.team.league_id)
-        : Promise.resolve(null);
-      const creatorUsernamePromise = this.team.creator_id
-        ? this.teamService.getCreatorUsernameById(this.team.creator_id)
-        : Promise.resolve(null);
-
-      const [leagueName, creatorUsername] = await Promise.all([
-        leagueNamePromise,
-        creatorUsernamePromise,
-      ]);
-
-      if (this.team.league_id) {
-        this.team.league_name = leagueName ?? undefined; // Set the league name
-      }
-      if (this.team.creator_id) {
-        this.team.creator_username = creatorUsername ?? undefined; // Set the creator username
-      }
-    }
-    this.dataSource.data = this.team?.players || [];
+  addPlayer(): void {
+    // Logic to add a new player
+    console.log('Add player button clicked');
   }
 }

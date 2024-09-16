@@ -18,6 +18,8 @@ import { PlayerService } from '../../services/player.service';
   styleUrls: ['./form.component.scss'],
 })
 export class FormComponent implements OnInit {
+  team: any = {};
+  player: any = {};
   fileName: string = '';
   display: FormControl = new FormControl('', Validators.required);
   @Input() data: any;
@@ -70,14 +72,14 @@ export class FormComponent implements OnInit {
   async initializeTeamForm(): Promise<void> {
     this.leagues = await this.leagueService.getLeagues();
     this.fields = this.teamService
-      .generateTeamFields(this.leagues)
+      .generateTeamFields(this.team, this.leagues)
       .filter((field) => ['name', 'league_id', 'logo'].includes(field.name));
     this.initializeForm(this.fields);
   }
 
   async initializePlayerForm(): Promise<void> {
     this.fields = this.playerService
-      .generatePlayerFields()
+      .generatePlayerFields(this.player)
       .filter((field) =>
         ['name', 'last_name', 'date_of_birth', 'sex', 'team_id'].includes(
           field.name

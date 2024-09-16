@@ -36,42 +36,42 @@ export class TeamService {
     private sessionService: SessionService
   ) {}
 
-  generateTeamFields(leagues: League[]): FormField[] {
+  generateTeamFields(team: Team, leagues: League[]): FormField[] {
     return [
       {
         type: 'number',
         name: 'id',
         id: 'id',
         placeholder: 'ID',
-        value: '',
+        value: team.id ?? '',
       },
       {
         type: 'text',
         name: 'name',
         id: 'name',
         placeholder: 'Name',
-        value: '',
+        value: team.name ?? '',
       },
       {
         type: 'number',
         name: 'matches_played',
         id: 'matches_played',
         placeholder: 'Matches Played',
-        value: '',
+        value: team.matches_played ?? '',
       },
       {
         type: 'string',
         name: 'league_name',
         id: 'league_name',
         placeholder: 'League Name',
-        value: '',
+        value: team.league_id ?? '',
       },
       {
         type: 'select',
         name: 'league_id',
         id: 'league_id',
         placeholder: 'League',
-        value: '',
+        value: team.league_name ?? '',
         options: leagues.map((league) => ({
           label: league.name,
           value: league.id,
@@ -82,28 +82,28 @@ export class TeamService {
         name: 'creator_id',
         id: 'creator_id',
         placeholder: 'Creator ID',
-        value: '',
+        value: team.creator_id ?? '',
       },
       {
         type: 'text',
         name: 'creator_username',
         id: 'creator_username',
         placeholder: 'Creator Username',
-        value: '',
+        value: team.creator_username ?? '',
       },
       {
         type: 'number',
         name: 'statics',
         id: 'statics',
         placeholder: 'Statics',
-        value: '',
+        value: team.statics ?? '',
       },
       {
         type: 'file',
         name: 'logo',
         id: 'logo',
         placeholder: 'Logo',
-        value: '',
+        value: team.logo ?? '',
       },
     ];
   }
@@ -113,6 +113,12 @@ export class TeamService {
     { key: 'name', header: 'Name' },
     { key: 'matches_played', header: 'Matches Played' },
     { key: 'league_name', header: 'League' },
+  ];
+
+  staticsColumns = [
+    { key: 'num_of_goals', header: 'Goals' },
+    { key: 'num_of_yellow_cards', header: 'Yellow Cards' },
+    { key: 'num_of_red_cards', header: 'Red Cards' },
   ];
 
   createTeam(formData: FormData): Promise<Team> {

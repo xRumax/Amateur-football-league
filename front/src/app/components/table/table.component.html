@@ -1,5 +1,12 @@
 <div class="mat-elevation-z8">
-  <div *ngIf="dataType !== 'teamPlayers'" class="search-bar">
+  <div
+    *ngIf="
+      dataType !== 'teamPlayers' &&
+      dataType !== 'teamStatics' &&
+      dataType !== 'playerStatics'
+    "
+    class="search-bar"
+  >
     <mat-form-field>
       <mat-label>Szukaj</mat-label>
       <input
@@ -10,7 +17,13 @@
     </mat-form-field>
   </div>
 
-  <table mat-table [dataSource]="data" matSort class="mat-elevation-z8">
+  <table
+    *ngIf="dataType !== 'teamStatics' && dataType !== 'playerStatics'"
+    mat-table
+    [dataSource]="data"
+    matSort
+    class="mat-elevation-z8"
+  >
     <!-- Header row definition -->
     <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="{{ column.key }}">
@@ -29,8 +42,38 @@
     ></tr>
   </table>
 
+  <!----------------------table for team statics (no sorting)------------------------>
+
+  <table
+    *ngIf="dataType === 'teamStatics' || dataType === 'playerStatics'"
+    mat-table
+    [dataSource]="data"
+    class="mat-elevation-z8"
+  >
+    <!-- Header row definition -->
+    <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ column.header }}
+      </th>
+      <td class="link" mat-cell *matCellDef="let row">
+        {{ getItemValue(row, column.key) }}
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+    <!-- Body row definition -->
+    <tr
+      mat-row
+      *matRowDef="let row; columns: getDisplayedColumns()"
+      (click)="onRowClicked(row)"
+    ></tr>
+  </table>
+
   <mat-paginator
-    *ngIf="dataType !== 'teamPlayers'"
+    *ngIf="
+      dataType !== 'teamPlayers' &&
+      dataType !== 'teamStatics' &&
+      dataType !== 'playerStatics'
+    "
     [pageSize]="10"
     [pageSizeOptions]="[5, 10, 20]"
     showFirstLastButtons

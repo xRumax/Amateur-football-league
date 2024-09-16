@@ -24,7 +24,7 @@ def create_team(
     # Check if the user already has a team
     existing_team = team_service.get_team_by_user_id(current_user['user_id'])
     if existing_team is not None:
-        raise HTTPException(status_code=400, detail="Posiadasz już drużynę")
+        raise HTTPException(status_code=400, detail="User already has a team")
 
     # Create a TeamCreate object from the form data
     team_create = TeamCreate(name=name, league_id=league_id)

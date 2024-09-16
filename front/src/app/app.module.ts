@@ -6,6 +6,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { FormModule } from './components/form/form.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -38,6 +39,8 @@ import { PopupContentModule } from './components/popup-content/popup-content.mod
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSortModule } from '@angular/material/sort';
+import { DetailsContentModule } from './components/details-content/details-content.module';
 
 @NgModule({
   declarations: [
@@ -76,10 +79,13 @@ import { MatIconModule } from '@angular/material/icon';
     ReactiveFormsModule,
     MatStepperModule,
     MatIconModule,
+    MatSortModule,
+    DetailsContentModule,
   ],
   providers: [
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi()),
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}
