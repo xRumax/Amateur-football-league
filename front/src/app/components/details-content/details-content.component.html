@@ -1,0 +1,9 @@
+<mat-card>
+  <mat-card-content>
+    <ng-container>
+      <ng-container *ngFor="let field of fields">
+        <p>{{ field.placeholder }}: {{ field.value }}</p>
+      </ng-container>
+    </ng-container>
+  </mat-card-content>
+</mat-card>
