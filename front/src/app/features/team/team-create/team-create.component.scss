@@ -1,18 +1,10 @@
 .main-container {
-  display: flex;
   flex-direction: column;
-  width: 100%;
-  padding-top: 60px;
 
   h1 {
-    margin-bottom: 20px;
     font-size: 2rem;
     text-align: center;
     font-style: italic;
     font-weight: 600;
   }
-}
-
-.form-container {
-  margin-top: 100px;
 }

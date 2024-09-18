@@ -1,9 +1,5 @@
 .main-container {
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
 }
 
 .player-details-container {
@@ -24,4 +20,9 @@
   font-size: 2rem;
   margin: 2rem;
   font-weight: 500;
+}
+
+.table-con {
+  width: 50%;
+  padding-bottom: 1rem;
 }

@@ -3,6 +3,8 @@
   justify-content: space-between;
   z-index: 9999;
   height: 9vh;
+  background-color: transparent;
+  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.1);
 }
 
 .nav-bar a:before {
@@ -20,7 +22,6 @@
 }
 
 .nav-bar a {
-  color: #fff;
   font-size: 1.4rem;
   line-height: 4rem;
   display: block;
@@ -32,6 +33,7 @@
 }
 
 .nav-bar-logo {
+  color: rgb(76, 61, 104);
   font-size: 2rem;
   font-weight: bold;
   font-style: italic;
@@ -52,7 +54,7 @@
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 .nav-bar-links a {
-  color: #ffffff; /* Kolor domyślny linków */
+  color: rgb(76, 61, 104); /* Kolor domyślny linków */
   transition: color 0.2s; /* Płynna zmiana koloru przez 0.2 sekundy */
 }
 
@@ -88,7 +90,7 @@
 }
 
 .nav-bar-submenu-block {
-  background: #252c41;
+  background: #252c417a;
   position: absolute;
   width: 100%;
   top: 9vh;
@@ -100,6 +102,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  a {
+    color: white;
+  }
 }
 
 li:hover .nav-bar-submenu-block {

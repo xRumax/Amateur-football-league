@@ -1,4 +1,4 @@
-<mat-toolbar color="primary " class="nav-bar">
+<mat-toolbar class="nav-bar">
   <span class="nav-bar-logo">AFL</span>
   <div class="nav-bar-links">
     <ul>
@@ -91,17 +91,48 @@
       <li class="dropdown">
         <a
           routerLink="/players-base"
-          [class.active]="isActive('/players')"
+          [class.active]="
+            isActive('/players') ||
+            isActive('/players-base') ||
+            isActive('/player-create')
+          "
           routerLinkActive="active"
-          >Players</a
+          ><div
+            [ngClass]="{
+              'active-link':
+                isActive('/players') ||
+                isActive('/players-base') ||
+                isActive('/player-create')
+            }"
+          >
+            Players
+          </div></a
         >
         <div class="nav-bar-submenu-block">
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
               <li *ngIf="isLoggedIn">
-                <a routerLink="/player-create">Add Player</a>
+                <a routerLink="/player-create"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/player-create')
+                    }"
+                  >
+                    Create Player
+                  </div></a
+                >
               </li>
-              <li><a routerLink="/players-base">Players Base</a></li>
+              <li>
+                <a routerLink="/players-base"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/players-base')
+                    }"
+                  >
+                    Players Base
+                  </div></a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -130,7 +161,7 @@
         <a routerLink="/login">Login</a>
       </li>
       <li *ngIf="isLoggedIn">
-        <a (click)="logout()">Logout</a>
+        <a (click)="logout()">Logout </a>
       </li>
     </ul>
   </div>
