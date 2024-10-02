@@ -50,6 +50,18 @@ export class NavbarComponent {
     }
   }
 
+  async navigateToCreatePlayer(): Promise<void> {
+    const teamId = await this.getTeamIdFromUser();
+    if (teamId !== null && teamId !== undefined) {
+      this.router.navigate(['/player-create']).then(() => {
+        window.location.reload();
+      });
+    } else {
+      console.error('No team ID found for the user, cannot navigate');
+      this.showSnackbar("You already don't have any team");
+    }
+  }
+
   showSnackbar(message: string): void {
     this.snackBar.open(message, 'Close', {
       duration: 3000, // Duration in milliseconds after which the snackbar will be automatically dismissed.

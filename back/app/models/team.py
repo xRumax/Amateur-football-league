@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, validates
 from app.database import Base
 
 class Team(Base):
@@ -25,3 +25,4 @@ class Team(Base):
     # Relationship with the creator of the team
     creator = relationship("User", back_populates="team", uselist=False)
     creator_id = Column(Integer, ForeignKey("users.id"))
+

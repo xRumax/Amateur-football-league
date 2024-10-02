@@ -11,6 +11,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LeagueService, League } from '../../services/league.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PlayerService } from '../../services/player.service';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-form',
@@ -30,6 +31,7 @@ export class FormComponent implements OnInit {
   user: UserResponse | null = null;
   leagues: League[] = [];
   selectedFile: File | null = null;
+  team_id: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -39,9 +41,10 @@ export class FormComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private teamService: TeamService,
     private playerService: PlayerService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private sessionService: SessionService
   ) {
-    this.form = this.formBuilder.group({});
+    this.form = this.formBuilder.group({ team_id: [null] });
     if (dialogData) {
       this.formType = dialogData.formType;
       this.data = dialogData.data;
@@ -58,10 +61,33 @@ export class FormComponent implements OnInit {
         break;
       case 'player':
         await this.initializePlayerForm();
+        await this.setTeamIdForPlayer();
         break;
     }
   }
 
+  async setTeamIdForPlayer(): Promise<void> {
+    const userId = this.sessionService.getUserId();
+    if (userId) {
+      try {
+        const user = await this.userService.getUser(Number(userId));
+        if (user && user.team && user.team.id) {
+          const teamId = user.team.id;
+          this.form.patchValue({ team_id: teamId });
+        } else {
+          console.error('Team ID not found for user');
+          this.snackBar.open('Team ID not found for user', 'Close', {
+            duration: 2000,
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        this.snackBar.open('Error fetching user data', 'Close', {
+          duration: 2000,
+        });
+      }
+    }
+  }
   async initializeUserForm(): Promise<void> {
     const { user, fields } = await this.userService.getUserDataAndFields();
     this.user = user;
@@ -81,11 +107,10 @@ export class FormComponent implements OnInit {
     this.fields = this.playerService
       .generatePlayerFields(this.player)
       .filter((field) =>
-        ['name', 'last_name', 'date_of_birth', 'sex', 'team_id'].includes(
-          field.name
-        )
+        ['name', 'last_name', 'date_of_birth', 'sex'].includes(field.name)
       );
     this.initializeForm(this.fields);
+    this.form.addControl('team_id', new FormControl(this.player.team_id || ''));
   }
 
   initializeForm(fields: any[]): void {
@@ -135,6 +160,14 @@ export class FormComponent implements OnInit {
   async submitTeamForm(): Promise<void> {
     const teamName = this.form.value.name;
     const teamExists = await this.teamService.teamExists(teamName);
+    const userId = this.sessionService.getUserId();
+    const userHaveTeam = await this.userService.userHaveTeam(Number(userId));
+    if (userHaveTeam) {
+      this.snackBar.open('You already have a team', 'Close', {
+        duration: 5000,
+      });
+      return;
+    }
     if (teamExists) {
       this.snackBar.open('Team already exists', 'Close', {
         duration: 2000,

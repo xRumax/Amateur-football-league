@@ -4,14 +4,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormField } from '../app.component';
 import { Environment } from '../../environments/environment';
 import { SessionService } from './session.service';
-import { TeamService } from './team.service';
+import { TeamService, Team } from './team.service';
 
 export interface UserResponse {
   id: number;
   username: string;
   email: string;
   password: string;
-  team?: { team_id: number };
+  team?: Team | null;
   is_superuser: boolean;
 }
 
@@ -137,17 +137,22 @@ export class UserService {
 
   async getUserTeamDetails(userId: number): Promise<any> {
     const user = await this.getUser(userId);
-    if (!user.team || !user.team.team_id) {
+    if (!user.team || !user.team.id) {
       return {
         error: 'No team ID found for the user. Please join or create a team.',
       };
     }
     try {
-      const teamDetails = await this.teamService.getTeam(user.team.team_id);
+      const teamDetails = await this.teamService.getTeam(user.team.id);
       return teamDetails;
     } catch (error) {
       console.error('Error fetching team details:', error);
       throw error;
     }
+  }
+
+  async userHaveTeam(userId: number): Promise<boolean> {
+    const user = await this.getUser(userId);
+    return Boolean(user.team && user.team.id);
   }
 }

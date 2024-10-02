@@ -252,4 +252,16 @@ export class TeamService {
       return 'No Team';
     }
   }
+
+  async getTeamIdByUserId(userId: number): Promise<number> {
+    try {
+      const response = await axios.get(
+        `${this.envService.base_url}/teams/creator/${userId}`
+      );
+      return response.data.id;
+    } catch (error) {
+      console.error('Error fetching team ID by user ID:', error);
+      throw error;
+    }
+  }
 }

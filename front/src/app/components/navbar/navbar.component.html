@@ -112,7 +112,7 @@
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
               <li *ngIf="isLoggedIn">
-                <a routerLink="/player-create"
+                <a (click)="navigateToCreatePlayer()"
                   ><div
                     [ngClass]="{
                       'active-link': isActive('/player-create')
