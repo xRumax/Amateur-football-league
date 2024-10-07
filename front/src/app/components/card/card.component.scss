@@ -1,0 +1,52 @@
+mat-card {
+  background-color: #f3f3f3;
+}
+
+.card-container {
+  width: 80vw;
+  padding: 0.5rem;
+}
+
+.card-container-items {
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.card-container-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  margin-left: 10px;
+}
+.card-container-amount-teams {
+  margin: 5px;
+  font-size: 1rem;
+}
+
+.card-container-button {
+  border: 1px solid #000;
+}
+
+button {
+  width: 100px;
+}
+
+.status {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -200%);
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.active {
+  color: green;
+}
+
+.inactive {
+  color: red;
+}

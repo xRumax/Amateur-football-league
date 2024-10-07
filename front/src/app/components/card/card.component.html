@@ -1,0 +1,32 @@
+<div class="card-container" *ngFor="let tournament of tournaments">
+  <mat-card class="card-container-items" appearance="outlined">
+    <mat-card-title class="card-container-title">{{
+      tournament.name
+    }}</mat-card-title>
+    <div
+      class="status"
+      [ngClass]="{
+        active: tournament.teams.length < tournament.amount_of_teams,
+        inactive: tournament.teams.length === tournament.amount_of_teams
+      }"
+    >
+      {{
+        tournament.teams.length < tournament.amount_of_teams
+          ? "Active"
+          : "Inactive"
+      }}
+    </div>
+    <mat-card-content class="card-container-amount-teams">
+      <p>
+        Teams: {{ tournament.teams.length }}/{{ tournament.amount_of_teams }}
+      </p>
+      <button
+        mat-button
+        class="card-container-button"
+        (click)="joinToTournament(tournament)"
+      >
+        Join!
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>
