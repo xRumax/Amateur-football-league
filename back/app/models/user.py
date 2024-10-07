@@ -10,5 +10,7 @@ class User(Base):
     email = Column(String, unique=True)
     password = Column(String)
     is_superuser = Column(Boolean, default=False)
+    is_referee = Column(Boolean, default=False)
+
     
     team = relationship("Team", back_populates="creator", uselist=False)

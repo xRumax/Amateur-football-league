@@ -7,8 +7,9 @@ import {
 } from '@angular/common/http';
 import { FormModule } from './components/form/form.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
+
+// Components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './features/login/login.component';
@@ -22,7 +23,10 @@ import { PlayerCreateComponent } from './features/player/player-create/player-cr
 import { PlayersBaseComponent } from './features/player/players-base/players-base.component';
 import { PlayerDetailsComponent } from './features/player/player-details/player-details.component';
 import { TournamentCreateComponent } from './features/tournament/tournament-create/tournament-create.component';
+import { TournamentBaseComponent } from './features/tournament/tournament-base/tournament-base.component';
+import { MatchCreateComponent } from './features/match/match-create/match-create.component';
 
+// Modules
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -41,6 +45,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { DetailsContentModule } from './components/details-content/details-content.module';
+import { StepperModule } from './components/stepper/stepper.module';
+import { CardModule } from './components/card/card.module';
 
 @NgModule({
   declarations: [
@@ -57,6 +63,8 @@ import { DetailsContentModule } from './components/details-content/details-conte
     PlayersBaseComponent,
     PlayerDetailsComponent,
     TournamentCreateComponent,
+    MatchCreateComponent,
+    TournamentBaseComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -81,6 +89,8 @@ import { DetailsContentModule } from './components/details-content/details-conte
     MatIconModule,
     MatSortModule,
     DetailsContentModule,
+    StepperModule,
+    CardModule,
   ],
   providers: [
     provideAnimationsAsync(),

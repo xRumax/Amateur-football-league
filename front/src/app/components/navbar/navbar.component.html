@@ -80,13 +80,36 @@
           </div>
         </div>
       </li>
-      <li>
+      <li class="dropdown">
         <a
           routerLink="/matches"
-          [class.active]="isActive('/matches')"
+          [class.active]="isActive('/matches') || isActive('/match-create')"
           routerLinkActive="active"
-          >Matches</a
+          ><div
+            [ngClass]="{
+              'active-link': isActive('/matches') || isActive('/match-create')
+            }"
+          >
+            Matches
+          </div></a
         >
+        <div class="nav-bar-submenu-block">
+          <div class="nav-bar-submenu-padding">
+            <ul class="nav-bar-level2">
+              <li *ngIf="isLoggedIn">
+                <a routerLink="/match-create"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/match-create')
+                    }"
+                  >
+                    Create Match
+                  </div></a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
       </li>
       <li class="dropdown">
         <a
@@ -148,10 +171,37 @@
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
               <li *ngIf="isLoggedIn">
-                <a routerLink="/tournament-create">Create Tournament</a>
+                <a routerLink="/tournament-create"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/tournament-create')
+                    }"
+                  >
+                    Create Tournament
+                  </div></a
+                >
               </li>
               <li *ngIf="isLoggedIn">
-                <a routerLink="/tournament">My Tournament</a>
+                <a routerLink="/tournament-base"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/tournament-base')
+                    }"
+                  >
+                    Tournaments
+                  </div></a
+                >
+              </li>
+              <li *ngIf="isLoggedIn">
+                <a routerLink="/my-tournament"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/my-tournament')
+                    }"
+                  >
+                    My Tournament
+                  </div></a
+                >
               </li>
             </ul>
           </div>

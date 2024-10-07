@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { PlayerService } from '../../../services/player.service';
-import { FormFieldsService } from '../../../services/form-fields.service';
 
 @Component({
   selector: 'app-player-create',

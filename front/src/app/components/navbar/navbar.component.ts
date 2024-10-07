@@ -64,7 +64,7 @@ export class NavbarComponent {
 
   showSnackbar(message: string): void {
     this.snackBar.open(message, 'Close', {
-      duration: 3000, // Duration in milliseconds after which the snackbar will be automatically dismissed.
+      duration: 3000,
     });
   }
 }

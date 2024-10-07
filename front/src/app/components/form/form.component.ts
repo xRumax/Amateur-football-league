@@ -12,6 +12,7 @@ import { LeagueService, League } from '../../services/league.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PlayerService } from '../../services/player.service';
 import { SessionService } from '../../services/session.service';
+import { TournamentService } from '../../services/tournament.service';
 
 @Component({
   selector: 'app-form',
@@ -21,10 +22,11 @@ import { SessionService } from '../../services/session.service';
 export class FormComponent implements OnInit {
   team: any = {};
   player: any = {};
+  tournament: any = {};
   fileName: string = '';
   display: FormControl = new FormControl('', Validators.required);
   @Input() data: any;
-  @Input() formType!: 'user' | 'team' | 'player';
+  @Input() formType!: 'user' | 'team' | 'player' | 'tournament';
 
   form: FormGroup;
   fields: any[] = [];
@@ -42,7 +44,8 @@ export class FormComponent implements OnInit {
     private teamService: TeamService,
     private playerService: PlayerService,
     private snackBar: MatSnackBar,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private tournamentService: TournamentService
   ) {
     this.form = this.formBuilder.group({ team_id: [null] });
     if (dialogData) {
@@ -62,6 +65,9 @@ export class FormComponent implements OnInit {
       case 'player':
         await this.initializePlayerForm();
         await this.setTeamIdForPlayer();
+        break;
+      case 'tournament':
+        await this.initializeTournamentForm();
         break;
     }
   }
@@ -113,6 +119,13 @@ export class FormComponent implements OnInit {
     this.form.addControl('team_id', new FormControl(this.player.team_id || ''));
   }
 
+  async initializeTournamentForm(): Promise<void> {
+    this.fields = this.tournamentService.generateTournamentFields(
+      this.tournament
+    );
+    this.initializeForm(this.fields);
+  }
+
   initializeForm(fields: any[]): void {
     const group: Record<string, any> = {};
     fields.forEach((field) => {
@@ -142,6 +155,9 @@ export class FormComponent implements OnInit {
           case 'player':
             await this.submitPlayerForm();
             break;
+          case 'tournament':
+            await this.submitTournamentForm();
+            break;
         }
       } catch (error) {
         this.snackBar.open('Error submitting form', 'Close', {
@@ -161,8 +177,8 @@ export class FormComponent implements OnInit {
     const teamName = this.form.value.name;
     const teamExists = await this.teamService.teamExists(teamName);
     const userId = this.sessionService.getUserId();
-    const userHaveTeam = await this.userService.userHaveTeam(Number(userId));
-    if (userHaveTeam) {
+    const userHasTeam = await this.userService.userHasTeam(Number(userId));
+    if (userHasTeam) {
       this.snackBar.open('You already have a team', 'Close', {
         duration: 5000,
       });
@@ -212,6 +228,32 @@ export class FormComponent implements OnInit {
 
     await this.playerService.createPlayer(this.form.value);
     this.snackBar.open('Player created successfully', 'Close', {
+      duration: 5000,
+    });
+  }
+
+  async submitTournamentForm(): Promise<void> {
+    const tournamentName = this.form.value.name;
+    const tournamentExists = await this.tournamentService.tournamentExists(
+      tournamentName
+    );
+    // const userId = this.sessionService.getUserId();
+    // const userHaveTournament = await this.userService.userHaveTournament(Number(userId));
+    // if (userHaveTournament) {
+    //   this.snackBar.open('You already have a team', 'Close', {
+    //     duration: 5000,
+    //   });
+    //   return;
+    // }
+    if (tournamentExists) {
+      this.snackBar.open('Tournament already exists', 'Close', {
+        duration: 2000,
+      });
+      return;
+    }
+
+    await this.tournamentService.createTournament(this.form.value);
+    this.snackBar.open('Tournament created successfully', 'Close', {
       duration: 5000,
     });
   }

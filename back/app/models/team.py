@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship, validates
+from sqlalchemy.orm import relationship
 from app.database import Base
+from app.association_tables import team_tournament
 
 class Team(Base):
     __tablename__ = "teams"
@@ -25,4 +26,7 @@ class Team(Base):
     # Relationship with the creator of the team
     creator = relationship("User", back_populates="team", uselist=False)
     creator_id = Column(Integer, ForeignKey("users.id"))
+
+     # Many-to-many relationship with tournaments
+    tournaments = relationship("Tournament", secondary=team_tournament, back_populates="teams")
 

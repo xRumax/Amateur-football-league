@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.database import Base, engine
-from app.routes import matchStatistics, user, player, team, match, league
+from app.routes import matchStatistics, user, player, team, match, league, tournament
 from .routes import upload_routes
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,6 +15,7 @@ app.include_router(match.router)
 app.include_router(league.router)
 app.include_router(matchStatistics.router)
 app.include_router(upload_routes.router)
+app.include_router(tournament.router)
 
 origins = [
     "http://localhost:4200",  # Angular app

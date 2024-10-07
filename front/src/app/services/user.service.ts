@@ -151,8 +151,16 @@ export class UserService {
     }
   }
 
-  async userHaveTeam(userId: number): Promise<boolean> {
+  async userHasTeam(userId: number): Promise<boolean> {
     const user = await this.getUser(userId);
     return Boolean(user.team && user.team.id);
+  }
+
+  async getUserTeam(userId: number): Promise<Team> {
+    const user = await this.getUser(userId);
+    if (!user.team || !user.team.id) {
+      throw new Error('No team ID found for the user');
+    }
+    return user.team;
   }
 }

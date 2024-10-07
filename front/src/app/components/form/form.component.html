@@ -33,7 +33,7 @@
         </ng-container>
       </mat-form-field>
 
-      <div *ngIf="field.type === 'file'">
+      <!-- <div *ngIf="field.type === 'file'">
         <mat-form-field class="no-transition">
           <mat-label>{{ fileName || "Logo: Select a file" }}</mat-label>
           <button mat-icon-button matPrefix type="button" disabled>
@@ -55,9 +55,14 @@
             style="max-width: 200px; max-height: 200px"
           />
         </div>
-      </div>
+      </div> -->
     </div>
-    <input formControlName="team_id" type="hidden" readonly />
+    <input
+      *ngIf="formType === 'player'"
+      formControlName="team_id"
+      type="hidden"
+      readonly
+    />
 
     <div class="btn-con">
       <button mat-button type="submit">Submit</button>
