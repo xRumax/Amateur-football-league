@@ -210,7 +210,6 @@ export class PlayerService {
     } else if (playerData.sex === 2) {
       playerData.sex = 'Female';
     }
-
     return axios
       .post(
         `${this.envService.base_url}/players/`,

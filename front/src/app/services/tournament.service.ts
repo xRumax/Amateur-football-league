@@ -3,12 +3,14 @@ import { Environment } from '../../environments/environment';
 import axios from 'axios';
 import { FormField } from '../app.component';
 import { SessionService } from './session.service';
+import { Team } from './team.service';
 
 export interface Tournament {
   id: number;
   name: string;
   amount_of_teams: number;
-  teams: number[];
+  teams: Team[];
+  date_of_tournament: string;
 }
 
 @Injectable({
@@ -42,6 +44,13 @@ export class TournamentService {
         ],
         value: tournament.amount_of_teams ?? '',
       },
+      {
+        type: 'date',
+        name: 'date_of_tournament',
+        id: 'date_of_tournament',
+        placeholder: 'Date',
+        value: tournament.date_of_tournament ?? '',
+      },
     ];
   }
 
@@ -69,8 +78,6 @@ export class TournamentService {
     amount_of_teams: number;
   }): Promise<Tournament> {
     const token = this.sessionService.getToken();
-
-    console.log('Sending Data:', data);
 
     return axios
       .post(`${this.envService.base_url}/tournaments`, data, {

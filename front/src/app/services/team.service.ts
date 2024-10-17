@@ -141,7 +141,6 @@ export class TeamService {
         return response.data;
       })
       .catch((error) => {
-        console.log(error.response.data);
         if (error.response && error.response.status === 400) {
           this.snackBar.open('You already have a team', 'Close', {
             duration: 5000,
