@@ -47,6 +47,10 @@ import { MatSortModule } from '@angular/material/sort';
 import { DetailsContentModule } from './components/details-content/details-content.module';
 import { StepperModule } from './components/stepper/stepper.module';
 import { CardModule } from './components/card/card.module';
+import { MatchBaseComponent } from './features/match/match-base-finished/match-base.component';
+import { MatchesSoonComponent } from './features/match/matches-soon/matches-soon.component';
+import { CardMatchesModule } from './components/card-matches/card-matches.module';
+import { TournamentDetailsComponent } from './features/tournament/tournament-details/tournament-details.component';
 
 @NgModule({
   declarations: [
@@ -63,8 +67,11 @@ import { CardModule } from './components/card/card.module';
     PlayersBaseComponent,
     PlayerDetailsComponent,
     TournamentCreateComponent,
-    MatchCreateComponent,
     TournamentBaseComponent,
+    MatchCreateComponent,
+    MatchBaseComponent,
+    MatchesSoonComponent,
+    TournamentDetailsComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -91,6 +98,7 @@ import { CardModule } from './components/card/card.module';
     DetailsContentModule,
     StepperModule,
     CardModule,
+    CardMatchesModule,
   ],
   providers: [
     provideAnimationsAsync(),
