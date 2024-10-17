@@ -1,27 +1,24 @@
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import date
 from typing import Optional
-from app.schemas.matchStatistics import MatchStatisticsBase
 
 class MatchBase(BaseModel):
-    date : datetime
-    result : str
     team_1_id : int
     team_2_id : int
 
 class MatchCreate(MatchBase):
-    pass    
+    date_of_match: Optional[date] = None
 
 class MatchUpdate(MatchBase):
-    pass
+    result: Optional[str] = None
+    date_of_match: Optional[date] = None
 
 class Match(BaseModel):
     id: int
-    date : datetime
-    result : str
+    date_of_match : Optional[date]
+    result : Optional[str]
     team_1_id : int
     team_2_id : int
-    match_statistics : Optional[MatchStatisticsBase]
 
     class Config:
         from_attributes = True

@@ -6,8 +6,8 @@ class Match(Base):
     __tablename__ = "matches"
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(Date)
-    result = Column(String)
+    date_of_match = Column(Date, None)
+    result = Column(String, None)
 
 
     # Relationship with the home team
