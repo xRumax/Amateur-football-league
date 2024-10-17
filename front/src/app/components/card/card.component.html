@@ -1,5 +1,9 @@
 <div class="card-container" *ngFor="let tournament of tournaments">
-  <mat-card class="card-container-items" appearance="outlined">
+  <mat-card
+    class="card-container-items"
+    appearance="outlined"
+    (click)="onCardClicked(tournament.id)"
+  >
     <mat-card-title class="card-container-title">{{
       tournament.name
     }}</mat-card-title>
@@ -20,10 +24,12 @@
       <p>
         Teams: {{ tournament.teams.length }}/{{ tournament.amount_of_teams }}
       </p>
+
       <button
         mat-button
         class="card-container-button"
         (click)="joinToTournament(tournament)"
+        [disabled]="tournament.teams.length === tournament.amount_of_teams"
       >
         Join!
       </button>
