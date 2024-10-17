@@ -82,12 +82,15 @@
       </li>
       <li class="dropdown">
         <a
-          routerLink="/matches"
-          [class.active]="isActive('/matches') || isActive('/match-create')"
+          routerLink="/matches-finished"
+          [class.active]="
+            isActive('/matches-finished') || isActive('/match-create')
+          "
           routerLinkActive="active"
           ><div
             [ngClass]="{
-              'active-link': isActive('/matches') || isActive('/match-create')
+              'active-link':
+                isActive('/matches-finished') || isActive('/match-create')
             }"
           >
             Matches
@@ -97,13 +100,24 @@
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
               <li *ngIf="isLoggedIn">
-                <a routerLink="/match-create"
+                <a routerLink="/matches-soon"
                   ><div
                     [ngClass]="{
-                      'active-link': isActive('/match-create')
+                      'active-link': isActive('/matches-soon')
                     }"
                   >
-                    Create Match
+                    Matches Soon
+                  </div></a
+                >
+              </li>
+              <li *ngIf="isLoggedIn">
+                <a routerLink="/matches-finished"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/matches-finished')
+                    }"
+                  >
+                    Match History
                   </div></a
                 >
               </li>
@@ -162,7 +176,7 @@
       </li>
       <li class="dropdown">
         <a
-          routerLink="/tournament"
+          routerLink="/tournament-base"
           [class.active]="isActive('/tournament')"
           routerLinkActive="active"
           >Tournament</a

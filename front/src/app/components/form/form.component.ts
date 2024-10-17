@@ -237,14 +237,6 @@ export class FormComponent implements OnInit {
     const tournamentExists = await this.tournamentService.tournamentExists(
       tournamentName
     );
-    // const userId = this.sessionService.getUserId();
-    // const userHaveTournament = await this.userService.userHaveTournament(Number(userId));
-    // if (userHaveTournament) {
-    //   this.snackBar.open('You already have a team', 'Close', {
-    //     duration: 5000,
-    //   });
-    //   return;
-    // }
     if (tournamentExists) {
       this.snackBar.open('Tournament already exists', 'Close', {
         duration: 2000,
