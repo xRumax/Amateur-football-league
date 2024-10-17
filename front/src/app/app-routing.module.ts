@@ -15,6 +15,9 @@ import { routes_player_details } from './features/player/player-details/player-d
 import { routes_tournament_create } from './features/tournament/tournament-create/tournament-create-routing.module';
 import { routes_match_create } from './features/match/match-create/match-create-routing.module';
 import { routes_tournament_base } from './features/tournament/tournament-base/tournament-base-routing.module';
+import { routes_match_base_finished } from './features/match/match-base-finished/match-base-routing.module';
+import { routes_matches_soon } from './features/match/matches-soon/matches-soon-routing.module';
+import { routes_tournament_details } from './features/tournament/tournament-details/tournament-details-routing.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -30,7 +33,10 @@ const routes: Routes = [
   ...routes_player_details,
   ...routes_tournament_create,
   ...routes_tournament_base,
+  ...routes_tournament_details,
   ...routes_match_create,
+  ...routes_match_base_finished,
+  ...routes_matches_soon,
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
