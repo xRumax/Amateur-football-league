@@ -1,0 +1,50 @@
+<!-------------------Match soon--------------------->
+<div *ngIf="formType === 'match-soon'" class="type">
+  <div class="card-container" *ngFor="let match of matches">
+    <mat-card class="card-container-items" appearance="outlined">
+      <mat-card-content class="card-container-teams-name">
+        <span>{{ getTeamName(match.team_1_id) }}</span>
+        <div class="date-info">
+          <p>{{ match.date | date : "dd.MM.yyyy" }}</p>
+          <div class="versus"><span>VS</span></div>
+          <p>{{ match.date | date : "HH:mm" }}</p>
+        </div>
+        <span>{{ getTeamName(match.team_2_id) }}</span>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<!-------------------Match history--------------------->
+<div *ngIf="formType === 'match-finished'" class="type">
+  <div class="card-container" *ngFor="let match of matches">
+    <mat-card class="card-container-items" appearance="outlined">
+      <mat-card-content class="card-container-teams-name">
+        <span>{{ getTeamName(match.team_1_id) }}</span>
+        <div class="date-info">
+          <p>{{ match.date | date : "dd.MM.yyyy" }}</p>
+          <div class="result">
+            <p>{{ match.result }}</p>
+          </div>
+          <p>{{ match.date | date : "HH:mm" }}</p>
+        </div>
+        <span>{{ getTeamName(match.team_2_id) }}</span>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<!-------------------------------All Matches----------------------->
+<div *ngIf="formType === 'matches'" class="type">
+  <div class="card-container" *ngFor="let match of matches">
+    <mat-card class="card-container-items" appearance="outlined">
+      <mat-card-content class="card-container-teams-name">
+        <span>{{ getTeamName(match.team_1_id) }}</span>
+        <div class="date-info">
+          <p>{{ match.date | date : "dd.MM.yyyy" }}</p>
+          <div class="versus"><span>VS</span></div>
+          <p>{{ match.date | date : "HH:mm" }}</p>
+        </div>
+        <span>{{ getTeamName(match.team_2_id) }}</span>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
