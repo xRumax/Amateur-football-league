@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
 from sqlalchemy.orm import relationship
 from app.database import Base
 from app.association_tables import team_tournament
@@ -10,6 +10,9 @@ class Tournament(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True)
     amount_of_teams = Column(Integer)
+    is_active = Column(Boolean, default=True)
+    is_full = Column(Boolean, default=False)
+    date_of_tournament = Column(Date, None)
 
     #Many-to-many relationship with teams
     teams = relationship("Team", secondary=team_tournament, back_populates="tournaments")
