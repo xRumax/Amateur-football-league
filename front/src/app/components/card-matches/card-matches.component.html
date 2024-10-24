@@ -48,3 +48,18 @@
     </mat-card>
   </div>
 </div>
+
+<!-------------------------------Tournament Matches----------------------->
+<div *ngIf="formType === 'tournament-matches'" class="type">
+  <div class="card-container" *ngFor="let match of matches">
+    <mat-card class="card-container-items" appearance="outlined">
+      <mat-card-content class="card-container-teams-name">
+        <span>{{ getTeamName(match.team_1_id) }}</span>
+        <div class="date-info">
+          <div class="versus"><span>VS</span></div>
+        </div>
+        <span>{{ getTeamName(match.team_2_id) }}</span>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

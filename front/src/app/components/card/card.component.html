@@ -20,6 +20,15 @@
           : "Inactive"
       }}
     </div>
+    <div class="date">
+      <div class="date-days">
+        {{ tournament.date_of_tournament | date : "dd.MM.yyyy" }}
+      </div>
+      <div class="date-hour">
+        {{ tournament.date_of_tournament | date : "HH:mm" }}
+      </div>
+    </div>
+
     <mat-card-content class="card-container-amount-teams">
       <p>
         Teams: {{ tournament.teams.length }}/{{ tournament.amount_of_teams }}
@@ -28,7 +37,7 @@
       <button
         mat-button
         class="card-container-button"
-        (click)="joinToTournament(tournament)"
+        (click)="joinToTournament(tournament); $event.stopPropagation()"
         [disabled]="tournament.teams.length === tournament.amount_of_teams"
       >
         Join!

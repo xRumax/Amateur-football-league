@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FormField } from '../app.component';
 import { SessionService } from './session.service';
 import { Team } from './team.service';
+import { Match } from './match.service';
 
 export interface Tournament {
   id: number;
@@ -11,6 +12,7 @@ export interface Tournament {
   amount_of_teams: number;
   teams: Team[];
   date_of_tournament: string;
+  matches: Match[];
 }
 
 @Injectable({
@@ -145,5 +147,15 @@ export class TournamentService {
       console.error('Error adding team to tournament:', error);
       throw error;
     }
+  }
+
+  getMatchesByTournamentId(tournamentId: number): Promise<Match[]> {
+    return axios
+      .get(`${this.envService.base_url}/${tournamentId}/matches`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Error fetching matches:', error);
+        throw error;
+      });
   }
 }

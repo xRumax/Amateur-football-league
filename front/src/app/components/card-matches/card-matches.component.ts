@@ -1,6 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { Match, MatchService } from '../../services/match.service';
 import { TeamService } from '../../services/team.service';
+import {
+  Tournament,
+  TournamentService,
+} from '../../services/tournament.service';
 
 @Component({
   selector: 'app-card-matches',
@@ -9,13 +13,15 @@ import { TeamService } from '../../services/team.service';
 })
 export class CardMatchesComponent {
   @Input() matches: Match[] = [];
+  @Input() tournaments: Tournament[] = [];
   teamNames: { [key: number]: string } = {};
-  @Input() formType!: 'match-soon' | 'match-finished' | 'matches';
+  @Input() formType!:
+    | 'match-soon'
+    | 'match-finished'
+    | 'matches'
+    | 'tournament-matches';
 
-  constructor(
-    private matchService: MatchService,
-    private teamService: TeamService
-  ) {}
+  constructor(private teamService: TeamService) {}
 
   ngOnInit(): void {
     this.loadTeams();

@@ -5,6 +5,7 @@ import {
   TournamentService,
 } from '../../../services/tournament.service';
 import { FormField } from '../../../app.component';
+import { Match } from '../../../services/match.service';
 
 @Component({
   selector: 'app-tournament-details',
@@ -13,6 +14,7 @@ import { FormField } from '../../../app.component';
 })
 export class TournamentDetailsComponent {
   tournament: Tournament | null = null;
+  matches: Match[] = [];
   tournamentId: number = 0;
   fields: FormField[] = [];
   constructor(
@@ -35,6 +37,17 @@ export class TournamentDetailsComponent {
       })
       .catch((error) => {
         console.error('Error loading tournament details:', error);
+      });
+  }
+
+  loadTournamentMatches(tournamentId: number): void {
+    this.tournamentService
+      .getMatchesByTournamentId(tournamentId)
+      .then((matches) => {
+        this.matches = matches;
+      })
+      .catch((error) => {
+        console.error('Error loading tournament matches:', error);
       });
   }
 }
