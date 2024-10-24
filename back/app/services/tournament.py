@@ -60,7 +60,8 @@ class TournamentService:
                     match = MatchCreate(
                         team_1_id=team_1.id,
                         team_2_id=team_2.id,
-                        date_of_match=db_tournament.date_of_tournament
+                        date_of_match=db_tournament.date_of_tournament,
+                        tournament_id=db_tournament.id
                     )
                     self.create_match(match)
 

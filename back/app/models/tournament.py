@@ -18,3 +18,5 @@ class Tournament(Base):
     teams = relationship("Team", secondary=team_tournament, back_populates="tournaments")
     team_id = Column(Integer, ForeignKey("teams.id"))
     
+    #One-to-many relationship with matches
+    matches = relationship("Match", back_populates="tournament")

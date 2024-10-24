@@ -17,3 +17,7 @@ class Match(Base):
     # Relationship with the guest team
     team_2_id = Column(Integer, ForeignKey("teams.id"))
     team_2 = relationship("Team", foreign_keys=[team_2_id], back_populates="matches_as_guest")
+
+    # Relationship with the tournament
+    tournament_id = Column(Integer, ForeignKey("tournaments.id"))
+    tournament = relationship("Tournament", back_populates="matches")

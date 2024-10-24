@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 from app.schemas.team import TeamBase
 from datetime import date
+from app.schemas.match import MatchTournament
 
 
 class TournamentBase(BaseModel):
@@ -23,6 +24,7 @@ class Tournament(BaseModel):
     amount_of_teams: int
     date_of_tournament: Optional[date] = None
     teams: Optional[List[TeamBase]] = None
+    matches: Optional[List[MatchTournament]] = None
     is_full: Optional[bool] = False
     is_active: Optional[bool] = True
     class Config:
