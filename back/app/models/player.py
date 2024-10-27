@@ -27,3 +27,6 @@ class Player(Base):
     # Relationship with team
     team_id  = Column(Integer, ForeignKey("teams.id"))
     team = relationship("Team", back_populates="players")
+
+    # Relationship with actions
+    actions = relationship("Action", back_populates="players")

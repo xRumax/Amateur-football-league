@@ -30,3 +30,6 @@ class Team(Base):
      # Many-to-many relationship with tournaments
     tournaments = relationship("Tournament", secondary=team_tournament, back_populates="teams")
 
+    # Relationship with actions
+    actions = relationship("Action", back_populates="teams")
+

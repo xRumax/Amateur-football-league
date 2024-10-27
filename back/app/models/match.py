@@ -8,7 +8,7 @@ class Match(Base):
     id = Column(Integer, primary_key=True, index=True)
     date_of_match = Column(Date, None)
     result = Column(String, None)
-
+    
 
     # Relationship with the home team
     team_1_id = Column(Integer, ForeignKey("teams.id"))
@@ -21,3 +21,6 @@ class Match(Base):
     # Relationship with the tournament
     tournament_id = Column(Integer, ForeignKey("tournaments.id"))
     tournament = relationship("Tournament", back_populates="matches")
+
+    # Relationship with actions
+    actions = relationship("Action", back_populates="matches")
