@@ -1,0 +1,36 @@
+<div class="form-container">
+  <h1 class="header">Action Form</h1>
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
+    <div *ngFor="let field of formFields">
+      <mat-form-field appearance="fill" *ngIf="field.type !== 'file'">
+        <mat-label>{{ field.placeholder }}</mat-label>
+        <ng-container [ngSwitch]="field.type">
+          <mat-select
+            *ngSwitchCase="'select'"
+            [formControlName]="field.name"
+            required
+          >
+            <mat-option
+              *ngFor="let option of field.options"
+              [value]="option.value"
+            >
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+          <input
+            *ngSwitchDefault
+            matInput
+            [type]="field.type"
+            [placeholder]="field.placeholder"
+            [id]="field.id"
+            [formControlName]="field.name"
+            [required]="field.name !== 'team_id'"
+          />
+        </ng-container>
+      </mat-form-field>
+    </div>
+    <div class="btn-con">
+      <button mat-button type="submit">Submit</button>
+    </div>
+  </form>
+</div>
