@@ -9,11 +9,10 @@ class SexEnum(str, Enum):
 
 class PlayerBase(BaseModel):
     name: str
+    last_name: str
 
 
 class PlayerCreate(PlayerBase):
-    name: str
-    last_name: str
     date_of_birth : Optional[date] = None
     sex : Optional[SexEnum] = None
     team_id: Optional[int] = None

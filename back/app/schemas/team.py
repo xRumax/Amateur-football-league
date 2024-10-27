@@ -12,14 +12,12 @@ class TeamCreate(TeamBase):
 class TeamUpdate(TeamBase):
     league_id: int
 
-class TeamList(BaseModel):
+
+class TeamMatch(BaseModel):
     id: int
     name:str
-    matches_played: Optional[int] = 0
     players: Optional[List[Player]] = None
-    league_id: int
-    creator_id: int
-    logo: Optional[str] = None
+
 
 class Team(BaseModel):
     id: int
