@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.schemas.match import MatchCreate, MatchUpdate, Match
 from app.services.match import MatchService
 from app.database import get_db
+from app.schemas.team import Team
 
 router = APIRouter(prefix="/matches", tags=["matches"])
 
@@ -39,3 +40,11 @@ def delete_match(match_id: int, db: Session = Depends(get_db)):
     if db_match is None:
         raise HTTPException(status_code=404, detail="Match not found")
     return match_service.delete_match(match_id)
+
+@router.get("/{match_id}/teams", response_model=list[Team])
+def read_match_teams(match_id: int, db: Session = Depends(get_db)):
+    match_service = MatchService(db)
+    db_match = match_service.get_match(match_id)
+    if db_match is None:
+        raise HTTPException(status_code=404, detail="Match not found")
+    return db_match.team_1, db_match.team_2
