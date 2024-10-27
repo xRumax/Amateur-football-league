@@ -23,7 +23,6 @@ export class CardComponent {
     private snackBar: MatSnackBar,
     private tournamentService: TournamentService,
     private userService: UserService,
-    private teamService: TeamService,
     private router: Router,
     private sessionService: SessionService
   ) {}

@@ -18,6 +18,8 @@ import { routes_tournament_base } from './features/tournament/tournament-base/to
 import { routes_match_base_finished } from './features/match/match-base-finished/match-base-routing.module';
 import { routes_matches_soon } from './features/match/matches-soon/matches-soon-routing.module';
 import { routes_tournament_details } from './features/tournament/tournament-details/tournament-details-routing.module';
+import { routes_match_manager } from './features/match/match-manager/match-manager-routing.module';
+import { routes_match_update } from './features/match/match-update/match-update-routing.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -37,6 +39,8 @@ const routes: Routes = [
   ...routes_match_create,
   ...routes_match_base_finished,
   ...routes_matches_soon,
+  ...routes_match_manager,
+  ...routes_match_update,
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

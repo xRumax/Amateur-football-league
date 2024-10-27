@@ -15,13 +15,14 @@ mat-card {
   font-weight: 600;
   text-align: center;
   margin-left: 10px;
-  width: 90%; /* Dodaj szerokość, aby elementy mogły się rozchodzić */
+  width: 90%;
 }
 
 .date-info {
   display: flex;
-  align-items: center; /* Wyśrodkuj tekst w pionie */
-  position: absolute; /* Ustaw relative, aby .versus mogło być pozycjonowane absolutnie */
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
   height: 100%;
   font-size: 14px;
   left: 50%;
@@ -37,6 +38,10 @@ mat-card {
 }
 
 .versus {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   font-size: 36px;
   font-style: italic;
 }

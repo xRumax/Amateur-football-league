@@ -26,6 +26,7 @@ export class TournamentDetailsComponent {
     const tournamentId = this.route.snapshot.paramMap.get('id');
     if (tournamentId) {
       this.loadTournamentDetails(Number(tournamentId));
+      this.loadTournamentMatches(Number(tournamentId));
     }
   }
 
@@ -40,14 +41,15 @@ export class TournamentDetailsComponent {
       });
   }
 
-  loadTournamentMatches(tournamentId: number): void {
-    this.tournamentService
-      .getMatchesByTournamentId(tournamentId)
-      .then((matches) => {
-        this.matches = matches;
-      })
-      .catch((error) => {
-        console.error('Error loading tournament matches:', error);
-      });
+  async loadTournamentMatches(tournamentId: Number): Promise<void> {
+    try {
+      const tournamentMatches =
+        await this.tournamentService.getMatchesByTournamentId(
+          Number(tournamentId)
+        );
+      this.matches = tournamentMatches;
+    } catch (error) {
+      console.error('Error loading Matches:', error);
+    }
   }
 }

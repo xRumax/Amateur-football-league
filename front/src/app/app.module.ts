@@ -51,6 +51,9 @@ import { MatchBaseComponent } from './features/match/match-base-finished/match-b
 import { MatchesSoonComponent } from './features/match/matches-soon/matches-soon.component';
 import { CardMatchesModule } from './components/card-matches/card-matches.module';
 import { TournamentDetailsComponent } from './features/tournament/tournament-details/tournament-details.component';
+import { MatchManagerComponent } from './features/match/match-manager/match-manager.component';
+import { ActionFormModule } from './components/action-form/action-form.module';
+import { MatchUpdateComponent } from './features/match/match-update/match-update.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +75,8 @@ import { TournamentDetailsComponent } from './features/tournament/tournament-det
     MatchBaseComponent,
     MatchesSoonComponent,
     TournamentDetailsComponent,
+    MatchManagerComponent,
+    MatchUpdateComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -99,6 +104,7 @@ import { TournamentDetailsComponent } from './features/tournament/tournament-det
     StepperModule,
     CardModule,
     CardMatchesModule,
+    ActionFormModule,
   ],
   providers: [
     provideAnimationsAsync(),

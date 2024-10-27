@@ -90,7 +90,9 @@
           ><div
             [ngClass]="{
               'active-link':
-                isActive('/matches-finished') || isActive('/match-create')
+                isActive('/matches-finished') ||
+                isActive('/match-create') ||
+                isActive('/match-manager')
             }"
           >
             Matches
@@ -110,7 +112,7 @@
                   </div></a
                 >
               </li> -->
-              <li *ngIf="isLoggedIn">
+              <li>
                 <a routerLink="/matches-finished"
                   ><div
                     [ngClass]="{
@@ -118,6 +120,17 @@
                     }"
                   >
                     Match History
+                  </div></a
+                >
+              </li>
+              <li>
+                <a routerLink="/match-manager"
+                  ><div
+                    [ngClass]="{
+                      'active-link': isActive('/match-manager')
+                    }"
+                  >
+                    Match Manager
                   </div></a
                 >
               </li>
@@ -195,7 +208,7 @@
                   </div></a
                 >
               </li>
-              <li *ngIf="isLoggedIn">
+              <li>
                 <a routerLink="/tournament-base"
                   ><div
                     [ngClass]="{

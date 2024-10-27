@@ -1,10 +1,8 @@
-import { Component, input, Input } from '@angular/core';
-import { Match, MatchService } from '../../services/match.service';
+import { Component, Input } from '@angular/core';
+import { Match } from '../../services/match.service';
 import { TeamService } from '../../services/team.service';
-import {
-  Tournament,
-  TournamentService,
-} from '../../services/tournament.service';
+import { Tournament } from '../../services/tournament.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-card-matches',
@@ -15,13 +13,14 @@ export class CardMatchesComponent {
   @Input() matches: Match[] = [];
   @Input() tournaments: Tournament[] = [];
   teamNames: { [key: number]: string } = {};
-  @Input() formType!:
+
+  @Input() dataType!:
     | 'match-soon'
     | 'match-finished'
     | 'matches'
     | 'tournament-matches';
 
-  constructor(private teamService: TeamService) {}
+  constructor(private teamService: TeamService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadTeams();
@@ -38,7 +37,14 @@ export class CardMatchesComponent {
     }
   }
 
-  getTeamName(teamId: number): string {
-    return this.teamNames[teamId] || 'Unknown'; // Return the team name or 'Unknown' if not found
+  onCardClickedManage(matchId: any): void {
+    if (this.dataType === 'matches') {
+      this.router.navigate(['/match', matchId]);
+    }
+  }
+  onCardClicked(matchId: any): void {
+    if (this.dataType === 'matches') {
+      this.router.navigate(['/match-update', matchId]);
+    }
   }
 }

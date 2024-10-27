@@ -75,6 +75,7 @@ export class TournamentService {
         throw error;
       });
   }
+
   createTournament(data: {
     name: string;
     amount_of_teams: number;
@@ -151,7 +152,7 @@ export class TournamentService {
 
   getMatchesByTournamentId(tournamentId: number): Promise<Match[]> {
     return axios
-      .get(`${this.envService.base_url}/${tournamentId}/matches`)
+      .get(`${this.envService.base_url}/tournaments/${tournamentId}/matches`)
       .then((response) => response.data)
       .catch((error) => {
         console.error('Error fetching matches:', error);
