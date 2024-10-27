@@ -7,6 +7,7 @@ from sqlalchemy import select
 from app.models.team import Team
 from fastapi import UploadFile, HTTPException
 from app.services.upload_service import UploadService
+from app.models.player import Player
 
 class TeamService:
     def __init__(self, db: Session):
@@ -41,3 +42,4 @@ class TeamService:
             team.logo = upload_result["info"]
 
         return self.create_team(team, creator_id)
+    

@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File
 from sqlalchemy.orm import Session
-from app.schemas.team import TeamCreate, TeamUpdate, Team, TeamList
+from app.schemas.team import TeamCreate, TeamUpdate, Team
 from app.services.team import TeamService
 from app.database import get_db
 from app.utils.auth import get_current_user
+from app.schemas.player import PlayerBase
 from app.services.upload_service import UploadService
 
 router = APIRouter(prefix="/teams", tags=["teams"])
@@ -40,7 +41,7 @@ def create_team(
     team_service = TeamService(db)
     return team_service.create_team_with_logo(team_create, creator_id=current_user['user_id'], logo=logo)
 
-@router.get("/", response_model=list[TeamList])
+@router.get("/", response_model=list[Team])
 def read_teams(db: Session = Depends(get_db)):
     team_service = TeamService(db)
     return team_service.get_all_teams()
@@ -68,3 +69,4 @@ def delete_team(team_id: int, db: Session = Depends(get_db)):
     if db_team is None:
         raise HTTPException(status_code=404, detail="Team not found")
     return team_service.delete_team(team_id)
+
