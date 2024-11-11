@@ -4,6 +4,7 @@ from app.schemas.tournament import TournamentCreate, TournamentUpdate, Tournamen
 from app.services.tournament import TournamentService
 from app.database import get_db
 from app.schemas.match import Match
+from app.schemas.team import Team
 
 router = APIRouter(prefix="/tournaments", tags=["tournaments"])
 
@@ -56,3 +57,4 @@ def read_tournament_matches(tournament_id: int, db: Session = Depends(get_db)):
     if db_tournament is None:
         raise HTTPException(status_code=404, detail="Tournament not found")
     return db_tournament.matches
+

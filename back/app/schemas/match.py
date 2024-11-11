@@ -14,8 +14,7 @@ class MatchCreate(MatchBase):
 
 class MatchUpdate(BaseModel):
     result: Optional[str] = None
-    actions: Optional[List[ActionCreate]] = None
-
+    
 class MatchTournament(BaseModel):
     id: int
     team_1_id : int
