@@ -24,14 +24,12 @@ class ActionBase(BaseModel):
 
 class ActionCreate(BaseModel):
     action_type : Optional[ActionTypeEnum] = None
-    count: int
     minute: int 
     match_id : int
     player_id : int
     team_id : int
 
 class ActionUpdate(ActionBase):
-    count: int
     minute: int 
     match_id : int
     player_id : int
@@ -41,7 +39,6 @@ class ActionDelete(ActionBase):
     id : int
 
 class Action(ActionBase):
-    count: int
     minute: int 
     match_id : int
     player_id : int
