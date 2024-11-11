@@ -23,7 +23,6 @@ class Action(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     action_type = Column(Enum(ActionTypeEnum), nullable=False)
-    count = Column(Integer, nullable=False, default = 0)
     minute = Column(Integer, nullable = False)
     match_id = Column(Integer, ForeignKey('matches.id'))
     player_id = Column(Integer, ForeignKey('players.id'))
