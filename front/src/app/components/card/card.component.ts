@@ -4,10 +4,10 @@ import {
   TournamentService,
 } from '../../services/tournament.service';
 import { UserService } from '../../services/user.service';
-import { TeamService } from '../../services/team.service';
 import { SessionService } from '../../services/session.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'app-card',
@@ -18,13 +18,16 @@ export class CardComponent {
   tournaments: Tournament[] = [];
   userTeam: any = {};
   @Input() dataType!: 'tournament' | 'match';
+  teams: any[] = [];
+  userTeamId: number | null = null;
 
   constructor(
     private snackBar: MatSnackBar,
     private tournamentService: TournamentService,
     private userService: UserService,
     private router: Router,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private teamService: TeamService
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +39,17 @@ export class CardComponent {
       this.tournaments = await this.tournamentService.getTournaments();
     } catch (error) {
       console.error('Error loading tournaments:', error);
+    }
+  }
+
+  async loadTeams(tournamentId: number): Promise<void> {
+    try {
+      const tournament = await this.tournamentService.getTournamentById(
+        tournamentId
+      );
+      this.teams = tournament.teams;
+    } catch (error) {
+      console.error('Error loading teams:', error);
     }
   }
 

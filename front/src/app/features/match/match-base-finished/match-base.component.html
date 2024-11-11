@@ -1,7 +1,10 @@
 <div class="main-container">
   <h1>MATCH HISTORY</h1>
+  <div *ngIf="filteredMatches.length === 0">
+    <p>There are no matches yet</p>
+  </div>
   <div class="cards-container">
-    <div class="card">
+    <div class="card" *ngIf="filteredMatches.length > 0">
       <app-card-matches
         [matches]="filteredMatches"
         [dataType]="'match-finished'"

@@ -4,11 +4,11 @@ import { Player } from './player.service';
 import { Team } from './team.service';
 import { Environment } from '../../environments/environment';
 import axios from 'axios';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface MatchAction {
   id: number;
   action_type: string;
-  count: number;
   minute: number;
   match_id: number;
   player_id: number;
@@ -21,7 +21,7 @@ export interface MatchAction {
   providedIn: 'root',
 })
 export class ActionService {
-  constructor(private envService: Environment) {}
+  constructor(private envService: Environment, private snackBar: MatSnackBar) {}
 
   generateActionFields(
     action: MatchAction,
@@ -31,38 +31,14 @@ export class ActionService {
     return [
       {
         type: 'select',
-        name: 'action_type',
-        id: 'action_type',
-        placeholder: 'Action Type',
-        options: [
-          { label: 'Goal', value: 1 },
-          { label: 'Assist', value: 2 },
-          { label: 'Yellow Card', value: 3 },
-          { label: 'Red Card', value: 4 },
-          { label: 'Substitution', value: 5 },
-          { label: 'Offside', value: 6 },
-          { label: 'Corner', value: 7 },
-          { label: 'Free Kick', value: 8 },
-          { label: 'Penalty', value: 9 },
-          { label: 'Shot', value: 10 },
-          { label: 'Shot on target', value: 11 },
-          { label: 'Foul', value: 12 },
-        ],
-        value: action.action_type ?? '',
-      },
-      {
-        type: 'number',
-        name: 'count',
-        id: 'count',
-        placeholder: 'Count',
-        value: action.count ?? 0,
-      },
-      {
-        type: 'number',
-        name: 'minute',
-        id: 'minute',
-        placeholder: 'Minute',
-        value: action.minute ?? 0,
+        name: 'team_id',
+        id: 'team_id',
+        placeholder: 'Team ID',
+        value: action.team_id ?? 0,
+        options: teams.map((team) => ({
+          label: team.name,
+          value: team.id,
+        })),
       },
       {
         type: 'select',
@@ -77,14 +53,31 @@ export class ActionService {
       },
       {
         type: 'select',
-        name: 'team_id',
-        id: 'team_id',
-        placeholder: 'Team ID',
-        value: action.team_id ?? 0,
-        options: teams.map((team) => ({
-          label: team.name,
-          value: team.id,
-        })),
+        name: 'action_type',
+        id: 'action_type',
+        placeholder: 'Action Type',
+        options: [
+          { label: 'Goal', value: 'Goal' },
+          { label: 'Assist', value: 'Assist' },
+          { label: 'Yellow Card', value: 'Yellow Card' },
+          { label: 'Red Card', value: 'Red Card' },
+          { label: 'Substitution', value: 'Substitution' },
+          { label: 'Offside', value: 'Offside' },
+          { label: 'Corner', value: 'Corner' },
+          { label: 'Free Kick', value: 'Free Kick' },
+          { label: 'Penalty', value: 'Penalty' },
+          { label: 'Shot', value: 'Shot' },
+          { label: 'Shot on target', value: 'Shot on target' },
+          { label: 'Foul', value: 'Foul' },
+        ],
+        value: action.action_type ?? '',
+      },
+      {
+        type: 'number',
+        name: 'minute',
+        id: 'minute',
+        placeholder: 'Minute',
+        value: action.minute ?? 0,
       },
     ];
   }
@@ -92,7 +85,15 @@ export class ActionService {
   createAction(action: MatchAction): Promise<MatchAction> {
     return axios
       .post(`${this.envService.base_url}/actions`, action)
-      .then((response) => response.data)
+      .then((response) => {
+        this.snackBar.open('Action created successfully', 'Close', {
+          duration: 5000,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+        return response.data;
+      })
       .catch((error) => {
         console.error('Error creating action:', error);
         throw error;

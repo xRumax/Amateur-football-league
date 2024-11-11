@@ -6,6 +6,7 @@ import {
 } from '../../../services/tournament.service';
 import { FormField } from '../../../app.component';
 import { Match } from '../../../services/match.service';
+import { Team } from '../../../services/team.service';
 
 @Component({
   selector: 'app-tournament-details',
@@ -17,6 +18,7 @@ export class TournamentDetailsComponent {
   matches: Match[] = [];
   tournamentId: number = 0;
   fields: FormField[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private tournamentService: TournamentService

@@ -1,5 +1,4 @@
 <div class="form-container">
-  <h1 class="header">Action Form</h1>
   <form [formGroup]="form" (ngSubmit)="submitForm()">
     <div *ngFor="let field of formFields">
       <mat-form-field appearance="fill" *ngIf="field.type !== 'file'">

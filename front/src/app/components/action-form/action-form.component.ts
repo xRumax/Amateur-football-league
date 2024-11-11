@@ -4,8 +4,6 @@ import { PlayerService } from '../../services/player.service';
 import { ActionService } from '../../services/action.service';
 import { MatchAction } from '../../services/action.service';
 import { MatchService } from '../../services/match.service';
-import { TeamService } from '../../services/team.service';
-
 @Component({
   selector: 'app-action-form',
   templateUrl: './action-form.component.html',
@@ -83,12 +81,15 @@ export class ActionFormComponent {
 
   submitForm(): void {
     if (this.form.valid) {
-      const action: MatchAction = this.form.value;
+      const action: MatchAction = {
+        ...this.form.value,
+        minute: Number(this.form.value.minute),
+        match_id: this.matchId,
+      };
+      console.log('Submitting action:', action);
       this.actionService
         .createAction(action)
-        .then((response) => {
-          console.log('Action created:', response);
-        })
+        .then((response) => {})
         .catch((error) => {
           console.error('Error creating action:', error);
         });
