@@ -2,10 +2,32 @@
   <div class="tournament-title">
     <h1>{{ tournament?.name | uppercase }}</h1>
   </div>
-  <div class="matches-container">
-    <app-card-matches
-      [matches]="matches"
-      dataType="tournament-matches"
-    ></app-card-matches>
+  <div class="components-btn-con">
+    <ul>
+      <li>
+        <a
+          (click)="switchView('teams')"
+          [class.active]="currentView === 'teams'"
+          >Teams</a
+        >
+      </li>
+      <span>|</span>
+      <li>
+        <a
+          (click)="switchView('match-ladder')"
+          [class.active]="currentView === 'match-ladder'"
+          >Match Ladder</a
+        >
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="currentView === 'teams'" class="matches-container">
+    <div class="teams-cards" *ngFor="let team of teams">
+      <mat-card>
+        <mat-card-title class="card-container-title">{{
+          team.name
+        }}</mat-card-title>
+      </mat-card>
+    </div>
   </div>
 </div>

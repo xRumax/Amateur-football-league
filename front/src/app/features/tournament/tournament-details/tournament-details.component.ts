@@ -6,7 +6,6 @@ import {
 } from '../../../services/tournament.service';
 import { FormField } from '../../../app.component';
 import { Match } from '../../../services/match.service';
-import { Team } from '../../../services/team.service';
 
 @Component({
   selector: 'app-tournament-details',
@@ -14,10 +13,12 @@ import { Team } from '../../../services/team.service';
   styleUrl: './tournament-details.component.scss',
 })
 export class TournamentDetailsComponent {
+  teams: any = [];
   tournament: Tournament | null = null;
   matches: Match[] = [];
   tournamentId: number = 0;
   fields: FormField[] = [];
+  currentView: 'teams' | 'match-ladder' = 'teams';
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +30,7 @@ export class TournamentDetailsComponent {
     if (tournamentId) {
       this.loadTournamentDetails(Number(tournamentId));
       this.loadTournamentMatches(Number(tournamentId));
+      this.loadTournamentTeams(Number(tournamentId));
     }
   }
 
@@ -52,6 +54,21 @@ export class TournamentDetailsComponent {
       this.matches = tournamentMatches;
     } catch (error) {
       console.error('Error loading Matches:', error);
+    }
+  }
+
+  switchView(view: 'teams' | 'match-ladder'): void {
+    this.currentView = view;
+  }
+
+  async loadTournamentTeams(tournamentId: number): Promise<void> {
+    try {
+      const tournament = await this.tournamentService.getTournamentById(
+        tournamentId
+      );
+      this.teams = tournament.teams;
+    } catch (error) {
+      console.error('Error loading Teams:', error);
     }
   }
 }
