@@ -26,8 +26,7 @@ export class CardComponent {
     private tournamentService: TournamentService,
     private userService: UserService,
     private router: Router,
-    private sessionService: SessionService,
-    private teamService: TeamService
+    private sessionService: SessionService
   ) {}
 
   ngOnInit(): void {

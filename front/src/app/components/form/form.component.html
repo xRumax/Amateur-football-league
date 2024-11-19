@@ -69,7 +69,7 @@
       <button
         mat-button
         type="button"
-        *ngIf="formType !== 'team' && formType !== 'player'"
+        *ngIf="formType === 'user'"
         (click)="cancel()"
       >
         Cancel

@@ -55,13 +55,6 @@ export class PlayerDetailsComponent implements OnInit {
       if (this.player && this.player.team_id) {
         this.player.team_name = teamName ?? undefined; // Set the league name
       }
-      this.player.num_of_goals = this.player.num_of_goals || 0;
-      this.player.num_of_assists = this.player.num_of_assists || 0;
-      this.player.num_of_yellow_cards = this.player.num_of_yellow_cards || 0;
-      this.player.num_of_red_cards = this.player.num_of_red_cards || 0;
-      this.player.num_of_matches_played =
-        this.player.num_of_matches_played || 0;
-      this.player.minutes_played = this.player.minutes_played || 0;
     }
 
     this.playerColumnKeys = this.playerColumns.map((column) => column.key);

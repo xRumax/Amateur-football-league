@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { TeamService, Team } from '../../services/team.service';
 import { PlayerService, Player } from '../../services/player.service';
+import { ActionService } from '../../services/action.service';
 
 @Component({
   selector: 'app-table',
@@ -29,7 +30,8 @@ export class TableComponent implements OnInit {
   constructor(
     private teamService: TeamService,
     private playerService: PlayerService,
-    private router: Router
+    private router: Router,
+    private actionService: ActionService
   ) {}
 
   ngOnInit() {
@@ -45,20 +47,9 @@ export class TableComponent implements OnInit {
       this.columns = this.teamService.staticsColumns;
       this.loadTeamStaticsData();
     } else if (this.dataType === 'playerStatics') {
-      this.columns = this.playerService.playerDetailsColumns.slice(3);
+      this.columns = this.actionService.playerStaticsColumns;
       this.loadPlayerStaticsData();
     }
-  }
-
-  private normalizePlayerStats(player: Player): Player {
-    return {
-      ...player,
-      num_of_goals: player.num_of_goals ?? 0,
-      num_of_yellow_cards: player.num_of_yellow_cards ?? 0,
-      num_of_red_cards: player.num_of_red_cards ?? 0,
-      num_of_matches_played: player.num_of_matches_played ?? 0,
-      minutes_played: player.minutes_played ?? 0,
-    };
   }
 
   private async loadTeamData() {
@@ -84,7 +75,7 @@ export class TableComponent implements OnInit {
           player.team_name = await this.playerService.getTeamName(
             player.team_id
           );
-          return this.normalizePlayerStats(player);
+          return player;
         })
       );
       this.data = new MatTableDataSource<Player>(updatedPlayers);
@@ -102,9 +93,9 @@ export class TableComponent implements OnInit {
 
     try {
       const players = await this.playerService.getAllPlayers();
-      const filteredPlayers = players
-        .filter((player) => player.team_id === this.teamId)
-        .map(this.normalizePlayerStats);
+      const filteredPlayers = players.filter(
+        (player) => player.team_id === this.teamId
+      );
 
       this.data = new MatTableDataSource<Player>(filteredPlayers);
       this.data.paginator = this.paginator;
@@ -153,12 +144,12 @@ export class TableComponent implements OnInit {
       return;
     }
     try {
-      const player = await this.playerService.getPlayer(this.playerId);
-      this.data = new MatTableDataSource<any>([player]);
+      const statics = await this.actionService.getPlayerActions(this.playerId);
+      this.data = new MatTableDataSource<any>([statics]);
       this.data.paginator = this.paginator;
       this.data.sort = this.sort;
     } catch (error) {
-      console.error('Error fetching player statics:', error);
+      console.error('Error fetching player actions:', error);
     }
   }
 
