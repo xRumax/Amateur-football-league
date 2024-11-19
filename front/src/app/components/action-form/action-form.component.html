@@ -1,5 +1,5 @@
 <div class="form-container">
-  <form [formGroup]="form" (ngSubmit)="submitForm()">
+  <form [formGroup]="formGroup">
     <div *ngFor="let field of formFields">
       <mat-form-field appearance="fill" *ngIf="field.type !== 'file'">
         <mat-label>{{ field.placeholder }}</mat-label>
@@ -27,9 +27,6 @@
           />
         </ng-container>
       </mat-form-field>
-    </div>
-    <div class="btn-con">
-      <button mat-button type="submit">Submit</button>
     </div>
   </form>
 </div>
