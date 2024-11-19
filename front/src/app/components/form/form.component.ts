@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PlayerService } from '../../services/player.service';
 import { SessionService } from '../../services/session.service';
 import { TournamentService } from '../../services/tournament.service';
+import { MatchService } from '../../services/match.service';
 
 @Component({
   selector: 'app-form',
@@ -23,10 +24,17 @@ export class FormComponent implements OnInit {
   team: any = {};
   player: any = {};
   tournament: any = {};
+  match: any = {};
   fileName: string = '';
   display: FormControl = new FormControl('', Validators.required);
+  @Input() matchId!: number;
   @Input() data: any;
-  @Input() formType!: 'user' | 'team' | 'player' | 'tournament';
+  @Input() formType!:
+    | 'user'
+    | 'team'
+    | 'player'
+    | 'tournament'
+    | 'match-update';
 
   form: FormGroup;
   fields: any[] = [];
@@ -45,7 +53,8 @@ export class FormComponent implements OnInit {
     private playerService: PlayerService,
     private snackBar: MatSnackBar,
     private sessionService: SessionService,
-    private tournamentService: TournamentService
+    private tournamentService: TournamentService,
+    private matchService: MatchService
   ) {
     this.form = this.formBuilder.group({ team_id: [null] });
     if (dialogData) {
@@ -68,6 +77,9 @@ export class FormComponent implements OnInit {
         break;
       case 'tournament':
         await this.initializeTournamentForm();
+        break;
+      case 'match-update':
+        await this.initializeMatchUpdateForm();
         break;
     }
   }
@@ -126,6 +138,13 @@ export class FormComponent implements OnInit {
     this.initializeForm(this.fields);
   }
 
+  async initializeMatchUpdateForm(): Promise<void> {
+    this.fields = this.matchService
+      .generateMatchFields(this.match)
+      .filter((field) => ['result'].includes(field.name));
+    this.initializeForm(this.fields);
+  }
+
   initializeForm(fields: any[]): void {
     const group: Record<string, any> = {};
     fields.forEach((field) => {
@@ -157,6 +176,9 @@ export class FormComponent implements OnInit {
             break;
           case 'tournament':
             await this.submitTournamentForm();
+            break;
+          case 'match-update':
+            await this.submitMatchUpdateForm();
             break;
         }
       } catch (error) {
@@ -248,6 +270,16 @@ export class FormComponent implements OnInit {
     this.snackBar.open('Tournament created successfully', 'Close', {
       duration: 5000,
     });
+  }
+
+  async submitMatchUpdateForm(): Promise<void> {
+    await this.matchService.updateMatchById(this.matchId, this.form.value);
+    this.snackBar.open('Match updated successfully', 'Close', {
+      duration: 5000,
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
   }
 
   cancel(): void {
