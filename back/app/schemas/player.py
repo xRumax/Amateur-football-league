@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, validator
 from datetime import date
 from enum import Enum
 from typing import Optional
+from app.schemas.action import ActionPlayerDisplay
 
 class SexEnum(str, Enum):
     Male = "Male"
@@ -26,17 +27,8 @@ class PlayerCreate(PlayerBase):
 class PlayerUpdate(PlayerBase):
     last_name: str
     date_of_birth : date
-    num_of_goals : Optional[int] = Field(0)
-    num_of_assists : Optional[int] = Field(0)
-    num_of_yellow_cards : Optional[int] = Field(0)
-    num_of_red_cards : Optional[int] = Field(0)
     team_id: int = Field(default=None)
 
-class PlayerStats(BaseModel):
-    num_of_goals: Optional[int] = Field(0)
-    num_of_assists: Optional[int] = Field(0)
-    num_of_yellow_cards: Optional[int] = Field(0)
-    num_of_red_cards: Optional[int] = Field(0)
 
 class Player(BaseModel):
     id :int
@@ -47,14 +39,6 @@ class Player(BaseModel):
 
     # Relationship with team
     team_id : Optional[int] = None
-
-    # Statics
-    num_of_goals: Optional[int] = Field(0)
-    num_of_assists: Optional[int] = Field(0)
-    num_of_yellow_cards: Optional[int] = Field(0)
-    num_of_red_cards: Optional[int] = Field(0)
-    num_of_matches_played :Optional[int] = Field(0)
-    minutes_played: Optional[int] = Field(0)
 
     class Config:
         from_attributes = True

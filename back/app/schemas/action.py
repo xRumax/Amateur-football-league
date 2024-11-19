@@ -1,22 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from enum import Enum
-
-class ActionTypeEnum(str, Enum):
-    Goal = "Goal"
-    Assist = "Assist"
-    YellowCard = "Yellow Card"
-    RedCard = "Red Card"
-    Substitution = "Substitution"
-    Injury = "Injury"
-    Offside = "Offside"
-    Corner = "Corner"
-    FreeKick = "Free Kick"
-    Penalty = "Penalty"
-    Shot = "Shot"
-    ShotOnTarget = "Shot on Target"
-    Foul = "Foul"
-
+from app.models.action import ActionTypeEnum
 
 class ActionBase(BaseModel):
     id : int
@@ -38,6 +22,16 @@ class ActionUpdate(ActionBase):
 class ActionDelete(ActionBase):
     id : int
 
+class ActionPlayerDisplay(BaseModel):
+    goals: int = 0
+    assists: int = 0
+    yellow_cards: int = 0
+    red_cards: int = 0
+    offside: int = 0
+    shots: int = 0
+    shots_on_target: int = 0
+
+    
 class Action(ActionBase):
     minute: int 
     match_id : int

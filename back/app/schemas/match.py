@@ -1,8 +1,9 @@
-from pydantic import BaseModel
 from datetime import date
 from typing import Optional, List
 from app.schemas.team import TeamMatch
-from app.schemas.action import ActionBase, ActionCreate
+from app.schemas.action import ActionBase
+from pydantic import BaseModel, validator
+import re
 
 class MatchBase(BaseModel):
     team_1_id : int
@@ -14,6 +15,12 @@ class MatchCreate(MatchBase):
 
 class MatchUpdate(BaseModel):
     result: Optional[str] = None
+    
+    @validator('result')
+    def validate_result(cls, v):
+        if not re.match(r'^\d{1,2}:\d{1,2}$', v):
+            raise ValueError('Result must be in the format "xx:xx" where x is a digit')
+        return v
     
 class MatchTournament(BaseModel):
     id: int
