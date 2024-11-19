@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from app.schemas.player import PlayerCreate, PlayerUpdate, Player
 from app.services.player import PlayerService
 from app.database import get_db
+from app.schemas.action import ActionPlayerDisplay
+from app.crud.action import get_player_action_summary
 
 router = APIRouter(prefix="/players", tags=["players"])
 
@@ -23,6 +25,7 @@ def read_player(player_id: int, db: Session = Depends(get_db)):
     if db_player is None:
         raise HTTPException(status_code=404, detail="Player not found")
     return db_player
+
 
 @router.put("/{player_id}", response_model=Player)
 def update_player(player_id: int, player: PlayerUpdate, db: Session = Depends(get_db)):

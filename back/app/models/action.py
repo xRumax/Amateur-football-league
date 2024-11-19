@@ -14,7 +14,7 @@ class ActionTypeEnum(PyEnum):
     FreeKick = "Free Kick"
     Penalty = "Penalty"
     Shot = "Shot"
-    ShotOnTarget = "Shot on Target"
+    ShotOnTarget = "Shot On Target"
     Foul = "Foul"
     
 

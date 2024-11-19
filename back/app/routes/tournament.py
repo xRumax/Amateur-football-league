@@ -4,7 +4,6 @@ from app.schemas.tournament import TournamentCreate, TournamentUpdate, Tournamen
 from app.services.tournament import TournamentService
 from app.database import get_db
 from app.schemas.match import Match
-from app.schemas.team import Team
 
 router = APIRouter(prefix="/tournaments", tags=["tournaments"])
 

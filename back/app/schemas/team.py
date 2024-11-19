@@ -8,7 +8,7 @@ class TeamBase(BaseModel):
 class TeamCreate(TeamBase):
     league_id: int
     logo: Optional[str] = None
-
+    
 class TeamUpdate(TeamBase):
     league_id: int
 

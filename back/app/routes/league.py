@@ -17,7 +17,7 @@ def read_leagues(db: Session = Depends(get_db)):
     return league_service.get_all_leagues()
 
 @router.get("/{league_id}", response_model=League)
-def read_league(league_id: int, db: Session = Depends(get_db)):
+def read_league(league_id: int, db: Session = Depends(get_db)): 
     league_service = LeagueService(db)
     db_league = league_service.get_league(league_id)
     if db_league is None:
