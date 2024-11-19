@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { Environment } from '../../environments/environment';
 import { Team } from './team.service';
-import { Player } from './player.service';
+import { FormField } from '../app.component';
 
 export interface Match {
   id: number;
@@ -16,6 +16,19 @@ export interface Match {
 })
 export class MatchService {
   constructor(private envService: Environment) {}
+
+  generateMatchFields(match: Match): FormField[] {
+    const fields: FormField[] = [
+      {
+        type: 'string',
+        name: 'result',
+        id: 'result',
+        placeholder: 'Result',
+        value: match.result ?? '',
+      },
+    ];
+    return fields;
+  }
 
   getMatches(): Promise<Match[]> {
     return axios
@@ -43,6 +56,16 @@ export class MatchService {
       .then((response) => response.data)
       .catch((error) => {
         console.error('Error fetching teams by match ID:', error);
+        throw error;
+      });
+  }
+
+  updateMatchById(matchId: number, match: Match): Promise<Match> {
+    return axios
+      .put(`${this.envService.base_url}/matches/${matchId}`, match)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Error updating match:', error);
         throw error;
       });
   }

@@ -17,6 +17,11 @@ export interface MatchAction {
   team_name?: string;
 }
 
+export interface ActionColumns {
+  key: keyof Player;
+  header: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -67,7 +72,7 @@ export class ActionService {
           { label: 'Free Kick', value: 'Free Kick' },
           { label: 'Penalty', value: 'Penalty' },
           { label: 'Shot', value: 'Shot' },
-          { label: 'Shot on target', value: 'Shot on target' },
+          { label: 'Shot On Target', value: 'Shot On Target' },
           { label: 'Foul', value: 'Foul' },
         ],
         value: action.action_type ?? '',
@@ -81,6 +86,16 @@ export class ActionService {
       },
     ];
   }
+
+  playerStaticsColumns: ActionColumns[] = [
+    { key: 'goals', header: 'Goals' },
+    { key: 'assists', header: 'Assists' },
+    { key: 'yellow_cards', header: 'Yellow Cards' },
+    { key: 'red_cards', header: 'Red Cards' },
+    { key: 'offside', header: 'Offside' },
+    { key: 'shots', header: 'Shots' },
+    { key: 'shots_on_target', header: 'Shots on Target' },
+  ];
 
   createAction(action: MatchAction): Promise<MatchAction> {
     return axios
@@ -98,5 +113,35 @@ export class ActionService {
         console.error('Error creating action:', error);
         throw error;
       });
+  }
+
+  createActions(actions: MatchAction[]): Promise<void> {
+    return axios
+      .post(`${this.envService.base_url}/actions/bulk`, actions)
+      .then(() => {
+        this.snackBar.open('All actions created successfully', 'Close', {
+          duration: 5000,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      })
+      .catch((error) => {
+        console.error('Error creating actions:', error);
+        throw error;
+      });
+  }
+
+  getPlayerActions(playerId: number): Promise<Player[]> {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${this.envService.base_url}/actions/${playerId}/actions`)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 }

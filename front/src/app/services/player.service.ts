@@ -14,12 +14,13 @@ export interface Player {
   sex: string;
   team_id: number;
   team_name?: string;
-  num_of_goals?: number;
-  num_of_assists?: number;
-  num_of_yellow_cards?: number;
-  num_of_red_cards?: number;
-  num_of_matches_played?: number;
-  minutes_played?: number;
+  goals?: number;
+  assists?: number;
+  yellow_cards?: number;
+  red_cards?: number;
+  offside?: number;
+  shots?: number;
+  shots_on_target?: number;
 }
 
 export interface PlayerColumns {
@@ -98,48 +99,6 @@ export class PlayerService {
         placeholder: 'Team Name',
         value: player.team_name ?? '',
       },
-      {
-        type: 'number',
-        name: 'num_of_goals',
-        id: 'num_of_goals',
-        placeholder: 'Number of Goals',
-        value: player.num_of_goals ?? 0,
-      },
-      {
-        type: 'number',
-        name: 'num_of_assists',
-        id: 'num_of_assists',
-        placeholder: 'Number of Assists',
-        value: player.num_of_assists ?? 0,
-      },
-      {
-        type: 'number',
-        name: 'num_of_yellow_cards',
-        id: 'num_of_yellow_cards',
-        placeholder: 'Number of Yellow Cards',
-        value: player.num_of_yellow_cards ?? 0,
-      },
-      {
-        type: 'number',
-        name: 'num_of_red_cards',
-        id: 'num_of_red_cards',
-        placeholder: 'Number of Red Cards',
-        value: player.num_of_red_cards ?? 0,
-      },
-      {
-        type: 'number',
-        name: 'num_of_matches_played',
-        id: 'num_of_matches_played',
-        placeholder: 'Number of Matches Played',
-        value: player.num_of_matches_played ?? 0,
-      },
-      {
-        type: 'number',
-        name: 'minutes_played',
-        id: 'minutes_played',
-        placeholder: 'Minutes Played',
-        value: player.minutes_played ?? 0,
-      },
     ];
     return fields;
   }
@@ -154,11 +113,6 @@ export class PlayerService {
     { key: 'name', header: 'Name' },
     { key: 'last_name', header: 'Last Name' },
     { key: 'team_name', header: 'Team' },
-    { key: 'num_of_goals', header: 'Goals' },
-    { key: 'num_of_yellow_cards', header: 'Yellow Cards' },
-    { key: 'num_of_red_cards', header: 'Red Cards' },
-    { key: 'num_of_matches_played', header: 'Matches Played' },
-    { key: 'minutes_played', header: 'Minutes Played' },
   ];
 
   async playerExists(
