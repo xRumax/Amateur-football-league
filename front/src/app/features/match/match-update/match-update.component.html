@@ -1,8 +1,67 @@
 <div class="main-container">
   <h1>MATCH UPDATE</h1>
-  <div class="player-details-container">
-    <div class="player-details-main-content">
-      <app-action-form [matchId]="matchId"></app-action-form>
+  <div class="components-btn-con">
+    <ul>
+      <li>
+        <a
+          (click)="switchView('actions')"
+          [class.active]="currentView === 'actions'"
+          >Actions</a
+        >
+      </li>
+      <span>|</span>
+      <li>
+        <a
+          (click)="switchView('result')"
+          [class.active]="currentView === 'result'"
+          >Result</a
+        >
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="currentView === 'actions'" class="player-details-container">
+    <div
+      class="player-details-main-content"
+      *ngFor="let formGroup of actionForms; let i = index"
+    >
+      <div class="action-form-container">
+        <app-action-form
+          [matchId]="matchId"
+          [formIndex]="i"
+          [formGroup]="formGroup"
+          (formSubmit)="submitAllForms()"
+        >
+        </app-action-form>
+      </div>
+      <div *ngIf="i > 0" class="remove-btn-container">
+        <button mat-button class="remove-btn" (click)="removeForm(i)">
+          <img src="../../../../assets/images/remove-icon.svg" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Przycisk dodający nową linię formularza -->
+  <div class="add-new-line-btn">
+    <button *ngIf="currentView === 'actions'" mat-button (click)="addNewForm()">
+      + Add new line
+    </button>
+  </div>
+
+  <!-- Przycisk przesyłający wszystkie formularze naraz -->
+  <div class="submit-all-btn">
+    <button
+      *ngIf="currentView === 'actions'"
+      mat-button
+      (click)="submitAllForms()"
+    >
+      Submit All
+    </button>
+  </div>
+
+  <div *ngIf="currentView === 'result'">
+    <div class="form-container">
+      <app-form [matchId]="matchId" [formType]="'match-update'"></app-form>
     </div>
   </div>
 </div>
