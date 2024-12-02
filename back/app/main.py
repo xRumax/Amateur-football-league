@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from app.database import Base, engine
-from app.routes import matchStatistics, user, player, team, match, league, tournament, action
-from .routes import upload_routes
+from app.routes import user, player, team, match, league, tournament, action
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
