@@ -179,9 +179,6 @@ export class PlayerService {
         this.snackBar.open('Player added successfully', 'Close', {
           duration: 5000,
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
         return response.data;
       })
       .catch((error) => {

@@ -2,10 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatchService, Match } from '../../../services/match.service';
 import { ActionService, MatchAction } from '../../../services/action.service';
 import { ActivatedRoute } from '@angular/router';
-import { FormField } from '../../../app.component';
 import { Player, PlayerService } from '../../../services/player.service';
 import { Team, TeamService } from '../../../services/team.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-match-update',
@@ -26,7 +26,8 @@ export class MatchUpdateComponent implements OnInit {
     private actionService: ActionService,
     private route: ActivatedRoute,
     private playerService: PlayerService,
-    private teamService: TeamService
+    private teamService: TeamService,
+    private router: Router
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -97,8 +98,6 @@ export class MatchUpdateComponent implements OnInit {
         ),
       };
 
-      console.log('Dane przed wysłaniem:', actionData);
-
       return actionData;
     });
 
@@ -106,22 +105,22 @@ export class MatchUpdateComponent implements OnInit {
     if (allActions.length > 0) {
       this.actionService
         .createActions(allActions)
-        .then(() => {
-          console.log('Wszystkie działania zostały zapisane.');
-        })
+        .then(() => {})
         .catch((error) =>
           console.error('Błąd przy zapisywaniu działań:', error)
         );
     } else {
       console.error('Brak poprawnych danych do wysłania!');
     }
+
+    setTimeout(() => {
+      this.router.navigateByUrl('/matches-finished').then(() => {
+        window.location.reload();
+      });
+    }, 500);
   }
 
   removeForm(index: number): void {
     this.actionForms.splice(index, 1);
-  }
-
-  switchView(view: 'actions' | 'result'): void {
-    this.currentView = view;
   }
 }

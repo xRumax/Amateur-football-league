@@ -116,9 +116,11 @@ export class TeamService {
   ];
 
   staticsColumns = [
-    { key: 'num_of_goals', header: 'Goals' },
-    { key: 'num_of_yellow_cards', header: 'Yellow Cards' },
-    { key: 'num_of_red_cards', header: 'Red Cards' },
+    { key: 'goals', header: 'Goals' },
+    { key: 'yellow_cards', header: 'Yellow Cards' },
+    { key: 'red_cards', header: 'Red Cards' },
+    { key: 'shots', header: 'Shots' },
+    { key: 'shots_on_target', header: 'Shots On Target' },
   ];
 
   createTeam(formData: FormData): Promise<Team> {
@@ -135,9 +137,6 @@ export class TeamService {
         this.snackBar.open('Team created successfully', 'Close', {
           duration: 5000,
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
         return response.data;
       })
       .catch((error) => {

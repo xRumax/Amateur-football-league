@@ -14,6 +14,7 @@ import { PlayerService } from '../../services/player.service';
 import { SessionService } from '../../services/session.service';
 import { TournamentService } from '../../services/tournament.service';
 import { MatchService } from '../../services/match.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form',
@@ -54,7 +55,8 @@ export class FormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private sessionService: SessionService,
     private tournamentService: TournamentService,
-    private matchService: MatchService
+    private matchService: MatchService,
+    private router: Router
   ) {
     this.form = this.formBuilder.group({ team_id: [null] });
     if (dialogData) {
@@ -136,6 +138,7 @@ export class FormComponent implements OnInit {
       this.tournament
     );
     this.initializeForm(this.fields);
+    this.form.addControl('creator_id', new FormControl(''));
   }
 
   async initializeMatchUpdateForm(): Promise<void> {
@@ -176,9 +179,6 @@ export class FormComponent implements OnInit {
             break;
           case 'tournament':
             await this.submitTournamentForm();
-            break;
-          case 'match-update':
-            await this.submitMatchUpdateForm();
             break;
         }
       } catch (error) {
@@ -252,9 +252,24 @@ export class FormComponent implements OnInit {
     this.snackBar.open('Player created successfully', 'Close', {
       duration: 5000,
     });
+    setTimeout(() => {
+      this.router.navigateByUrl('/players-base').then(() => {
+        window.location.reload();
+      });
+    }, 500);
   }
 
   async submitTournamentForm(): Promise<void> {
+    const userId = this.sessionService.getUserId();
+    if (!userId) {
+      this.snackBar.open('User ID not found', 'Close', {
+        duration: 2000,
+      });
+      return;
+    }
+
+    this.form.patchValue({ creator_id: Number(userId) });
+
     const tournamentName = this.form.value.name;
     const tournamentExists = await this.tournamentService.tournamentExists(
       tournamentName
@@ -266,19 +281,20 @@ export class FormComponent implements OnInit {
       return;
     }
 
+    if (!this.form.value.creator_id) {
+      console.error('creator_id is not set in the form');
+      return;
+    }
     await this.tournamentService.createTournament(this.form.value);
     this.snackBar.open('Tournament created successfully', 'Close', {
       duration: 5000,
     });
-  }
 
-  async submitMatchUpdateForm(): Promise<void> {
-    await this.matchService.updateMatchById(this.matchId, this.form.value);
-    this.snackBar.open('Match updated successfully', 'Close', {
-      duration: 5000,
-    });
+    //Reload
     setTimeout(() => {
-      window.location.reload();
+      this.router.navigateByUrl('/tournament-base').then(() => {
+        window.location.reload();
+      });
     }, 500);
   }
 

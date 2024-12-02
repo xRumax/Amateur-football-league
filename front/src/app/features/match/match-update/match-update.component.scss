@@ -27,13 +27,13 @@
 }
 
 .components-btn-con a {
-  color: rgb(76, 61, 104); /* Kolor domyślny linków */
-  transition: color 0.2s; /* Płynna zmiana koloru przez 0.2 sekundy */
+  color: #686868;
+  transition: color 0.2s;
 }
 
 .components-btn-con a:hover {
   color: #f1356d;
-  transition: 0.2s;
+  transition: color 0.2s;
 }
 
 .components-btn-con a.active {

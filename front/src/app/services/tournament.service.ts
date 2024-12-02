@@ -13,6 +13,7 @@ export interface Tournament {
   teams: Team[];
   date_of_tournament: string;
   matches: Match[];
+  creator_id: number;
 }
 
 @Injectable({
@@ -90,9 +91,6 @@ export class TournamentService {
         },
       })
       .then((response) => {
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
         return response.data;
       })
       .catch((error) => {
@@ -124,7 +122,6 @@ export class TournamentService {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setTimeout(() => window.location.reload(), 500);
     } catch (error) {
       console.error('Error updating tournament:', error);
       throw error;

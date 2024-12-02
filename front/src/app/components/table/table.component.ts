@@ -107,34 +107,16 @@ export class TableComponent implements OnInit {
 
   private async loadTeamStaticsData() {
     if (!this.teamId) {
-      console.error('Team ID not provided');
+      console.error('Player ID not provided');
       return;
     }
     try {
-      const players = await this.playerService.getPlayerByTeamId(this.teamId);
-      const totalNumOfGoals = players.reduce(
-        (sum: number, player: any) => sum + (player.num_of_goals || 0),
-        0
-      );
-      const totalNumOfYellowCards = players.reduce(
-        (sum: number, player: any) => sum + (player.num_of_yellow_cards || 0),
-        0
-      );
-      const totalNumOfRedCards = players.reduce(
-        (sum: number, player: any) => sum + (player.num_of_red_cards || 0),
-        0
-      );
-      this.data = new MatTableDataSource<any>([
-        {
-          num_of_goals: totalNumOfGoals,
-          num_of_yellow_cards: totalNumOfYellowCards,
-          num_of_red_cards: totalNumOfRedCards,
-        },
-      ]);
+      const statics = await this.actionService.getTeamActions(this.teamId);
+      this.data = new MatTableDataSource<any>([statics]);
       this.data.paginator = this.paginator;
       this.data.sort = this.sort;
     } catch (error) {
-      console.error('Error fetching team statics:', error);
+      console.error('Error fetching team actions:', error);
     }
   }
 

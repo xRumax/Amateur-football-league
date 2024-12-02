@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <!-- Gradient for the circle -->
+    <radialGradient id="sunGradient" cx="50%" cy="50%" r="70%" fx="50%" fy="50%">
+      <stop offset="30%" stop-color="#0a0e1a" />
+      <stop offset="100%" stop-color="#1c1c1c" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Filter for the glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="15" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Circle with gradient and glow -->
+  <circle cx="50" cy="50" r="40" fill="url(#sunGradient)" filter="url(#glow)" />
+</svg>

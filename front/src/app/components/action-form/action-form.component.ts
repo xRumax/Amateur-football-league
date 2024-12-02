@@ -68,7 +68,6 @@ export class ActionFormComponent implements OnInit {
   async loadPlayersByTeamId(teamId: number): Promise<void> {
     try {
       this.players = await this.playerService.getPlayerByTeamId(teamId);
-      console.log('Players:', this.players);
 
       const playerField = this.formGroup.get('player_id');
       if (playerField) {
@@ -81,7 +80,6 @@ export class ActionFormComponent implements OnInit {
         this.players,
         this.teams
       );
-      console.log('Fields:', this.formFields);
       this.initializeForm(this.formFields);
       this.cdr.detectChanges(); // Ręczne uruchomienie cyklu wykrywania zmian
     } catch (error) {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   Tournament,
   TournamentService,
@@ -7,16 +7,16 @@ import { UserService } from '../../services/user.service';
 import { SessionService } from '../../services/session.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
-  styleUrl: './card.component.scss',
+  styleUrls: ['./card.component.scss'],
 })
-export class CardComponent {
+export class CardComponent implements OnInit {
   tournaments: Tournament[] = [];
   userTeam: any = {};
+  @Input() tournament: any;
   @Input() dataType!: 'tournament' | 'match';
   teams: any[] = [];
   userTeamId: number | null = null;
@@ -29,7 +29,12 @@ export class CardComponent {
     private sessionService: SessionService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    const userId = this.sessionService.getUserId();
+    if (userId) {
+      const userTeam = await this.userService.getUserTeam(Number(userId));
+      this.userTeamId = userTeam.id;
+    }
     this.loadTournaments();
   }
 
@@ -41,15 +46,12 @@ export class CardComponent {
     }
   }
 
-  async loadTeams(tournamentId: number): Promise<void> {
-    try {
-      const tournament = await this.tournamentService.getTournamentById(
-        tournamentId
-      );
-      this.teams = tournament.teams;
-    } catch (error) {
-      console.error('Error loading teams:', error);
-    }
+  isTeamInTournament(tournament: Tournament): boolean {
+    const isInTournament = tournament.teams.some(
+      (team: any) => team.id === this.userTeamId
+    );
+
+    return isInTournament;
   }
 
   async joinToTournament(tournament: Tournament): Promise<void> {
@@ -63,6 +65,13 @@ export class CardComponent {
         return;
       }
       const userTeam = await this.userService.getUserTeam(Number(userId));
+
+      if (this.isTeamInTournament(tournament)) {
+        this.snackBar.open('Your team is already in this tournament', 'Close', {
+          duration: 5000,
+        });
+        return;
+      }
 
       await this.tournamentService.addTeamToTournament(
         userTeam.id,

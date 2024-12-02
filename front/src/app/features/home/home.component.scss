@@ -1,47 +1,118 @@
-.container {
-  background-position: center;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  width: 100vw;
-  height: calc(100vh - 9vh);
+.homepage {
+  font-family: Arial, sans-serif;
+  color: #333;
 
-  h1 {
-    margin-bottom: 20px;
-    font-size: 2rem;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    color: #fff;
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .nav a {
+      margin-left: 1rem;
+      color: #fff;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(158, 74, 74);
+    border-radius: 15px 15px 15px 15px;
+    width: 90vw;
+    height: 50vh;
     text-align: center;
-    font-style: italic;
-    font-weight: 600;
+    padding: 2rem;
+    color: #fff;
+
+    h1 {
+      align-items: center;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero-btn-con {
+      display: flex;
+      gap: 15px;
+    }
+
+    .cta-button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background-color: #ff5722;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #e64a19;
+      }
+    }
   }
 
-  .title-f,
-  .title-s,
-  .title-t {
-    font-size: 7em;
-    color: rgba(255, 255, 255, 0.897);
-    text-shadow: 2px 2px 0 #00000046, -2px 2px 0 #00000033, 2px -2px 0 #0000001f,
-      -2px -2px 0 #00000023, 2px 0px 0 #0000002d, -2px 0px 0 #0000003a,
-      0px 2px 0 #0000002c, 0px -2px 0 #00000025;
-    transition: transform 0.3s ease;
-    position: absolute;
-    filter: opacity(0.7);
+  .features {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem;
+
+    .feature-card {
+      padding: 1rem;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+
+      h2 {
+        margin-bottom: 1rem;
+        color: #004d40;
+      }
+    }
   }
 
-  .title-f {
-    top: 200px;
-    left: 150px;
-    margin: 20px;
+  .news {
+    padding: 2rem;
+
+    .news-card {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      span {
+        font-size: 0.9rem;
+        color: #666;
+      }
+    }
   }
 
-  .title-s {
-    position: relative;
-    font-size: 8em;
-  }
+  .footer {
+    padding: 1rem;
+    background-color: #004d40;
+    color: #fff;
+    text-align: center;
 
-  .title-t {
-    bottom: 150px;
-    right: 150px;
-    margin: 20px;
-    z-index: 3;
+    .social-links a {
+      margin: 0 0.5rem;
+      color: #fff;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

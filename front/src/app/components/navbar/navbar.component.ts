@@ -38,6 +38,15 @@ export class NavbarComponent {
     return null;
   }
 
+  async getTournamentIdFromUser(): Promise<number | null> {
+    const { user } = await this.userService.getUserDataAndFields();
+    const userWithTournament = user as any;
+    if (userWithTournament && userWithTournament.tournament) {
+      return userWithTournament.tournament.id;
+    }
+    return null;
+  }
+
   async navigateToMyTeam(): Promise<void> {
     const teamId = await this.getTeamIdFromUser();
     if (teamId !== null && teamId !== undefined) {
@@ -47,6 +56,18 @@ export class NavbarComponent {
     } else {
       console.error('No team ID found for the user, cannot navigate');
       this.showSnackbar("You already don't have any team");
+    }
+  }
+
+  async navigateToMyTournament(): Promise<void> {
+    const tournamentId = await this.getTournamentIdFromUser();
+    if (tournamentId !== null && tournamentId !== undefined) {
+      this.router.navigate(['/tournament', tournamentId]).then(() => {
+        window.location.reload();
+      });
+    } else {
+      console.error('No tournament ID found for the user, cannot navigate');
+      this.showSnackbar("You already don't have any tournament");
     }
   }
 

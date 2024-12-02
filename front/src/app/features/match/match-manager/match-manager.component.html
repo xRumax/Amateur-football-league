@@ -1,5 +1,8 @@
 <div class="main-container">
   <h1>MATCH MANAGER</h1>
+  <div *ngIf="matches.length === 0">
+    <p>There are no matches yet</p>
+  </div>
   <div class="card-matches-container">
     <app-card-matches
       [matches]="matches"

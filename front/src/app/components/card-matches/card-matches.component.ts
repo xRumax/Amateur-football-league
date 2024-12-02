@@ -40,6 +40,8 @@ export class CardMatchesComponent {
   onCardClickedManage(matchId: any): void {
     if (this.dataType === 'matches') {
       this.router.navigate(['/match', matchId]);
+    } else if (this.dataType === 'match-soon') {
+      this.router.navigate(['/match', matchId]);
     }
   }
   onCardClicked(matchId: any): void {

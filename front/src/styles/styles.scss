@@ -4,7 +4,7 @@ body {
   height: 100%;
 }
 body {
-  background-color: #ffffff;
+  background-color: #000000;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
@@ -27,4 +27,12 @@ body {
   width: 80vw;
   margin: 1rem;
   cursor: pointer;
+}
+mat-card {
+  background-color: #f3f3f3 !important;
+  border-radius: 10px !important;
+}
+
+.mat-sort-header-container {
+  justify-content: center !important;
 }

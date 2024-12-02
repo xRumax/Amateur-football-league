@@ -104,9 +104,6 @@ export class ActionService {
         this.snackBar.open('Action created successfully', 'Close', {
           duration: 5000,
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
         return response.data;
       })
       .catch((error) => {
@@ -122,9 +119,6 @@ export class ActionService {
         this.snackBar.open('All actions created successfully', 'Close', {
           duration: 5000,
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
       })
       .catch((error) => {
         console.error('Error creating actions:', error);
@@ -135,7 +129,20 @@ export class ActionService {
   getPlayerActions(playerId: number): Promise<Player[]> {
     return new Promise((resolve, reject) => {
       axios
-        .get(`${this.envService.base_url}/actions/${playerId}/actions`)
+        .get(`${this.envService.base_url}/actions/player/${playerId}/actions`)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  getTeamActions(teamId: number): Promise<Team> {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${this.envService.base_url}/actions/team/${teamId}/actions`)
         .then((response) => {
           resolve(response.data);
         })

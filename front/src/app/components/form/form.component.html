@@ -58,6 +58,12 @@
       </div> -->
     </div>
     <input
+      *ngIf="formType === 'tournament'"
+      formControlName="creator_id"
+      type="hidden"
+      readonly
+    />
+    <input
       *ngIf="formType === 'player'"
       formControlName="team_id"
       type="hidden"

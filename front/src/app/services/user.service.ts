@@ -13,6 +13,7 @@ export interface UserResponse {
   password: string;
   team?: Team | null;
   is_superuser: boolean;
+  tournaments: any[];
 }
 
 @Injectable({
@@ -110,7 +111,6 @@ export class UserService {
       this.snackBar.open('User updated successfully', 'Close', {
         duration: 5000,
       });
-      setTimeout(() => window.location.reload(), 500);
     } catch (error) {
       console.error('Error updating user:', error);
       this.snackBar.open('Error updating user', 'Close', { duration: 5000 });

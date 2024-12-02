@@ -1,5 +1,4 @@
 mat-card {
-  background-color: #f3f3f3;
   height: 115px;
 }
 
@@ -22,14 +21,6 @@ mat-card {
   font-size: 1rem;
 }
 
-.card-container-button {
-  border: 1px solid #000;
-}
-
-button {
-  width: 100px;
-}
-
 .status {
   position: absolute;
   top: 50%;
@@ -40,11 +31,13 @@ button {
 }
 
 .active {
-  color: green;
+  font-family: "Cabin", sans-serif;
+  color: #0dc167;
 }
 
 .inactive {
-  color: red;
+  font-family: "Cabin", sans-serif;
+  color: #dc143c;
 }
 
 .date {
@@ -56,4 +49,24 @@ button {
   font-size: 1rem;
   font-weight: bold;
   flex-direction: row;
+}
+.button-green {
+  padding: 10px 22px;
+  font-family: "Cabin", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 56px;
+  background-color: #0dc167;
+  transition: 0.25s ease;
+  color: white !important;
+}
+
+.button-green:hover {
+  background-color: #ffffff;
+  color: black !important;
+}
+.button-green[disabled] {
+  background-color: rgb(143, 143, 143);
+  color: white;
+  cursor: not-allowed;
 }
