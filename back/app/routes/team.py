@@ -4,7 +4,6 @@ from app.schemas.team import TeamCreate, TeamUpdate, Team
 from app.services.team import TeamService
 from app.database import get_db
 from app.utils.auth import get_current_user
-from app.schemas.player import PlayerBase
 from app.services.upload_service import UploadService
 
 router = APIRouter(prefix="/teams", tags=["teams"])

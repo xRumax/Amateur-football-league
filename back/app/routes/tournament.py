@@ -2,15 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.schemas.tournament import TournamentCreate, TournamentUpdate, Tournament
 from app.services.tournament import TournamentService
+from app.utils.auth import get_current_user
 from app.database import get_db
 from app.schemas.match import Match
 
 router = APIRouter(prefix="/tournaments", tags=["tournaments"])
 
 @router.post("/", response_model=Tournament)
-def create_tournament(tournament: TournamentCreate, db: Session = Depends(get_db)):
+def create_tournament(tournament: TournamentCreate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     tournament_service = TournamentService(db)
-    return tournament_service.create_tournament(tournament)
+    return tournament_service.create_tournament(tournament, creator_id=current_user['user_id'])
 
 @router.get("/", response_model=list[Tournament])
 def read_tournaments(db: Session = Depends(get_db)):

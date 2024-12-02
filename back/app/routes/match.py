@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.schemas.match import MatchCreate, MatchUpdate, Match
+from app.schemas.match import MatchCreate, MatchUpdate, Match, MatchDisplay
 from app.services.match import MatchService
 from app.database import get_db
 from app.schemas.team import Team
