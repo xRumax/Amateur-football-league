@@ -4,6 +4,9 @@ from app.models import match as models
 from app.models import team as team_models
 from app.models import tournament as tournament_models
 from fastapi import HTTPException
+from app.models.match import Match
+from app.models.action import Action
+from app.schemas.action import ActionTypeEnum
 
 
 def create_match(db: Session, match: MatchCreate):
@@ -74,4 +77,28 @@ def get_match_player(db:Session, match_id:int):
         "team_1_players": team_1_players,
         "team_2_players": team_2_players
     }
+
+def calculate_match_result(db: Session, match_id: int):
+    actions = db.query(Action).filter(Action.match_id == match_id).all()
+    team_goals = {}
+
+    for action in actions:
+        if action.action_type == ActionTypeEnum.Goal:
+            if action.team_id not in team_goals:
+                team_goals[action.team_id] = 0
+            team_goals[action.team_id] += 1
+
+    if len(team_goals) == 2:
+        team_ids = list(team_goals.keys())
+        result = f"{team_goals[team_ids[0]]}:{team_goals[team_ids[1]]}"
+    else:
+        result = None
+
+    db_match = db.query(Match).filter(Match.id == match_id).first()
+    if db_match:
+        db_match.result = result
+        db.commit()
+        db.refresh(db_match)
+
+    return db_match
 

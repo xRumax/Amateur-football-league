@@ -1,13 +1,13 @@
 from sqlalchemy.orm import Session
-from app.schemas.action import ActionCreate, ActionUpdate
+from app.schemas.action import ActionCreate, ActionUpdate, ActionTeamDisplay, ActionTypeEnum, ActionPlayerDisplay, ActionMatchDisplay
 from app.models import action as models
 from app.models.team import Team
 from app.models.match import Match
 from app.models.player import Player
 from fastapi import HTTPException
 from typing import List
-from app.schemas.action import ActionPlayerDisplay
-from app.schemas.action import ActionTypeEnum
+from app.crud.match import calculate_match_result
+
 
 def create_action(db: Session, action: ActionCreate):
     check_team_match_player_exist(db, action.team_id, action.match_id, action.player_id)
@@ -34,7 +34,6 @@ def create_match_actions(db: Session, actions: List[ActionCreate]):
     try:
         db_actions = []
         for action in actions:
-            # Sprawdź, czy taki sam rekord już istnieje
             existing_action = db.query(models.Action).filter(
                 models.Action.action_type == action.action_type,
                 models.Action.minute == action.minute,
@@ -53,6 +52,11 @@ def create_match_actions(db: Session, actions: List[ActionCreate]):
         db.commit()
         for db_action in db_actions:
             db.refresh(db_action)
+
+        # Calculate match result for the first action's match_id
+        if db_actions:
+            calculate_match_result(db, db_actions[0].match_id)
+
         return db_actions
     except Exception as e:
         raise HTTPException(status_code=500, detail="An error occurred while processing actions.")
@@ -66,6 +70,12 @@ def get_action(db: Session, action_id: int):
 def update_action(db: Session, action: ActionUpdate, action_id: int):
     db.query(models.Action).filter(models.Action.id == action_id).update(action.dict())
     db.commit()
+
+    db_action = db.query(models.Action).filter(models.Action.id == action_id).first()
+    if db_action:
+        # Calculate match result
+        calculate_match_result(db, db_action.match_id)
+
     return get_action(db=db, action_id=action_id)
 
 def delete_action(db: Session, action_id: int):
@@ -90,7 +100,7 @@ def check_team_match_player_exist(db: Session, team_id: int, match_id: int, play
 
     return db_team, db_match, db_player
 
-def get_player_action_summary(db: Session, player_id: int):
+def get_player_action_summary(db: Session, player_id: int) -> ActionPlayerDisplay:
     actions = db.query(models.Action).filter(models.Action.player_id == player_id).all()
     summary = {
         "goals": 0,
@@ -119,3 +129,64 @@ def get_player_action_summary(db: Session, player_id: int):
             summary["shots_on_target"] += 1
 
     return ActionPlayerDisplay(**summary)
+
+
+def get_team_action_summary(db: Session, team_id: int) -> ActionTeamDisplay:
+    actions = db.query(models.Action).filter(models.Action.team_id == team_id).all()
+    summary = {
+        "goals": 0,
+        "yellow_cards": 0,
+        "red_cards": 0,
+        "shots": 0,
+        "shots_on_target": 0
+    }
+
+    for action in actions:
+        if action.action_type == ActionTypeEnum.Goal:
+            summary["goals"] += 1
+        elif action.action_type == ActionTypeEnum.YellowCard:
+            summary["yellow_cards"] += 1
+        elif action.action_type == ActionTypeEnum.RedCard:
+            summary["red_cards"] += 1
+        elif action.action_type == ActionTypeEnum.Shot:
+            summary["shots"] += 1
+        elif action.action_type == ActionTypeEnum.ShotOnTarget:
+            summary["shots_on_target"] += 1
+
+    return ActionTeamDisplay(**summary)
+
+
+def get_match_action_summary(db: Session, match_id: int) -> List[ActionMatchDisplay]:
+    actions = db.query(models.Action).filter(models.Action.match_id == match_id).all()
+    team_summaries = {}
+
+    for action in actions:
+        team_id = action.team_id
+        if team_id not in team_summaries:
+            team_summaries[team_id] = {
+                "team_id": team_id,
+                "goals": 0,
+                "assists": 0,
+                "yellow_cards": 0,
+                "red_cards": 0,
+                "offside": 0,
+                "shots": 0,
+                "shots_on_target": 0
+            }
+
+        if action.action_type == ActionTypeEnum.Goal:
+            team_summaries[team_id]["goals"] += 1
+        elif action.action_type == ActionTypeEnum.Assist:
+            team_summaries[team_id]["assists"] += 1
+        elif action.action_type == ActionTypeEnum.YellowCard:
+            team_summaries[team_id]["yellow_cards"] += 1
+        elif action.action_type == ActionTypeEnum.RedCard:
+            team_summaries[team_id]["red_cards"] += 1
+        elif action.action_type == ActionTypeEnum.Offside:
+            team_summaries[team_id]["offside"] += 1
+        elif action.action_type == ActionTypeEnum.Shot:
+            team_summaries[team_id]["shots"] += 1
+        elif action.action_type == ActionTypeEnum.ShotOnTarget:
+            team_summaries[team_id]["shots_on_target"] += 1
+
+    return [ActionMatchDisplay(**summary) for summary in team_summaries.values()]
