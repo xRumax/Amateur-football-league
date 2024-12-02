@@ -4,16 +4,17 @@ from app.crud.tournament import create_tournament, get_all_tournaments, get_tour
 from sqlalchemy.orm import Session
 from typing import Optional
 from app.models.team import Team
+from app.schemas.tournament import Tournament
 from app.schemas.match import MatchCreate
 from app.services.match import MatchService
 from fastapi import HTTPException
 
 class TournamentService:
     def __init__(self, db: Session):
-        self.db = db
+        self.db = db    
 
-    def create_tournament(self, tournament: TournamentCreate) -> models.Tournament:
-        return create_tournament(self.db, tournament)
+    def create_tournament(self, tournament: TournamentCreate, creator_id: int) -> Tournament:
+        return create_tournament(self.db, tournament, creator_id)
 
     def get_all_tournaments(self) -> list[models.Tournament]:
         return get_all_tournaments(self.db)
