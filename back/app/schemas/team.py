@@ -4,7 +4,9 @@ from app.schemas.player import Player
 
 class TeamBase(BaseModel):
     name: str
-
+class TeamTournamentDisplay(BaseModel):
+    id: int
+    name: str
 class TeamCreate(TeamBase):
     league_id: int
     logo: Optional[str] = None

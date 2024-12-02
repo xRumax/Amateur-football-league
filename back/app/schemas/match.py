@@ -22,6 +22,12 @@ class MatchUpdate(BaseModel):
             raise ValueError('Result must be in the format "xx:xx" where x is a digit')
         return v
     
+
+class MatchDisplay(BaseModel):
+    team_1_id : int
+    team_2_id : int
+    result: Optional[str] = None
+    
 class MatchTournament(BaseModel):
     id: int
     team_1_id : int

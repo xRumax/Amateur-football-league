@@ -31,7 +31,23 @@ class ActionPlayerDisplay(BaseModel):
     shots: int = 0
     shots_on_target: int = 0
 
-    
+class ActionTeamDisplay(BaseModel):
+    goals: int = 0
+    yellow_cards: int = 0
+    red_cards: int = 0
+    shots: int = 0
+    shots_on_target: int = 0
+
+class ActionMatchDisplay(BaseModel):
+    team_id: int
+    goals: int = 0
+    assists: int = 0
+    yellow_cards: int = 0
+    red_cards: int = 0
+    offside: int = 0
+    shots: int = 0
+    shots_on_target: int = 0
+
 class Action(ActionBase):
     minute: int 
     match_id : int
