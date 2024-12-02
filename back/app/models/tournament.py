@@ -20,3 +20,6 @@ class Tournament(Base):
     
     #One-to-many relationship with matches
     matches = relationship("Match", back_populates="tournament")
+
+    creator_id = Column(Integer, ForeignKey("users.id"))
+    creator = relationship("User", back_populates="tournaments")

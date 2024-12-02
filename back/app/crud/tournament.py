@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
-from app.schemas.tournament import TournamentCreate, TournamentUpdate
+from app.schemas.tournament import TournamentCreate, TournamentUpdate, Tournament
 from app.models import tournament as models
 
 
-def create_tournament(db: Session, tournament: TournamentCreate):
-    db_tournament = models.Tournament(**tournament.dict())
+def create_tournament(db: Session, tournament: TournamentCreate, creator_id: int):
+    db_tournament = models.Tournament(creator_id=creator_id, **tournament.dict())
     db.add(db_tournament)
     db.commit()
     db.refresh(db_tournament)

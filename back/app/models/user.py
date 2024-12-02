@@ -14,3 +14,4 @@ class User(Base):
 
     
     team = relationship("Team", back_populates="creator", uselist=False)
+    tournaments = relationship("Tournament", back_populates="creator")
