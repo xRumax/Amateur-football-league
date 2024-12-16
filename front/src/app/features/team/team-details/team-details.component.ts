@@ -3,6 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { Team, TeamService } from '../../../services/team.service';
 import { Player, PlayerService } from '../../../services/player.service';
+import { SessionService } from '../../../services/session.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupContentComponent } from '../../../components/popup-content/popup-content.component';
+import { FormComponent } from '../../../components/form/form.component';
 
 @Component({
   selector: 'app-team-details',
@@ -14,10 +18,12 @@ export class TeamDetailsComponent implements OnInit {
   totalNumOfYellowCards: number = 0;
   totalNumOfRedCards: number = 0;
 
+  fields: any[] = [];
   dataSource = new MatTableDataSource<Player>(); // Initialize dataSource here
   staticsDataSource = new MatTableDataSource<any>([]); // Additional dataSource for statics
   id: number = 0; // Initialize id as number
   team: Team | undefined;
+  isCreator: boolean = false;
 
   teamDetails: { key: keyof Team; label: string }[] = [
     { key: 'name', label: 'Name' },
@@ -32,7 +38,9 @@ export class TeamDetailsComponent implements OnInit {
   constructor(
     private teamService: TeamService,
     private route: ActivatedRoute,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private sessionService: SessionService,
+    private dialog: MatDialog
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -69,11 +77,53 @@ export class TeamDetailsComponent implements OnInit {
           num_of_red_cards: this.totalNumOfRedCards,
         },
       ];
+
+      const userId = this.sessionService.getUserId();
+      if (userId && this.team.creator_id === Number(userId)) {
+        this.isCreator = true;
+      }
     }
   }
 
-  addPlayer(): void {
-    // Logic to add a new player
-    console.log('Add player button clicked');
+  openDialog(dataType: 'team'): void {
+    const dialogRef = this.dialog.open(PopupContentComponent, {
+      width: '1000px',
+      height: '300px',
+      data: { dataType },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
+  openEditDialog(): void {
+    const dialogRef = this.dialog.open(FormComponent, {
+      data: {
+        title: 'Edit Form',
+        formType: 'team-edit',
+        data: { fields: this.fields },
+      },
+      height: '500px',
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // Handle the result from the dialog here
+    });
+  }
+
+  openAddPlayerDialog(): void {
+    const dialogRef = this.dialog.open(FormComponent, {
+      data: {
+        title: 'Add Player',
+        formType: 'player',
+        data: { fields: this.fields },
+      },
+      height: '500px',
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // Handle the result from the dialog here
+    });
   }
 }

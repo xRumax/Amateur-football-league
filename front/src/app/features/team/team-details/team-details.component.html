@@ -6,12 +6,34 @@
   </div>
   <!-----------------Table Players-------------------------->
   <p class="team-details-content-item">Players:</p>
-  <div class="table-con">
-    <app-table dataType="teamPlayers" [teamId]="id"></app-table>
+  <div class="table-wrapper">
+    <app-table
+      class="team-players"
+      dataType="teamPlayers"
+      [teamId]="id"
+    ></app-table>
+    <button
+      mat-button
+      class="add-player-button"
+      (click)="openAddPlayerDialog()"
+      *ngIf="isCreator"
+    >
+      <i class="fa-solid fa-plus" style="color: #ffffff"></i>
+      <span>Add Player</span>
+    </button>
   </div>
   <!-----------------Table Statics-------------------------->
   <p class="team-details-content-item">Team Statics:</p>
   <div class="table-con">
     <app-table dataType="teamStatics" [teamId]="id"></app-table>
   </div>
+</div>
+<!-----------------Edit and Delete Buttons-------------------------->
+<div *ngIf="isCreator" class="actions">
+  <button mat-button class="button-edit" (click)="openEditDialog()">
+    Edit Team
+  </button>
+  <button mat-button class="button-delete" (click)="openDialog('team')">
+    Delete Team
+  </button>
 </div>
