@@ -5,18 +5,29 @@ from app.services.tournament import TournamentService
 from app.utils.auth import get_current_user
 from app.database import get_db
 from app.schemas.match import Match
+from app.schemas.team import TournamentTeams
+from typing import Optional
 
 router = APIRouter(prefix="/tournaments", tags=["tournaments"])
 
 @router.post("/", response_model=Tournament)
 def create_tournament(tournament: TournamentCreate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+    if 'user_id' not in current_user:
+        raise HTTPException(status_code=400, detail="User ID not found")
+    
     tournament_service = TournamentService(db)
+
+    # Check if the user already has a active tournament
+    existing_active_tournament = tournament_service.get_active_tournament_by_user_id(current_user['user_id'])
+    if existing_active_tournament:
+        raise HTTPException(status_code=400, detail="User already has an active tournament")
+    
     return tournament_service.create_tournament(tournament, creator_id=current_user['user_id'])
 
 @router.get("/", response_model=list[Tournament])
-def read_tournaments(db: Session = Depends(get_db)):
+def read_tournaments(limit: Optional[int] = None, db: Session = Depends(get_db)):
     tournament_service = TournamentService(db)
-    return tournament_service.get_all_tournaments()
+    return tournament_service.get_all_tournaments(limit=limit)
 
 @router.get("/{tournament_id}", response_model=Tournament)
 def read_tournament(tournament_id: int, db: Session = Depends(get_db)):
@@ -58,3 +69,11 @@ def read_tournament_matches(tournament_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Tournament not found")
     return db_tournament.matches
 
+
+@router.get("/{tournament_id}/teams", response_model=list[TournamentTeams])
+def read_tournament_teams(tournament_id: int, db: Session = Depends(get_db)):
+    tournament_service = TournamentService(db)
+    db_tournament = tournament_service.get_tournament(tournament_id)
+    if db_tournament is None:
+        raise HTTPException(status_code=404, detail="Tournament not found")
+    return db_tournament.teams
