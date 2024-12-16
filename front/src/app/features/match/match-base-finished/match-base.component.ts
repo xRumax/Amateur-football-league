@@ -18,7 +18,7 @@ export class MatchBaseComponent {
 
   async loadMatches(): Promise<void> {
     try {
-      const allMatches = await this.matchService.getMatches();
+      const allMatches = await this.matchService.getMatches(10);
       this.filteredMatches = allMatches.filter((match) => {
         return match.result != null || match.result != undefined;
       });
