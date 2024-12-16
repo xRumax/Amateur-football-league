@@ -14,6 +14,7 @@ class TournamentCreate(TournamentBase):
 
 class TournamentUpdate(TournamentBase):
     teams: Optional[List[TeamBase]] = None
+    date_of_tournament: Optional[date] = None
 
 class AddTeamToTournament(BaseModel):
     team_id: int
@@ -21,6 +22,7 @@ class AddTeamToTournament(BaseModel):
 class TournamentPlayerDisplay(BaseModel):
     id: int
     name: str
+    is_active: bool
 
 class Tournament(BaseModel):
     id: int

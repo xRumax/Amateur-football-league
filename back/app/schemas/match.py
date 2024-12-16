@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional, List
 from app.schemas.team import TeamMatch
-from app.schemas.action import ActionBase
+from app.schemas.action import ActionMatch
 from pydantic import BaseModel, validator
 import re
 
@@ -32,6 +32,7 @@ class MatchTournament(BaseModel):
     id: int
     team_1_id : int
     team_2_id : int
+    result: Optional[str] = None
 
 class Match(BaseModel):
     id: int
@@ -39,7 +40,7 @@ class Match(BaseModel):
     result : Optional[str]
     team_1 : Optional[TeamMatch]
     team_2 : Optional[TeamMatch]
-    actions: Optional[List[ActionBase]] = None
+    actions: Optional[List[ActionMatch]] = None
 
     tournament_id : int
 

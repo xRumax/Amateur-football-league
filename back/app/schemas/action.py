@@ -48,6 +48,12 @@ class ActionMatchDisplay(BaseModel):
     shots: int = 0
     shots_on_target: int = 0
 
+class ActionMatch(ActionBase):
+    team_id: int
+
+    class Config:
+        from_attributes = True
+
 class Action(ActionBase):
     minute: int 
     match_id : int

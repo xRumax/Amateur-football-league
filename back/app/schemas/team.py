@@ -20,6 +20,9 @@ class TeamMatch(BaseModel):
     name:str
     players: Optional[List[Player]] = None
 
+class TournamentTeams(BaseModel):
+    id:int
+    name:str
 
 class Team(BaseModel):
     id: int
