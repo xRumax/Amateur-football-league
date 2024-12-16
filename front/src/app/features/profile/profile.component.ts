@@ -21,10 +21,11 @@ export class ProfileComponent {
     this.fields = fields;
   }
 
-  openDialog(): void {
+  openDialog(dataType: 'profile'): void {
     const dialogRef = this.dialog.open(PopupContentComponent, {
       width: '1000px',
       height: '300px',
+      data: { dataType },
     });
 
     dialogRef.afterClosed().subscribe((result) => {});
