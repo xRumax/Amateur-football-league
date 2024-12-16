@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
-from app.schemas.tournament import TournamentCreate, TournamentUpdate, Tournament
+from app.schemas.tournament import TournamentCreate, TournamentUpdate
 from app.models import tournament as models
+from app.models.match import Match
 
 
 def create_tournament(db: Session, tournament: TournamentCreate, creator_id: int):
@@ -23,6 +24,20 @@ def update_tournament(db: Session, tournament: TournamentUpdate, tournament_id: 
 
 def delete_tournament(db: Session, tournament_id: int):
     db_tournament = get_tournament(db=db, tournament_id=tournament_id)
-    db.delete(db_tournament)
-    db.commit()
+    if db_tournament:
+        # Usuń wszystkie mecze powiązane z turniejem
+        db.query(Match).filter(Match.tournament_id == tournament_id).delete()
+        db.commit()
+        
+        # Usuń turniej
+        db.delete(db_tournament)
+        db.commit()
     return db_tournament
+
+def check_and_update_tournament_status(db: Session, tournament_id: int):
+    db_tournament = get_tournament(db=db, tournament_id=tournament_id)
+    if db_tournament:
+        all_matches_have_result = all(result is not None for result in db_tournament.matches)
+        if all_matches_have_result:
+            db_tournament.is_active = False
+            db.commit()

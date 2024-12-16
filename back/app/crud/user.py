@@ -38,6 +38,9 @@ def delete_user(db: Session, user_id: int):
     # Delete the team assigned to the user if it exists
     if db_user.team:
         db.delete(db_user.team)
+
+    for tournament in db_user.tournaments:
+        db.delete(tournament)
     
     # Delete user
     db.delete(db_user)
