@@ -21,6 +21,9 @@
       </li>
     </ul>
   </div>
+  <div *ngIf="currentView === 'teams' && teams.length === 0">
+    <p>There are no teams yet</p>
+  </div>
   <div *ngIf="currentView === 'teams'" class="matches-container">
     <div class="teams-cards" *ngFor="let team of teams">
       <mat-card>
@@ -30,4 +33,13 @@
       </mat-card>
     </div>
   </div>
+</div>
+<!-----------------Edit and Delete Buttons-------------------------->
+<div *ngIf="isCreator" class="actions">
+  <button mat-button class="button-edit" (click)="openEditDialog()">
+    Edit
+  </button>
+  <button mat-button class="button-delete" (click)="openDialog('tournament')">
+    Delete
+  </button>
 </div>

@@ -6,6 +6,10 @@ import {
 } from '../../../services/tournament.service';
 import { FormField } from '../../../app.component';
 import { Match } from '../../../services/match.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupContentComponent } from '../../../components/popup-content/popup-content.component';
+import { FormComponent } from '../../../components/form/form.component';
+import { SessionService } from '../../../services/session.service';
 
 @Component({
   selector: 'app-tournament-details',
@@ -14,15 +18,18 @@ import { Match } from '../../../services/match.service';
 })
 export class TournamentDetailsComponent {
   teams: any = [];
-  tournament: Tournament | null = null;
+  tournament: Tournament | undefined;
   matches: Match[] = [];
   tournamentId: number = 0;
   fields: FormField[] = [];
   currentView: 'teams' | 'match-ladder' = 'teams';
+  isCreator: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
-    private tournamentService: TournamentService
+    private tournamentService: TournamentService,
+    private dialog: MatDialog,
+    private sessionService: SessionService
   ) {}
 
   ngOnInit(): void {
@@ -32,13 +39,21 @@ export class TournamentDetailsComponent {
       this.loadTournamentMatches(Number(tournamentId));
       this.loadTournamentTeams(Number(tournamentId));
     }
-  }
 
+    const userId = this.sessionService.getUserId();
+    if (userId) {
+      this.isCreator = this.tournament?.creator_id === Number(userId);
+    }
+  }
   loadTournamentDetails(id: number): void {
     this.tournamentService
       .getTournamentById(id)
       .then((tournament) => {
         this.tournament = tournament;
+        const userId = this.sessionService.getUserId();
+        if (userId && this.tournament?.creator_id === Number(userId)) {
+          this.isCreator = true;
+        }
       })
       .catch((error) => {
         console.error('Error loading tournament details:', error);
@@ -70,5 +85,31 @@ export class TournamentDetailsComponent {
     } catch (error) {
       console.error('Error loading Teams:', error);
     }
+  }
+
+  openDialog(dataType: 'tournament'): void {
+    const dialogRef = this.dialog.open(PopupContentComponent, {
+      width: '1000px',
+      height: '300px',
+      data: { dataType },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
+  openEditDialog(): void {
+    const dialogRef = this.dialog.open(FormComponent, {
+      data: {
+        title: 'Edit Form',
+        formType: 'tournament-edit',
+        data: { fields: this.fields },
+      },
+      height: '500px',
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      // Handle the result from the dialog here
+    });
   }
 }
