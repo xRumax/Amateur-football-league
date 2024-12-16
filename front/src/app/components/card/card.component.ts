@@ -17,7 +17,7 @@ export class CardComponent implements OnInit {
   tournaments: Tournament[] = [];
   userTeam: any = {};
   @Input() tournament: any;
-  @Input() dataType!: 'tournament' | 'match';
+  @Input() dataType!: 'tournament' | 'match' | 'home';
   teams: any[] = [];
   userTeamId: number | null = null;
 
@@ -30,12 +30,13 @@ export class CardComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.loadTournaments();
+
     const userId = this.sessionService.getUserId();
     if (userId) {
       const userTeam = await this.userService.getUserTeam(Number(userId));
       this.userTeamId = userTeam.id;
     }
-    this.loadTournaments();
   }
 
   async loadTournaments(): Promise<void> {
@@ -57,14 +58,20 @@ export class CardComponent implements OnInit {
   async joinToTournament(tournament: Tournament): Promise<void> {
     try {
       const userId = this.sessionService.getUserId();
+      console.log('User ID:', userId);
+
       const userHasTeam = await this.userService.userHasTeam(Number(userId));
+      console.log('User has team:', userHasTeam);
+
       if (!userHasTeam) {
         this.snackBar.open("You already don't have a team", 'Close', {
           duration: 5000,
         });
         return;
       }
+
       const userTeam = await this.userService.getUserTeam(Number(userId));
+      console.log('User team:', userTeam);
 
       if (this.isTeamInTournament(tournament)) {
         this.snackBar.open('Your team is already in this tournament', 'Close', {
@@ -73,11 +80,19 @@ export class CardComponent implements OnInit {
         return;
       }
 
+      console.log('Adding team to tournament:', {
+        teamId: userTeam.id,
+        tournamentId: tournament.id,
+      });
+
       await this.tournamentService.addTeamToTournament(
         userTeam.id,
         tournament.id
       );
       this.snackBar.open(`Successfully joined`, 'Close', { duration: 5000 });
+      setTimeout(() => {
+        this.router.navigate(['/tournament', tournament.id]);
+      }, 500);
       this.loadTournaments();
     } catch (error) {
       console.error('Error joining tournament:', error);
@@ -88,7 +103,7 @@ export class CardComponent implements OnInit {
   }
 
   onCardClicked(tournamentId: any): void {
-    if (this.dataType === 'tournament') {
+    if (this.dataType === 'tournament' || this.dataType === 'home') {
       this.router.navigate(['/tournament', tournamentId]);
     }
   }

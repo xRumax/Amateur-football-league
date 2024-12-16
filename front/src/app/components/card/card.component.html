@@ -1,51 +1,106 @@
-<div *ngIf="tournaments.length === 0">
+<div *ngIf="tournaments.length === 0 && dataType === 'tournament'">
   <p>There are no tournaments yet</p>
 </div>
-<div class="card-container" *ngFor="let tournament of tournaments">
-  <mat-card
-    class="card-container-items"
-    appearance="outlined"
-    (click)="onCardClicked(tournament.id)"
-  >
-    <mat-card-title class="card-container-title">{{
-      tournament.name
-    }}</mat-card-title>
-    <div
-      class="status"
-      [ngClass]="{
-        active: tournament.teams.length < tournament.amount_of_teams,
-        inactive: tournament.teams.length === tournament.amount_of_teams
-      }"
+<div *ngIf="dataType === 'tournament'">
+  <div class="card-container" *ngFor="let tournament of tournaments">
+    <mat-card
+      class="card-container-items"
+      appearance="outlined"
+      (click)="onCardClicked(tournament.id)"
     >
-      {{
-        tournament.teams.length < tournament.amount_of_teams
-          ? "Active"
-          : "Inactive"
-      }}
-    </div>
-    <div class="date">
-      <div class="date-days">
-        {{ tournament.date_of_tournament | date : "dd.MM.yyyy" }}
-      </div>
-      <div class="date-hour"></div>
-    </div>
-
-    <mat-card-content class="card-container-amount-teams">
-      <p>
-        Teams: {{ tournament.teams.length }}/{{ tournament.amount_of_teams }}
-      </p>
-
-      <button
-        mat-button
-        class="button-green"
-        (click)="joinToTournament(tournament); $event.stopPropagation()"
-        [disabled]="
-          tournament.teams.length === tournament.amount_of_teams ||
-          isTeamInTournament(tournament)
-        "
+      <mat-card-title class="card-container-title">
+        {{ tournament.name }}
+      </mat-card-title>
+      <div
+        class="status"
+        [ngClass]="{
+          active: tournament.teams.length < tournament.amount_of_teams,
+          inactive: tournament.teams.length === tournament.amount_of_teams
+        }"
       >
-        {{ isTeamInTournament(tournament) ? "Joined" : "Join!" }}
-      </button>
-    </mat-card-content>
-  </mat-card>
+        {{
+          tournament.teams.length < tournament.amount_of_teams
+            ? "Active"
+            : "Inactive"
+        }}
+      </div>
+      <div class="date">
+        <div class="date-days">
+          {{ tournament.date_of_tournament | date : "dd.MM.yyyy" }}
+        </div>
+        <div class="date-hour"></div>
+      </div>
+
+      <mat-card-content class="card-container-amount-teams">
+        <p>
+          Teams: {{ tournament.teams.length }}/{{ tournament.amount_of_teams }}
+        </p>
+
+        <button
+          mat-button
+          class="button-green"
+          (click)="joinToTournament(tournament); $event.stopPropagation()"
+          [disabled]="
+            tournament.teams.length === tournament.amount_of_teams ||
+            isTeamInTournament(tournament)
+          "
+        >
+          {{ isTeamInTournament(tournament) ? "Joined" : "Join!" }}
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<!------------Home section-------------------------->
+<div *ngIf="tournaments.length === 0 && dataType === 'home'">
+  <p>There are no tournaments yet</p>
+</div>
+<div *ngIf="dataType === 'home'">
+  <div class="card-container" *ngFor="let tournament of tournaments">
+    <ng-container
+      *ngIf="
+        dataType !== 'home' ||
+        (dataType === 'home' &&
+          tournament.teams.length < tournament.amount_of_teams)
+      "
+    >
+      <mat-card
+        class="card-container-items"
+        appearance="outlined"
+        (click)="onCardClicked(tournament.id)"
+      >
+        <mat-card-title class="card-container-title">
+          {{ tournament.name }}
+        </mat-card-title>
+        <div
+          class="status"
+          [ngClass]="{
+            active: tournament.teams.length < tournament.amount_of_teams,
+            inactive: tournament.teams.length === tournament.amount_of_teams
+          }"
+        >
+          {{
+            tournament.teams.length < tournament.amount_of_teams
+              ? "Active"
+              : "Inactive"
+          }}
+        </div>
+        <div class="date">
+          <div class="date-days">
+            {{ tournament.date_of_tournament | date : "dd.MM.yyyy" }}
+          </div>
+          <div class="date-hour"></div>
+        </div>
+
+        <mat-card-content class="card-container-amount-teams">
+          <p>
+            Teams: {{ tournament.teams.length }}/{{
+              tournament.amount_of_teams
+            }}
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+  </div>
 </div>
