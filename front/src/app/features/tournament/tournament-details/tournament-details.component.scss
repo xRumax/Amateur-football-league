@@ -1,6 +1,9 @@
 .main-container {
   flex-direction: column;
-  height: 100vh;
+
+  p {
+    color: white;
+  }
 }
 
 .tournament-title {
@@ -61,4 +64,27 @@ mat-card {
   justify-content: center;
   width: 250px;
   height: 50px;
+  background: #1e293b !important;
+  color: white;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+mat-card:hover {
+  transform: scale(1.05);
+}
+
+.actions {
+  display: flex;
+  padding: 2rem 0;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+
+  .button-edit {
+    width: 200px;
+  }
+  .button-delete {
+    width: 200px;
+  }
 }

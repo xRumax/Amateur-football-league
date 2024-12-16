@@ -1,28 +1,26 @@
 .homepage {
+  padding-top: 2rem;
   font-family: Arial, sans-serif;
   color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    color: #fff;
+  .hero,
+  .features,
+  .news,
+  .footer {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
 
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
-    .nav a {
-      margin-left: 1rem;
-      color: #fff;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
+  .hero.visible,
+  .features.visible,
+  .news.visible,
+  .footer.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .hero {
@@ -30,18 +28,28 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: rgb(158, 74, 74);
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.7),
+        rgba(0, 0, 0, 0.7)
+      ),
+      url("../../../assets/images/home.jpg");
+    background-size: cover;
+    background-position: center;
     border-radius: 15px 15px 15px 15px;
     width: 90vw;
-    height: 50vh;
+    height: 60vh;
     text-align: center;
     padding: 2rem;
     color: #fff;
+    padding-bottom: 5rem;
+    margin-bottom: 5rem;
 
     h1 {
       align-items: center;
       font-size: 2.5rem;
       margin-bottom: 1rem;
+      font-style: italic;
     }
     .hero-btn-con {
       display: flex;
@@ -66,45 +74,116 @@
   .features {
     display: flex;
     justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
     padding: 2rem;
+    margin-bottom: 5rem;
 
-    .feature-card {
-      padding: 1rem;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      text-align: center;
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .feature-card {
+        display: flex;
+        padding: 1rem;
+
+        .feature-card-1 {
+          background-image: linear-gradient(
+              to right,
+              rgba(0, 0, 0, 0.5),
+              rgba(0, 0, 0, 0.5)
+            ),
+            url("../../../assets/images/feature1.jpg");
+          background-size: cover;
+          background-position: center;
+          transition: transform 0.3s ease;
+          cursor: pointer;
+        }
+
+        .feature-card-2 {
+          width: 400px;
+          height: 300px;
+          background-image: linear-gradient(
+              to right,
+              rgba(0, 0, 0, 0.7),
+              rgba(0, 0, 0, 0.7)
+            ),
+            url("../../../assets/images/feature3.jpg");
+          background-size: cover;
+          background-position: center;
+          transition: transform 0.3s ease;
+          cursor: pointer;
+        }
+
+        .feature-card-3 {
+          background-image: linear-gradient(
+              to right,
+              rgba(0, 0, 0, 0.7),
+              rgba(0, 0, 0, 0.7)
+            ),
+            url("../../../assets/images/feature2.jpg");
+          background-size: cover;
+          background-position: center;
+          transition: transform 0.3s ease;
+          cursor: pointer;
+        }
+      }
+
+      .feature-card-1:hover,
+      .feature-card-2:hover,
+      .feature-card-3:hover {
+        transform: scale(1.05); // Powiększ element o 5%
+      }
+
+      mat-card {
+        width: 25vw;
+        height: 30vh;
+      }
 
       h2 {
-        margin-bottom: 1rem;
-        color: #004d40;
+        padding-top: 1rem;
+        padding-left: 1rem;
+        color: #02b698;
+      }
+      p {
+        padding-left: 1rem;
+        color: #fff;
       }
     }
   }
 
   .news {
-    padding: 2rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      margin: auto;
+    }
 
     .news-card {
       margin-bottom: 1rem;
       padding: 1rem;
-      background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-      span {
-        font-size: 0.9rem;
-        color: #666;
-      }
     }
   }
 
   .footer {
     padding: 1rem;
-    background-color: #004d40;
     color: #fff;
     text-align: center;
-
+    width: calc(100% - 2rem);
     .social-links a {
       margin: 0 0.5rem;
       color: #fff;
@@ -115,4 +194,17 @@
       }
     }
   }
+  // Dodaj efekt powiększenia na hover dla elementów .card-matches
+  app-card-matches {
+    transition: transform 0.3s ease !important;
+    cursor: pointer;
+  }
+
+  app-card-matches:hover {
+    transform: scale(1.05) !important; // Powiększ element o 5%
+  }
+}
+
+p {
+  color: white;
 }

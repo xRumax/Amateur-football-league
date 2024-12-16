@@ -1,7 +1,13 @@
 mat-card {
   height: 115px;
+  background: #1e293b !important;
+  color: white;
+  transition: transform 0.3s ease;
 }
 
+mat-card:hover {
+  transform: scale(1.05);
+}
 .card-container-items {
   align-items: center;
   justify-content: center;
@@ -69,4 +75,8 @@ mat-card {
   background-color: rgb(143, 143, 143);
   color: white;
   cursor: not-allowed;
+}
+
+p {
+  color: white;
 }

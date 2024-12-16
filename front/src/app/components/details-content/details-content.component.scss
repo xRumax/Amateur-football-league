@@ -1,0 +1,10 @@
+p {
+  color: #ffffff;
+}
+mat-card {
+  position: relative; // Ustawienie pozycji względnej dla mat-card
+  overflow: hidden;
+  background: transparent !important;
+  border: 1.5px solid #000000 !important;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 1);
+}

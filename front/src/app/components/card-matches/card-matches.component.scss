@@ -1,5 +1,12 @@
 mat-card {
   height: 115px;
+  background: #1e293b !important;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+mat-card:hover {
+  transform: scale(1.05) !important;
 }
 
 .card-container-items {
