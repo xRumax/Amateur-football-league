@@ -1,6 +1,10 @@
 <div class="container">
   <app-navbar *ngIf="!isLoginPage()"></app-navbar>
   <div class="content">
+    <div class="bg-shapes-con">
+      <div class="bg-shape"></div>
+      <div class="bg-second-shape"></div>
+    </div>
     <router-outlet></router-outlet>
   </div>
 </div>

@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 export interface FormField {
   type: string;
   name: string;
   id: string;
   placeholder: string;
-  value: string | number | boolean;
+  value: string | number | boolean | (string | number)[];
   options?: { label: string; value: number | string }[];
 }
 
