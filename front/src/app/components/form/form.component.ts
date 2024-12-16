@@ -15,7 +15,8 @@ import { SessionService } from '../../services/session.service';
 import { TournamentService } from '../../services/tournament.service';
 import { MatchService } from '../../services/match.service';
 import { Router } from '@angular/router';
-
+import { NavigationService } from '../../services/navigation.service';
+import { Team } from '../../services/team.service';
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -23,6 +24,7 @@ import { Router } from '@angular/router';
 })
 export class FormComponent implements OnInit {
   team: any = {};
+  teamId: number = 0;
   player: any = {};
   tournament: any = {};
   match: any = {};
@@ -35,14 +37,15 @@ export class FormComponent implements OnInit {
     | 'team'
     | 'player'
     | 'tournament'
-    | 'match-update';
+    | 'match-update'
+    | 'team-edit'
+    | 'tournament-edit';
 
   form: FormGroup;
   fields: any[] = [];
   user: UserResponse | null = null;
   leagues: League[] = [];
-  selectedFile: File | null = null;
-  team_id: number = 0;
+  teams: Team[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,7 +59,8 @@ export class FormComponent implements OnInit {
     private sessionService: SessionService,
     private tournamentService: TournamentService,
     private matchService: MatchService,
-    private router: Router
+    private router: Router,
+    private navigationService: NavigationService
   ) {
     this.form = this.formBuilder.group({ team_id: [null] });
     if (dialogData) {
@@ -82,6 +86,12 @@ export class FormComponent implements OnInit {
         break;
       case 'match-update':
         await this.initializeMatchUpdateForm();
+        break;
+      case 'team-edit':
+        await this.initializeTeamEditForm();
+        break;
+      case 'tournament-edit':
+        await this.initializeTournamentEditForm();
         break;
     }
   }
@@ -123,6 +133,26 @@ export class FormComponent implements OnInit {
     this.initializeForm(this.fields);
   }
 
+  async initializeTeamEditForm(): Promise<void> {
+    this.leagues = await this.leagueService.getLeagues();
+    this.fields = this.teamService
+      .generateTeamFields(this.team, this.leagues)
+      .filter((field) => ['name', 'league_id'].includes(field.name));
+    this.initializeForm(this.fields);
+  }
+
+  async initializeTournamentEditForm(): Promise<void> {
+    this.teams = await this.teamService.getAllTeams();
+    this.fields = this.tournamentService
+      .generateTournamentEditFields(this.tournament, this.teams)
+      .filter((field) =>
+        ['name', 'amount_of_teams', 'teams', 'date_of_tournament'].includes(
+          field.name
+        )
+      );
+    this.initializeForm(this.fields);
+  }
+
   async initializePlayerForm(): Promise<void> {
     this.fields = this.playerService
       .generatePlayerFields(this.player)
@@ -156,14 +186,6 @@ export class FormComponent implements OnInit {
     this.form = new FormGroup(group);
   }
 
-  onFileChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-      this.selectedFile = target.files[0];
-      this.fileName = this.selectedFile.name;
-    }
-  }
-
   async submitForm(): Promise<void> {
     if (this.form.valid) {
       try {
@@ -179,6 +201,9 @@ export class FormComponent implements OnInit {
             break;
           case 'tournament':
             await this.submitTournamentForm();
+            break;
+          case 'team-edit':
+            await this.submitTeamEditForm();
             break;
         }
       } catch (error) {
@@ -215,10 +240,17 @@ export class FormComponent implements OnInit {
     const formData = new FormData();
     formData.append('name', this.form.value.name);
     formData.append('league_id', this.form.value.league_id);
-    if (this.selectedFile) {
-      formData.append('logo', this.selectedFile, this.selectedFile.name);
-    }
+
     await this.teamService.createTeam(formData);
+
+    this.snackBar.open('Team created successfully', 'Close', {
+      duration: 5000,
+    });
+    setTimeout(() => {
+      this.navigationService.navigateToMyTeam().then(() => {
+        window.location.reload();
+      });
+    }, 500);
   }
 
   async submitPlayerForm(): Promise<void> {
@@ -253,7 +285,7 @@ export class FormComponent implements OnInit {
       duration: 5000,
     });
     setTimeout(() => {
-      this.router.navigateByUrl('/players-base').then(() => {
+      this.navigationService.navigateToMyTeam().then(() => {
         window.location.reload();
       });
     }, 500);
@@ -298,6 +330,40 @@ export class FormComponent implements OnInit {
     }, 500);
   }
 
+  async submitTeamEditForm(): Promise<void> {
+    const userId = this.sessionService.getUserId();
+    if (userId) {
+      const userTeam = await this.userService.getUserTeam(Number(userId));
+      this.teamId = userTeam.id;
+    }
+
+    const data = {
+      name: this.form.value.name,
+      league_id: this.form.value.league_id,
+    };
+
+    console.log('Submitting form with data:', {
+      teamId: this.teamId,
+      ...data,
+    });
+
+    try {
+      await this.teamService.updateTeam(this.teamId, data);
+      this.snackBar.open('Team updated successfully', 'Close', {
+        duration: 5000,
+      });
+      setTimeout(() => {
+        this.navigationService.navigateToMyTeam().then(() => {
+          window.location.reload();
+        });
+      }, 500);
+    } catch (error) {
+      console.error('Error updating team:', error);
+      this.snackBar.open('Error updating team', 'Close', {
+        duration: 2000,
+      });
+    }
+  }
   cancel(): void {
     this.dialogRef.close();
   }
