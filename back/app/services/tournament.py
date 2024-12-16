@@ -1,10 +1,11 @@
 from app.schemas.tournament import TournamentCreate, TournamentUpdate
 from app.models import tournament as models
-from app.crud.tournament import create_tournament, get_all_tournaments, get_tournament, update_tournament, delete_tournament
+from app.crud.tournament import create_tournament, get_tournament, update_tournament, delete_tournament
 from sqlalchemy.orm import Session
 from typing import Optional
 from app.models.team import Team
 from app.schemas.tournament import Tournament
+from app.models.tournament import Tournament as ModelTournament
 from app.schemas.match import MatchCreate
 from app.services.match import MatchService
 from fastapi import HTTPException
@@ -16,8 +17,11 @@ class TournamentService:
     def create_tournament(self, tournament: TournamentCreate, creator_id: int) -> Tournament:
         return create_tournament(self.db, tournament, creator_id)
 
-    def get_all_tournaments(self) -> list[models.Tournament]:
-        return get_all_tournaments(self.db)
+    def get_all_tournaments(self, limit:Optional[int] = None) -> list[models.Tournament]:
+        query = self.db.query(ModelTournament)
+        if limit:
+            query = query.limit(limit)
+        return query.all()
 
     def get_tournament(self, tournament_id: int) -> Optional[models.Tournament]:
         return get_tournament(self.db, tournament_id)
@@ -65,7 +69,15 @@ class TournamentService:
                         tournament_id=db_tournament.id
                     )
                     self.create_match(match)
+        self.check_and_update_tournament_status(db_tournament.id)
 
     def create_match(self, match: MatchCreate):
         match_service = MatchService(self.db)
         return match_service.create_match(match)
+    
+    def get_active_tournament_by_user_id(self, user_id: int):
+        return self.db.query(ModelTournament).filter(ModelTournament.creator_id == user_id, ModelTournament.is_active == True).first()
+    
+
+    
+    

@@ -1,11 +1,9 @@
 from app.schemas.match import MatchCreate, MatchUpdate
 from app.models import match as models
-from app.crud.match import create_match, get_all_matches, get_match, update_match, delete_match
+from app.crud.match import create_match, get_match, update_match, delete_match
 from sqlalchemy.orm import Session
+from app.models.match import Match as MatchModel
 from typing import Optional
-from app.models.action import Action
-from app.schemas.action import ActionTypeEnum
-from app.models.match import Match
 class MatchService:
     def __init__(self, db: Session):
         self.db = db
@@ -13,9 +11,11 @@ class MatchService:
     def create_match(self, match: MatchCreate) -> models.Match:
         return create_match(self.db, match)
 
-    def get_all_matches(self) -> list[models.Match]:
-        return get_all_matches(self.db)
-
+    def get_all_matches(self, limit: Optional[int] = None):
+        query = self.db.query(MatchModel).order_by(MatchModel.date_of_match)
+        if limit:
+            query = query.limit(limit)
+        return query.all()
     def get_match(self, match_id: int) -> Optional[models.Match]:
         return get_match(self.db, match_id)
 
