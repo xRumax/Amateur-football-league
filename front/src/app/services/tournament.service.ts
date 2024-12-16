@@ -25,6 +25,52 @@ export class TournamentService {
     private sessionService: SessionService
   ) {}
 
+  generateTournamentEditFields(
+    tournament: Tournament,
+    teams: Team[]
+  ): FormField[] {
+    return [
+      {
+        type: 'text',
+        name: 'name',
+        id: 'name',
+        placeholder: 'Name',
+        value: tournament.name ?? '',
+      },
+      {
+        type: 'select',
+        name: 'amount_of_teams',
+        id: 'amount_of_teams',
+        placeholder: 'Amount of Teams',
+        options: [
+          { label: '4', value: 4 },
+          { label: '8', value: 8 },
+          { label: '10', value: 10 },
+          { label: '16', value: 16 },
+        ],
+        value: tournament.amount_of_teams ?? '',
+      },
+      {
+        type: 'select',
+        name: 'teams',
+        id: 'teams',
+        placeholder: 'Teams',
+        options: teams.map((team) => ({
+          label: team.name,
+          value: team.id,
+        })),
+        value: tournament.teams.map((team) => team.id) ?? [],
+      },
+      {
+        type: 'date',
+        name: 'date_of_tournament',
+        id: 'date_of_tournament',
+        placeholder: 'Date',
+        value: tournament.date_of_tournament ?? '',
+      },
+    ];
+  }
+
   generateTournamentFields(tournament: Tournament): FormField[] {
     return [
       {
@@ -57,9 +103,11 @@ export class TournamentService {
     ];
   }
 
-  getTournaments(): Promise<Tournament[]> {
+  getTournaments(limit?: number): Promise<Tournament[]> {
     return axios
-      .get(`${this.envService.base_url}/tournaments`)
+      .get(`${this.envService.base_url}/tournaments`, {
+        params: limit ? { limit } : {},
+      })
       .then((response) => response.data)
       .catch((error) => {
         console.error('Error fetching tournaments:', error);
@@ -153,6 +201,32 @@ export class TournamentService {
       .then((response) => response.data)
       .catch((error) => {
         console.error('Error fetching matches:', error);
+        throw error;
+      });
+  }
+
+  getTournamentTeams(tournamentId: number): Promise<Team[]> {
+    return axios
+      .get(`${this.envService.base_url}/tournaments/${tournamentId}/teams`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Error fetching teams:', error);
+        throw error;
+      });
+  }
+
+  deleteTournament(tournamentId: number): Promise<void> {
+    const token = this.sessionService.getToken();
+
+    return axios
+      .delete(`${this.envService.base_url}/tournaments/${tournamentId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(() => {
+        console.log('Tournament deleted successfully');
+      })
+      .catch((error) => {
+        console.error('Error deleting tournament:', error);
         throw error;
       });
   }

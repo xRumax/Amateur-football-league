@@ -134,20 +134,10 @@ export class TeamService {
         },
       })
       .then((response) => {
-        this.snackBar.open('Team created successfully', 'Close', {
-          duration: 5000,
-        });
         return response.data;
       })
       .catch((error) => {
-        if (error.response && error.response.status === 400) {
-          this.snackBar.open('You already have a team', 'Close', {
-            duration: 5000,
-          });
-        } else {
-          console.error('Error creating team:', error);
-        }
-        throw error;
+        console.error('Error creating team:', error);
       });
   }
 
@@ -177,6 +167,45 @@ export class TeamService {
           reject(error);
         });
     });
+  }
+
+  deleteTeam(teamId: number): Promise<void> {
+    const token = this.sessionService.getToken();
+
+    return axios
+      .delete(`${this.envService.base_url}/teams/${teamId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        this.snackBar.open('Team deleted successfully', 'Close', {
+          duration: 5000,
+        });
+      })
+      .catch((error) => {
+        console.error('Error deleting team:', error);
+        throw error;
+      });
+  }
+
+  updateTeam(teamId: number, data: any): Promise<Team> {
+    const token = this.sessionService.getToken();
+
+    return axios
+      .put(`${this.envService.base_url}/teams/${teamId}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.error('Error updating team:', error);
+        throw error;
+      });
   }
 
   async teamExists(name: string): Promise<boolean> {

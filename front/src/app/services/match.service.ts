@@ -30,9 +30,11 @@ export class MatchService {
     return fields;
   }
 
-  getMatches(): Promise<Match[]> {
+  getMatches(limit?: number): Promise<Match[]> {
     return axios
-      .get(`${this.envService.base_url}/matches`)
+      .get(`${this.envService.base_url}/matches`, {
+        params: limit ? { limit } : {},
+      })
       .then((response) => response.data)
       .catch((error) => {
         console.error('Error fetching matches:', error);

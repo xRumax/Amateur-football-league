@@ -163,4 +163,9 @@ export class UserService {
     }
     return user.team;
   }
+
+  async getUserActiveTournament(userId: number): Promise<any[]> {
+    const user = await this.getUser(userId);
+    return user.tournaments.filter((tournament: any) => tournament.is_active);
+  }
 }
