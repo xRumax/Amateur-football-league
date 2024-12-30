@@ -138,7 +138,7 @@
       .feature-card-1:hover,
       .feature-card-2:hover,
       .feature-card-3:hover {
-        transform: scale(1.05); // Powiększ element o 5%
+        transform: scale(1.05);
       }
 
       mat-card {
@@ -194,14 +194,13 @@
       }
     }
   }
-  // Dodaj efekt powiększenia na hover dla elementów .card-matches
   app-card-matches {
     transition: transform 0.3s ease !important;
     cursor: pointer;
   }
 
   app-card-matches:hover {
-    transform: scale(1.05) !important; // Powiększ element o 5%
+    transform: scale(1.05) !important;
   }
 }
 

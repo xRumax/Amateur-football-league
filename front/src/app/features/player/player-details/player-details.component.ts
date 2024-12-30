@@ -4,6 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { PlayerService } from '../../../services/player.service';
 import { TeamService } from '../../../services/team.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupContentComponent } from '../../../components/popup-content/popup-content.component';
+import { FormComponent } from '../../../components/form/form.component';
+import { SessionService } from '../../../services/session.service';
+import { Team } from '../../../services/team.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-player-details',
@@ -13,7 +19,10 @@ import { MatTableDataSource } from '@angular/material/table';
 export class PlayerDetailsComponent implements OnInit {
   player: Player | undefined;
   playerId: number = 0;
-  dataSource = new MatTableDataSource<Player>(); // Initialize dataSource here
+  dataSource = new MatTableDataSource<Player>();
+  fields = [];
+  isTeamPlayer: boolean = false;
+  team: Team | undefined;
 
   playerDetails: { key: keyof Player; label: string }[] = [
     { key: 'name', label: 'Name' },
@@ -37,7 +46,10 @@ export class PlayerDetailsComponent implements OnInit {
   constructor(
     private playerService: PlayerService,
     private route: ActivatedRoute,
-    private teamService: TeamService
+    private teamService: TeamService,
+    private dialog: MatDialog,
+    private sessionService: SessionService,
+    private userService: UserService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -63,5 +75,41 @@ export class PlayerDetailsComponent implements OnInit {
     if (this.player) {
       this.dataSource.data = [this.player];
     }
+
+    const userId = this.sessionService.getUserId();
+    if (userId) {
+      const teamDetails = await this.userService.getUserTeamDetails(
+        Number(userId)
+      );
+      if (teamDetails && teamDetails.players) {
+        this.isTeamPlayer = teamDetails.players.some(
+          (player: any) => player.id === this.playerId
+        );
+      }
+    }
+  }
+
+  openDialog(dataType: 'player'): void {
+    const dialogRef = this.dialog.open(PopupContentComponent, {
+      width: '1000px',
+      height: '300px',
+      data: { dataType, playerId: this.playerId },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
+  openEditDialog(): void {
+    const dialogRef = this.dialog.open(FormComponent, {
+      data: {
+        title: 'Edit Form',
+        formType: 'player-edit',
+        playerId: this.playerId,
+      },
+      height: '500px',
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 }

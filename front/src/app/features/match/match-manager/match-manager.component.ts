@@ -18,7 +18,6 @@ export class MatchManagerComponent {
   async loadMatches(): Promise<void> {
     try {
       const allMatches = await this.matchService.getMatches();
-      // Filtruj mecze, które nie posiadają wyniku
       this.matches = allMatches.filter((match) => !match.result);
     } catch (error) {
       console.error('Error loading Matches:', error);

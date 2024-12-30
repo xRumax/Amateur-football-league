@@ -7,6 +7,13 @@ import { AuthService } from '../../services/auth.service';
 import { TeamService } from '../../services/team.service';
 import { TournamentService } from '../../services/tournament.service';
 import { Router } from '@angular/router';
+import { PlayerService } from '../../services/player.service';
+import { NavigationService } from '../../services/navigation.service';
+
+interface DialogData {
+  dataType: 'profile' | 'team' | 'tournament' | 'player';
+  playerId?: number;
+}
 
 @Component({
   selector: 'app-popup-content',
@@ -24,13 +31,15 @@ export class PopupContentComponent {
     private dialogRef: MatDialogRef<PopupContentComponent>,
     private router: Router,
     @Inject(MAT_DIALOG_DATA)
-    public data: { dataType: 'profile' | 'team' | 'tournament' },
+    public data: DialogData,
     private userService: UserService,
     private sessionService: SessionService,
     private snackBar: MatSnackBar,
     private authService: AuthService,
     private teamService: TeamService,
-    private tournamentService: TournamentService
+    private tournamentService: TournamentService,
+    private playerService: PlayerService,
+    private navigateService: NavigationService
   ) {
     if (data.dataType === 'profile') {
       this.title = 'Are You Sure?';
@@ -46,6 +55,11 @@ export class PopupContentComponent {
       this.message =
         'Are you sure you want to delete this Tournament? This action is irreversible and will result in the loss of all your tournament data. Do you wish to proceed?';
       this.confirmFunction = this.confirmTournamentDelete;
+    } else if (data.dataType === 'player') {
+      this.title = 'Are You Sure?';
+      this.message =
+        'Are you sure you want to delete this Player? This action is irreversible and will result in the loss of all your tournament data. Do you wish to proceed?';
+      this.confirmFunction = this.confirmPlayerDelete;
     }
   }
 
@@ -136,6 +150,37 @@ export class PopupContentComponent {
     } catch (error) {
       console.error('Error deleting tournament:', error);
       this.snackBar.open('Error deleting tournament', 'Close', {
+        duration: 2000,
+      });
+    }
+  }
+
+  async confirmPlayerDelete(): Promise<void> {
+    const userId = this.sessionService.getUserId();
+    if (!userId) {
+      console.error('User ID is null');
+      return;
+    }
+
+    try {
+      const playerId = this.data.playerId;
+      if (!playerId) {
+        console.error('Player ID is null');
+        return;
+      }
+      await this.playerService.deletePlayer(playerId);
+      this.dialogRef.close();
+      this.snackBar.open('Player has been successfully deleted', 'Close', {
+        duration: 2000,
+      });
+      setTimeout(() => {
+        this.navigateService.navigateToMyTeam().then(() => {
+          window.location.reload();
+        });
+      }, 500);
+    } catch (error) {
+      console.error('Error deleting player:', error);
+      this.snackBar.open('Error deleting player', 'Close', {
         duration: 2000,
       });
     }

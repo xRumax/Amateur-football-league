@@ -42,8 +42,21 @@ export class ProfileComponent {
       width: '600px',
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      // Handle the result from the dialog here
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
+  openPasswordDialog(): void {
+    const dialogRef = this.dialog.open(FormComponent, {
+      data: {
+        title: 'Change Password',
+        formType: 'password',
+        data: { fields: this.fields },
+      },
+      height: '500px',
+      width: '600px',
+      panelClass: 'custom-popup',
     });
+
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 }

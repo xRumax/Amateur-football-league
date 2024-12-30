@@ -101,7 +101,6 @@ export class MatchUpdateComponent implements OnInit {
       return actionData;
     });
 
-    // Wysłanie danych, jeśli są poprawne
     if (allActions.length > 0) {
       this.actionService
         .createActions(allActions)

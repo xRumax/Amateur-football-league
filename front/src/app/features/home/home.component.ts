@@ -20,7 +20,8 @@ export class HomeComponent {
   ) {}
 
   ngOnInit(): void {
-    this.loadData();
+    this.loadMatches();
+    this.loadTournaments();
     this.addScrollEvent();
     this.checkSectionVisibility();
     this.makeHeroVisible();
@@ -30,7 +31,7 @@ export class HomeComponent {
     try {
       const allMatches = await this.matchService.getMatches(3);
       this.filteredMatches = allMatches
-        .filter((match) => match.result != null)
+        .filter((match) => match.result && match.result.trim() !== '')
         .sort(
           (a, b) =>
             new Date(b.date_of_match).getTime() -

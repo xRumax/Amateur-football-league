@@ -86,38 +86,30 @@ def get_match_player(db:Session, match_id:int):
     }
 
 def calculate_match_result(db: Session, match_id: int):
-    # Pobranie wszystkich akcji z meczu
     actions = db.query(Action).filter(Action.match_id == match_id).all()
 
-    # Sprawdzenie, czy istnieją jakiekolwiek akcje
     if not actions:
-        return None  # Brak akcji, nic do przeliczenia
+        return None 
 
-    # Pobranie informacji o meczu
     db_match = db.query(Match).filter(Match.id == match_id).first()
     if not db_match:
-        return None  # Mecz nie istnieje
+        return None  
 
-    # Identyfikatory drużyn z meczu
     team_1_id = db_match.team_1_id
     team_2_id = db_match.team_2_id
 
-    # Zliczanie goli dla każdej drużyny
     team_goals = {team_1_id: 0, team_2_id: 0}
     for action in actions:
         if action.action_type == ActionTypeEnum.Goal:
             if action.team_id in team_goals:
                 team_goals[action.team_id] += 1
 
-    # Przygotowanie wyniku w formacie "X:Y"
     result = f"{team_goals.get(team_1_id, 0)}:{team_goals.get(team_2_id, 0)}"
 
-    # Aktualizacja wyniku w tabeli Match
     db_match.result = result
     db.commit()
     db.refresh(db_match)
 
-    # Aktualizacja statusu turnieju, jeśli dotyczy
     check_and_update_tournament_status(db, db_match.tournament_id)
 
     return db_match

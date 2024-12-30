@@ -187,6 +187,42 @@ export class PlayerService {
       });
   }
 
+  updatePlayer(playerId: number, playerData: any): Promise<Player> {
+    const token = this.sessionService.getToken();
+    return axios
+      .put(`${this.envService.base_url}/players/${playerId}`, playerData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.error('Error updating player:', error);
+        throw error;
+      });
+  }
+
+  deletePlayer(playerId: number): Promise<void> {
+    const token = this.sessionService.getToken();
+    return axios
+      .delete(`${this.envService.base_url}/players/${playerId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.error('Error deleting player:', error);
+        throw error;
+      });
+  }
+
   async getTeamName(teamId: number): Promise<string> {
     if (!teamId) return 'No Team';
 

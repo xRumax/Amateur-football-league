@@ -78,6 +78,13 @@ class TournamentService:
     def get_active_tournament_by_user_id(self, user_id: int):
         return self.db.query(ModelTournament).filter(ModelTournament.creator_id == user_id, ModelTournament.is_active == True).first()
     
+    def check_and_update_tournament_status(self, tournament_id: int):
+        db_tournament = self.get_tournament(tournament_id)
+        if db_tournament:
+            all_matches_have_result = all(match.result is not None for match in db_tournament.matches)
+            if all_matches_have_result:
+                db_tournament.is_active = False
+                self.db.commit()
 
-    
+        
     

@@ -2,9 +2,15 @@ from sqlalchemy.orm import Session
 from app.schemas.tournament import TournamentCreate, TournamentUpdate
 from app.models import tournament as models
 from app.models.match import Match
+from datetime import datetime, timedelta
 
 
 def create_tournament(db: Session, tournament: TournamentCreate, creator_id: int):
+    today = datetime.today().date()
+    six_months_later = today + timedelta(days=180)
+
+    if tournament.date_of_tournament < today or tournament.date_of_tournament > six_months_later:
+        raise ValueError("Date of tournament must be between today and six months from today")
     db_tournament = models.Tournament(creator_id=creator_id, **tournament.dict())
     db.add(db_tournament)
     db.commit()
@@ -25,11 +31,9 @@ def update_tournament(db: Session, tournament: TournamentUpdate, tournament_id: 
 def delete_tournament(db: Session, tournament_id: int):
     db_tournament = get_tournament(db=db, tournament_id=tournament_id)
     if db_tournament:
-        # Usuń wszystkie mecze powiązane z turniejem
         db.query(Match).filter(Match.tournament_id == tournament_id).delete()
         db.commit()
         
-        # Usuń turniej
         db.delete(db_tournament)
         db.commit()
     return db_tournament

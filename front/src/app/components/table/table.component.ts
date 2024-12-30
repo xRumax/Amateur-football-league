@@ -2,10 +2,12 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TeamService, Team } from '../../services/team.service';
 import { PlayerService, Player } from '../../services/player.service';
 import { ActionService } from '../../services/action.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupContentComponent } from '../popup-content/popup-content.component';
 
 @Component({
   selector: 'app-table',
@@ -29,9 +31,11 @@ export class TableComponent implements OnInit {
 
   constructor(
     private teamService: TeamService,
+    private dialog: MatDialog,
     private playerService: PlayerService,
     private router: Router,
-    private actionService: ActionService
+    private actionService: ActionService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -50,6 +54,10 @@ export class TableComponent implements OnInit {
       this.columns = this.actionService.playerStaticsColumns;
       this.loadPlayerStaticsData();
     }
+
+    this.route.params.subscribe((params) => {
+      this.playerId = params['id'];
+    });
   }
 
   private async loadTeamData() {
@@ -157,5 +165,13 @@ export class TableComponent implements OnInit {
     } else if (this.dataType === 'player' || this.dataType === 'teamPlayers') {
       this.router.navigate(['/player', row.id]);
     }
+  }
+
+  openDeletePlayerDialog(playerId: number): void {
+    const dialogRef = this.dialog.open(PopupContentComponent, {
+      data: { dataType: 'player', playerId: playerId },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 }

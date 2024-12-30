@@ -102,14 +102,12 @@ export class TournamentDetailsComponent {
       data: {
         title: 'Edit Form',
         formType: 'tournament-edit',
-        data: { fields: this.fields },
+        fields: this.fields,
       },
       height: '500px',
       width: '600px',
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      // Handle the result from the dialog here
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 }

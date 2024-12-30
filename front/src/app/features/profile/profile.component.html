@@ -11,6 +11,13 @@
           <td>Email:</td>
           <td>{{ user?.email }}</td>
         </tr>
+        <tr>
+          <td>Password:</td>
+          <td>*****</td>
+          <button class="pass-btn" mat-button (click)="openPasswordDialog()">
+            Change
+          </button>
+        </tr>
       </table>
     </div>
     <div class="buttons-container">

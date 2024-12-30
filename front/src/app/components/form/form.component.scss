@@ -28,3 +28,18 @@
     display: none;
   }
 }
+.date-picker-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.date-picker-wrapper input {
+  flex: 1;
+}
+
+.datepicker-icon {
+  margin-left: -36px;
+  z-index: 1;
+  cursor: pointer;
+}

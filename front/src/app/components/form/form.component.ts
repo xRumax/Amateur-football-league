@@ -17,6 +17,7 @@ import { MatchService } from '../../services/match.service';
 import { Router } from '@angular/router';
 import { NavigationService } from '../../services/navigation.service';
 import { Team } from '../../services/team.service';
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -39,13 +40,17 @@ export class FormComponent implements OnInit {
     | 'tournament'
     | 'match-update'
     | 'team-edit'
-    | 'tournament-edit';
+    | 'tournament-edit'
+    | 'password'
+    | 'player-edit';
 
   form: FormGroup;
   fields: any[] = [];
   user: UserResponse | null = null;
+  userPassword: any = {};
   leagues: League[] = [];
   teams: Team[] = [];
+  playerId: number | undefined;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -66,6 +71,8 @@ export class FormComponent implements OnInit {
     if (dialogData) {
       this.formType = dialogData.formType;
       this.data = dialogData.data;
+      this.playerId = dialogData.playerId;
+      this.fields = dialogData.fields;
     }
   }
 
@@ -92,6 +99,12 @@ export class FormComponent implements OnInit {
         break;
       case 'tournament-edit':
         await this.initializeTournamentEditForm();
+        break;
+      case 'password':
+        await this.initializePasswordForm();
+        break;
+      case 'player-edit':
+        await this.initializePlayerEditForm();
         break;
     }
   }
@@ -146,9 +159,7 @@ export class FormComponent implements OnInit {
     this.fields = this.tournamentService
       .generateTournamentEditFields(this.tournament, this.teams)
       .filter((field) =>
-        ['name', 'amount_of_teams', 'teams', 'date_of_tournament'].includes(
-          field.name
-        )
+        ['name', 'amount_of_teams', 'date_of_tournament'].includes(field.name)
       );
     this.initializeForm(this.fields);
   }
@@ -158,6 +169,16 @@ export class FormComponent implements OnInit {
       .generatePlayerFields(this.player)
       .filter((field) =>
         ['name', 'last_name', 'date_of_birth', 'sex'].includes(field.name)
+      );
+    this.initializeForm(this.fields);
+    this.form.addControl('team_id', new FormControl(this.player.team_id || ''));
+  }
+
+  async initializePlayerEditForm(): Promise<void> {
+    this.fields = this.playerService
+      .generatePlayerFields(this.player)
+      .filter((field) =>
+        ['name', 'last_name', 'date_of_birth'].includes(field.name)
       );
     this.initializeForm(this.fields);
     this.form.addControl('team_id', new FormControl(this.player.team_id || ''));
@@ -186,6 +207,20 @@ export class FormComponent implements OnInit {
     this.form = new FormGroup(group);
   }
 
+  async initializePasswordForm(): Promise<void> {
+    const userId = this.sessionService.getUserId();
+    if (!userId) {
+      this.snackBar.open('User ID not found', 'Close', {
+        duration: 2000,
+      });
+      return;
+    }
+
+    const user = await this.userService.getUser(Number(userId));
+    this.fields = await this.userService.generatePasswordFields(user);
+    this.initializeForm(this.fields);
+  }
+
   async submitForm(): Promise<void> {
     if (this.form.valid) {
       try {
@@ -205,6 +240,15 @@ export class FormComponent implements OnInit {
           case 'team-edit':
             await this.submitTeamEditForm();
             break;
+          case 'password':
+            await this.submitPasswordForm();
+            break;
+          case 'player-edit':
+            await this.submitPlayerEditForm();
+            break;
+          case 'tournament-edit':
+            await this.submitTournamentEditForm();
+            break;
         }
       } catch (error) {
         this.snackBar.open('Error submitting form', 'Close', {
@@ -218,6 +262,11 @@ export class FormComponent implements OnInit {
     if (this.user) {
       await this.userService.updateUser(this.user.id, this.form.value);
     }
+    setTimeout(() => {
+      this.navigationService.navigateToProfile().then(() => {
+        window.location.reload();
+      });
+    }, 500);
   }
 
   async submitTeamForm(): Promise<void> {
@@ -256,12 +305,17 @@ export class FormComponent implements OnInit {
   async submitPlayerForm(): Promise<void> {
     const playerName = this.form.value.name;
     const playerLastName = this.form.value.last_name;
-    const playerDOB = this.form.value.date_of_birth;
+    const playerDOB = new Date(this.form.value.date_of_birth);
+
+    const formattedDate = playerDOB.toISOString().split('T')[0];
+    this.form.patchValue({ date_of_birth: formattedDate });
+
     const playerExists = await this.playerService.playerExists(
       playerName,
       playerLastName,
-      playerDOB
+      formattedDate
     );
+
     const teamId = this.form.value.team_id;
 
     const teamExists = await this.teamService.teamExistsById(teamId);
@@ -291,6 +345,53 @@ export class FormComponent implements OnInit {
     }, 500);
   }
 
+  async submitPlayerEditForm(): Promise<void> {
+    const playerName = this.form.value.name;
+    const playerLastName = this.form.value.last_name;
+    const playerDOB = new Date(this.form.value.date_of_birth);
+
+    const formattedDate = playerDOB.toISOString().split('T')[0];
+    this.form.patchValue({ date_of_birth: formattedDate });
+
+    const playerExists = await this.playerService.playerExists(
+      playerName,
+      playerLastName,
+      formattedDate
+    );
+
+    const teamId = this.form.value.team_id;
+
+    const teamExists = await this.teamService.teamExistsById(teamId);
+
+    if (!teamExists) {
+      this.snackBar.open('Team not found', 'Close', {
+        duration: 2000,
+      });
+      return;
+    }
+
+    if (playerExists) {
+      this.snackBar.open('Player already exists', 'Close', {
+        duration: 2000,
+      });
+      return;
+    }
+
+    if (this.playerId) {
+      await this.playerService.updatePlayer(this.playerId, this.form.value);
+      this.snackBar.open('Player Updated successfully', 'Close', {
+        duration: 5000,
+      });
+      setTimeout(() => {
+        this.navigationService.navigateToMyTeam().then(() => {
+          window.location.reload();
+        });
+      }, 500);
+    } else {
+      console.error('Player ID is undefined');
+    }
+  }
+
   async submitTournamentForm(): Promise<void> {
     const userId = this.sessionService.getUserId();
     if (!userId) {
@@ -313,21 +414,134 @@ export class FormComponent implements OnInit {
       return;
     }
 
+    const activeTournaments = await this.userService.getUserActiveTournament(
+      Number(userId)
+    );
+    if (activeTournaments.length > 0) {
+      this.snackBar.open('You have already active tournament', 'Close', {
+        duration: 5000,
+      });
+      return;
+    }
+
+    const tournamentDate = new Date(this.form.value.date_of_tournament);
+    const today = new Date();
+    const sixMonthsFromNow = new Date();
+    sixMonthsFromNow.setMonth(today.getMonth() + 6);
+
+    if (tournamentDate < today || tournamentDate > sixMonthsFromNow) {
+      this.snackBar.open(
+        'Tournament date must be within the next 6 months',
+        'Close',
+        {
+          duration: 5000,
+        }
+      );
+      return;
+    }
+
+    const formattedDate = tournamentDate.toISOString().split('T')[0];
+    this.form.patchValue({ date_of_tournament: formattedDate });
+
     if (!this.form.value.creator_id) {
       console.error('creator_id is not set in the form');
       return;
     }
-    await this.tournamentService.createTournament(this.form.value);
-    this.snackBar.open('Tournament created successfully', 'Close', {
-      duration: 5000,
-    });
 
-    //Reload
-    setTimeout(() => {
-      this.router.navigateByUrl('/tournament-base').then(() => {
-        window.location.reload();
+    try {
+      await this.tournamentService.createTournament(this.form.value);
+      this.snackBar.open('Tournament created successfully', 'Close', {
+        duration: 5000,
       });
-    }, 500);
+
+      //Reload
+      setTimeout(() => {
+        this.router.navigateByUrl('/tournament-base').then(() => {
+          window.location.reload();
+        });
+      }, 500);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      this.snackBar.open('Error submitting form', 'Close', {
+        duration: 5000,
+      });
+    }
+  }
+
+  async submitTournamentEditForm(): Promise<void> {
+    const userId = this.sessionService.getUserId();
+    if (!userId) {
+      this.snackBar.open('User ID not found', 'Close', {
+        duration: 2000,
+      });
+      return;
+    }
+
+    this.form.patchValue({ creator_id: Number(userId) });
+
+    const tournamentName = this.form.value.name;
+    const tournamentExists = await this.tournamentService.tournamentExists(
+      tournamentName
+    );
+    if (tournamentExists) {
+      this.snackBar.open('Tournament already exists', 'Close', {
+        duration: 2000,
+      });
+      return;
+    }
+
+    const activeTournaments = await this.userService.getUserActiveTournament(
+      Number(userId)
+    );
+
+    if (activeTournaments.length === 0) {
+      this.snackBar.open('No active tournament found', 'Close', {
+        duration: 5000,
+      });
+      return;
+    }
+
+    const activeTournamentId = activeTournaments[0].id;
+
+    const tournamentDate = new Date(this.form.value.date_of_tournament);
+    const today = new Date();
+    const sixMonthsFromNow = new Date();
+    sixMonthsFromNow.setMonth(today.getMonth() + 6);
+
+    if (tournamentDate < today || tournamentDate > sixMonthsFromNow) {
+      this.snackBar.open(
+        'Tournament date must be within the next 6 months',
+        'Close',
+        {
+          duration: 5000,
+        }
+      );
+      return;
+    }
+
+    const formattedDate = tournamentDate.toISOString().split('T')[0];
+    this.form.patchValue({ date_of_tournament: formattedDate });
+
+    try {
+      await this.tournamentService.updateTournament(
+        activeTournamentId,
+        this.form.value
+      );
+      this.snackBar.open('Tournament updated successfully', 'Close', {
+        duration: 5000,
+      });
+
+      setTimeout(() => {
+        this.navigationService.navigateToMyTournament().then(() => {
+          window.location.reload();
+        });
+      }, 500);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      this.snackBar.open('Error submitting form', 'Close', {
+        duration: 5000,
+      });
+    }
   }
 
   async submitTeamEditForm(): Promise<void> {
@@ -341,11 +555,6 @@ export class FormComponent implements OnInit {
       name: this.form.value.name,
       league_id: this.form.value.league_id,
     };
-
-    console.log('Submitting form with data:', {
-      teamId: this.teamId,
-      ...data,
-    });
 
     try {
       await this.teamService.updateTeam(this.teamId, data);
@@ -364,7 +573,52 @@ export class FormComponent implements OnInit {
       });
     }
   }
+
+  async submitPasswordForm(): Promise<void> {
+    const userId = this.sessionService.getUserId();
+    if (!userId) {
+      this.snackBar.open('User ID not found', 'Close', {
+        duration: 2000,
+      });
+      return;
+    }
+
+    const { password, new_password, confirm_new_password } = this.form.value;
+
+    if (new_password !== confirm_new_password) {
+      this.snackBar.open(
+        'New password and confirm password do not match',
+        'Close',
+        {
+          duration: 2000,
+        }
+      );
+      return;
+    }
+
+    try {
+      await this.userService.changePassword(Number(userId), {
+        password,
+        new_password,
+        confirm_new_password,
+      });
+      this.snackBar.open('Password changed successfully', 'Close', {
+        duration: 5000,
+      });
+      this.dialogRef.close();
+    } catch (error) {
+      console.error('Error changing password:', error);
+      this.snackBar.open('Error changing password', 'Close', {
+        duration: 5000,
+      });
+    }
+  }
+
   cancel(): void {
     this.dialogRef.close();
+  }
+
+  trackByFn(index: number, item: any): any {
+    return item.name;
   }
 }

@@ -25,9 +25,10 @@ class PlayerCreate(PlayerBase):
         return v
 
 class PlayerUpdate(PlayerBase):
+    name: str
     last_name: str
     date_of_birth : date
-    team_id: int = Field(default=None)
+
 
 
 class Player(BaseModel):

@@ -12,7 +12,6 @@ from app.crud.match import calculate_match_result
 def create_action(db: Session, action: ActionCreate):
     check_team_match_player_exist(db, action.team_id, action.match_id, action.player_id)
 
-    # Sprawdź, czy taki sam rekord już istnieje
     existing_action = db.query(models.Action).filter(
         models.Action.action_type == action.action_type,
         models.Action.minute == action.minute,

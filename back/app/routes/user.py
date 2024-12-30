@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.schemas.user import UserCreate, UserUpdate, User, UserLogin
+from app.schemas.user import UserCreate, UserUpdate, User, UserLogin, UserChangePassword
 from app.services.user import UserService
 from app.database import get_db
 from app.utils.auth import create_access_token, get_current_user
@@ -52,3 +52,11 @@ def login_for_access_token(user: UserLogin, db: Session = Depends(get_db)):
     access_token = create_access_token(db_user.id)
     return {"access_token": access_token}
 
+
+@router.put("/{user_id}/password", response_model=User)
+def change_password(change_password_data: UserChangePassword, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+    user_service = UserService(db)
+    user_id = current_user['user_id']
+    if change_password_data.new_password != change_password_data.confirm_new_password:
+        raise HTTPException(status_code=400, detail="New passwords do not match")
+    return user_service.change_password(user_id, change_password_data.password, change_password_data.new_password)

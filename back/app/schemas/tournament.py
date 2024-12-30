@@ -13,7 +13,6 @@ class TournamentCreate(TournamentBase):
     date_of_tournament: Optional[date] = None
 
 class TournamentUpdate(TournamentBase):
-    teams: Optional[List[TeamBase]] = None
     date_of_tournament: Optional[date] = None
 
 class AddTeamToTournament(BaseModel):

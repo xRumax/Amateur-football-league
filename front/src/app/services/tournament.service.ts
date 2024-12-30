@@ -59,7 +59,7 @@ export class TournamentService {
           label: team.name,
           value: team.id,
         })),
-        value: tournament.teams.map((team) => team.id) ?? [],
+        value: tournament.teams ? tournament.teams.map((team) => team.id) : [],
       },
       {
         type: 'date',
@@ -128,6 +128,7 @@ export class TournamentService {
   createTournament(data: {
     name: string;
     amount_of_teams: number;
+    date_of_tournament: string;
   }): Promise<Tournament> {
     const token = this.sessionService.getToken();
 
@@ -222,9 +223,7 @@ export class TournamentService {
       .delete(`${this.envService.base_url}/tournaments/${tournamentId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then(() => {
-        console.log('Tournament deleted successfully');
-      })
+      .then(() => {})
       .catch((error) => {
         console.error('Error deleting tournament:', error);
         throw error;

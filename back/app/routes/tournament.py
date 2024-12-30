@@ -17,7 +17,7 @@ def create_tournament(tournament: TournamentCreate, db: Session = Depends(get_db
     
     tournament_service = TournamentService(db)
 
-    # Check if the user already has a active tournament
+    # Check if the user already has an active tournament
     existing_active_tournament = tournament_service.get_active_tournament_by_user_id(current_user['user_id'])
     if existing_active_tournament:
         raise HTTPException(status_code=400, detail="User already has an active tournament")

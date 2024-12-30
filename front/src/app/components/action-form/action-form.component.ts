@@ -45,7 +45,7 @@ export class ActionFormComponent implements OnInit {
         this.teams
       );
       this.initializeForm(this.formFields);
-      this.cdr.detectChanges(); // Ręczne uruchomienie cyklu wykrywania zmian
+      this.cdr.detectChanges();
     } catch (error) {
       console.error('Error initializing action form:', error);
     }
@@ -81,7 +81,7 @@ export class ActionFormComponent implements OnInit {
         this.teams
       );
       this.initializeForm(this.formFields);
-      this.cdr.detectChanges(); // Ręczne uruchomienie cyklu wykrywania zmian
+      this.cdr.detectChanges();
     } catch (error) {
       console.error('Error loading players by team ID:', error);
     }

@@ -58,10 +58,8 @@ export class CardComponent implements OnInit {
   async joinToTournament(tournament: Tournament): Promise<void> {
     try {
       const userId = this.sessionService.getUserId();
-      console.log('User ID:', userId);
 
       const userHasTeam = await this.userService.userHasTeam(Number(userId));
-      console.log('User has team:', userHasTeam);
 
       if (!userHasTeam) {
         this.snackBar.open("You already don't have a team", 'Close', {
@@ -71,7 +69,6 @@ export class CardComponent implements OnInit {
       }
 
       const userTeam = await this.userService.getUserTeam(Number(userId));
-      console.log('User team:', userTeam);
 
       if (this.isTeamInTournament(tournament)) {
         this.snackBar.open('Your team is already in this tournament', 'Close', {
@@ -79,11 +76,6 @@ export class CardComponent implements OnInit {
         });
         return;
       }
-
-      console.log('Adding team to tournament:', {
-        teamId: userTeam.id,
-        tournamentId: tournament.id,
-      });
 
       await this.tournamentService.addTeamToTournament(
         userTeam.id,

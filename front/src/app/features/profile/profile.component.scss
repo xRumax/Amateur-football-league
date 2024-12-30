@@ -34,7 +34,7 @@
 }
 
 .table-con td {
-  padding: 0 20px;
+  padding: 5px 20px;
   border-bottom: 1px solid #ddd;
   font-size: 20px;
   color: #ffffff;
@@ -43,4 +43,12 @@
 .table-con th {
   padding: 0 20px;
   border-bottom: 2px solid #ddd;
+}
+
+.pass-btn {
+  margin-left: 5px;
+}
+
+.custom-popup .mat-dialog-container {
+  background-color: red; /* Sprawdź, czy styl jest stosowany */
 }

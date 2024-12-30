@@ -75,6 +75,12 @@ export class NavigationService {
     }
   }
 
+  async navigateToProfile(): Promise<void> {
+    this.router.navigate(['/profile']).then(() => {
+      this.router.navigate([this.router.url]);
+    });
+  }
+
   showSnackbar(message: string): void {
     this.snackBar.open(message, 'Close', {
       duration: 3000,

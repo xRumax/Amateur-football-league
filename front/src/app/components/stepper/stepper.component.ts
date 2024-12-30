@@ -64,7 +64,7 @@ export class StepperComponent implements OnInit {
       if (!this.formStep2.contains(controlName)) {
         const control = new FormControl('', Validators.required);
         control.valueChanges.subscribe(() => {
-          this.updateSelectedTeams(); // Aktualizujemy drużyny za każdym razem, gdy zmienia się wartość
+          this.updateSelectedTeams();
         });
         this.formStep2.addControl(controlName, control);
       }
@@ -78,10 +78,9 @@ export class StepperComponent implements OnInit {
   updateSelectedTeams(): void {
     this.selectedTeams = Object.values(this.formStep2.controls)
       .map((control) => control.value)
-      .filter((value) => value); // Filtrujemy tylko wybrane wartości
+      .filter((value) => value);
   }
 
-  // Metoda filtrująca drużyny, aby wykluczyć już wybrane drużyny
   getAvailableTeams(index: number): any[] {
     return this.teams.filter(
       (team: any) =>

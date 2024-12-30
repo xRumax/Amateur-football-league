@@ -46,6 +46,52 @@ export class UserService {
     ];
   }
 
+  generatePasswordFields(user: UserResponse): FormField[] {
+    return [
+      {
+        type: 'password',
+        name: 'password',
+        id: 'password',
+        placeholder: 'Old Password',
+        value: '',
+      },
+      {
+        type: 'password',
+        name: 'new_password',
+        id: 'new_password',
+        placeholder: 'New Password',
+        value: '',
+      },
+      {
+        type: 'password',
+        name: 'confirm_new_password',
+        id: 'confirm_new_password',
+        placeholder: 'Confirm Password',
+        value: '',
+      },
+    ];
+  }
+
+  async changePassword(userId: number, passwordData: any): Promise<any> {
+    const token = localStorage.getItem('access_token');
+    try {
+      const response = await axios.put(
+        `${this.envService.base_url}/users/${userId}/password`,
+        passwordData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(
+        'Error changing password:',
+        (error as any).response?.data || (error as any).message
+      );
+      throw new Error('Error changing password');
+    }
+  }
+
   async getUserDataAndFields(): Promise<{
     user: UserResponse;
     fields: FormField[];
@@ -166,6 +212,10 @@ export class UserService {
 
   async getUserActiveTournament(userId: number): Promise<any[]> {
     const user = await this.getUser(userId);
-    return user.tournaments.filter((tournament: any) => tournament.is_active);
+    const activeTournaments = user.tournaments.filter(
+      (tournament: any) => tournament.is_active
+    );
+
+    return activeTournaments;
   }
 }
