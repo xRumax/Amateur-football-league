@@ -23,3 +23,5 @@ class Tournament(Base):
 
     creator_id = Column(Integer, ForeignKey("users.id"))
     creator = relationship("User", back_populates="tournaments")
+
+    actions = relationship("Action", back_populates="tournaments")

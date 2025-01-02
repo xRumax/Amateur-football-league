@@ -6,6 +6,7 @@ import { Player, PlayerService } from '../../../services/player.service';
 import { Team, TeamService } from '../../../services/team.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-match-update',
@@ -19,10 +20,10 @@ export class MatchUpdateComponent implements OnInit {
   actionForms: FormGroup[] = [];
   players: Player[] = [];
   teams: Team[] = [];
-  currentView: 'actions' | 'result' = 'actions';
 
   constructor(
     private matchService: MatchService,
+    private snackBar: MatSnackBar,
     private actionService: ActionService,
     private route: ActivatedRoute,
     private playerService: PlayerService,
@@ -49,6 +50,7 @@ export class MatchUpdateComponent implements OnInit {
       match_id: this.matchId,
       player_id: 0,
       team_id: 0,
+      tournament_id: this.match?.tournament_id ?? 0,
     };
 
     const formFields = this.actionService.generateActionFields(
@@ -66,7 +68,7 @@ export class MatchUpdateComponent implements OnInit {
     this.actionForms.push(formGroup);
   }
 
-  submitAllForms(): void {
+  async submitAllForms(): Promise<void> {
     const allActions = this.actionForms.map((formGroup) => {
       const formFields = Object.keys(formGroup.controls).map((key) => ({
         name: key,
@@ -96,27 +98,28 @@ export class MatchUpdateComponent implements OnInit {
             .filter((field) => field.name === 'team_id')
             .map((field) => field.value)[0]
         ),
+        tournament_id: this.match?.tournament_id ?? 0,
       };
 
       return actionData;
     });
 
-    if (allActions.length > 0) {
-      this.actionService
-        .createActions(allActions)
-        .then(() => {})
-        .catch((error) =>
-          console.error('Błąd przy zapisywaniu działań:', error)
-        );
-    } else {
-      console.error('Brak poprawnych danych do wysłania!');
-    }
-
-    setTimeout(() => {
-      this.router.navigateByUrl('/matches-finished').then(() => {
-        window.location.reload();
+    try {
+      await this.actionService.createActions(allActions);
+      this.snackBar.open('Actions created successfully', 'Close', {
+        duration: 5000,
       });
-    }, 500);
+      setTimeout(() => {
+        this.router.navigateByUrl('/matches-finished').then(() => {
+          window.location.reload();
+        });
+      }, 500);
+    } catch (error) {
+      console.error('Błąd przy zapisywaniu działań:', error);
+      this.snackBar.open('Error creating actions', 'Close', {
+        duration: 5000,
+      });
+    }
   }
 
   removeForm(index: number): void {

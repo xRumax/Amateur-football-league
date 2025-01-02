@@ -15,6 +15,7 @@ export interface MatchAction {
   player_name?: string;
   team_id: number;
   team_name?: string;
+  tournament_id: number;
 }
 
 export interface ActionColumns {

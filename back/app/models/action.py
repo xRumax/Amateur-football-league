@@ -27,8 +27,10 @@ class Action(Base):
     match_id = Column(Integer, ForeignKey('matches.id'))
     player_id = Column(Integer, ForeignKey('players.id'))
     team_id = Column(Integer, ForeignKey('teams.id'))
+    tournament_id = Column(Integer, ForeignKey('tournaments.id'))
 
-    # Relationship with match, player and team
+    # Relationship with match, player, team and tournament
     matches = relationship("Match", back_populates="actions")
     players = relationship("Player", back_populates="actions")
     teams = relationship("Team", back_populates="actions")
+    tournaments = relationship("Tournament", back_populates="actions")

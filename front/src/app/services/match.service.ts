@@ -10,6 +10,7 @@ export interface Match {
   result: string;
   team_1: Team;
   team_2: Team;
+  tournament_id: number;
 }
 @Injectable({
   providedIn: 'root',

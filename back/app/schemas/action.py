@@ -12,6 +12,7 @@ class ActionCreate(BaseModel):
     match_id : int
     player_id : int
     team_id : int
+    tournament_id : int
 
 class ActionUpdate(ActionBase):
     minute: int 
@@ -38,6 +39,14 @@ class ActionTeamDisplay(BaseModel):
     shots: int = 0
     shots_on_target: int = 0
 
+class ActionTournamentDisplay(BaseModel):
+    goals: int = 0
+    yellow_cards: int = 0
+    red_cards: int = 0
+    shots: int = 0
+    shots_on_target: int = 0
+    offside: int = 0
+
 class ActionMatchDisplay(BaseModel):
     team_id: int
     goals: int = 0
@@ -59,6 +68,7 @@ class Action(ActionBase):
     match_id : int
     player_id : int
     team_id : int
+    tournament_id : int
 
     class Config:
         from_attributes = True

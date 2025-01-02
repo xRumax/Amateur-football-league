@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.schemas.action import ActionCreate, ActionUpdate, ActionTeamDisplay, ActionTypeEnum, ActionPlayerDisplay, ActionMatchDisplay
+from app.schemas.action import ActionCreate, ActionUpdate, ActionTeamDisplay, ActionTypeEnum, ActionTournamentDisplay, ActionPlayerDisplay, ActionMatchDisplay
 from app.models import action as models
 from app.models.team import Team
 from app.models.match import Match
@@ -7,7 +7,6 @@ from app.models.player import Player
 from fastapi import HTTPException
 from typing import List
 from app.crud.match import calculate_match_result
-
 
 def create_action(db: Session, action: ActionCreate):
     check_team_match_player_exist(db, action.team_id, action.match_id, action.player_id)
@@ -82,7 +81,6 @@ def delete_action(db: Session, action_id: int):
     db.delete(db_action)
     db.commit()
     return db_action
-
 
 def check_team_match_player_exist(db: Session, team_id: int, match_id: int, player_id: int):
     db_team = db.query(Team).filter(Team.id == team_id).first()
@@ -189,3 +187,36 @@ def get_match_action_summary(db: Session, match_id: int) -> List[ActionMatchDisp
             team_summaries[team_id]["shots_on_target"] += 1
 
     return [ActionMatchDisplay(**summary) for summary in team_summaries.values()]
+
+def get_tournament_action_summary(db: Session, tournament_id: int) -> List[ActionTournamentDisplay]:
+    actions = db.query(models.Action).filter(models.Action.tournament_id == tournament_id).all()
+    tournament_summaries = {}
+
+    for action in actions:
+        tournament_id = action.tournament_id
+        if tournament_id not in tournament_summaries:
+            tournament_summaries[tournament_id] = {
+                "tournament_id": tournament_id,
+                "goals": 0,
+                "yellow_cards": 0,
+                "red_cards": 0,
+                "shots": 0,
+                "shots_on_target": 0,
+                "offside": 0,
+            }
+
+
+        if action.action_type == ActionTypeEnum.Goal:
+            tournament_summaries[tournament_id]["goals"] += 1
+        elif action.action_type == ActionTypeEnum.YellowCard:
+            tournament_summaries[tournament_id]["yellow_cards"] += 1
+        elif action.action_type == ActionTypeEnum.RedCard:
+            tournament_summaries[tournament_id]["red_cards"] += 1
+        elif action.action_type == ActionTypeEnum.Shot:
+            tournament_summaries[tournament_id]["shots"] += 1
+        elif action.action_type == ActionTypeEnum.ShotOnTarget:
+            tournament_summaries[tournament_id]["shots_on_target"] += 1
+        elif action.action_type == ActionTypeEnum.Offside:
+            tournament_summaries[tournament_id]["offside"] += 1
+
+    return [ActionMatchDisplay(**summary) for summary in tournament_summaries.values()]

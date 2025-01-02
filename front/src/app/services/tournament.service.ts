@@ -14,6 +14,8 @@ export interface Tournament {
   date_of_tournament: string;
   matches: Match[];
   creator_id: number;
+  is_active: boolean;
+  is_full: boolean;
 }
 
 @Injectable({

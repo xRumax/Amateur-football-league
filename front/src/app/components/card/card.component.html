@@ -14,15 +14,11 @@
       <div
         class="status"
         [ngClass]="{
-          active: tournament.teams.length < tournament.amount_of_teams,
-          inactive: tournament.teams.length === tournament.amount_of_teams
+          active: tournament.is_active === true,
+          inactive: tournament.is_active === false
         }"
       >
-        {{
-          tournament.teams.length < tournament.amount_of_teams
-            ? "Active"
-            : "Inactive"
-        }}
+        {{ tournament.is_active === true ? "Active" : "Inactive" }}
       </div>
       <div class="date">
         <div class="date-days">
@@ -76,15 +72,11 @@
         <div
           class="status"
           [ngClass]="{
-            active: tournament.teams.length < tournament.amount_of_teams,
-            inactive: tournament.teams.length === tournament.amount_of_teams
+            active: tournament.is_active === false,
+            inactive: tournament.is_active === true
           }"
         >
-          {{
-            tournament.teams.length < tournament.amount_of_teams
-              ? "Active"
-              : "Inactive"
-          }}
+          {{ tournament.is_active === true ? "Inactive" : "Active" }}
         </div>
         <div class="date">
           <div class="date-days">

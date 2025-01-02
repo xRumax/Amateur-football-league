@@ -4,6 +4,7 @@ from app.crud.match import create_match, get_match, update_match, delete_match
 from sqlalchemy.orm import Session
 from app.models.match import Match as MatchModel
 from typing import Optional
+
 class MatchService:
     def __init__(self, db: Session):
         self.db = db
@@ -25,3 +26,6 @@ class MatchService:
     def delete_match(self, match_id: int) -> Optional[models.Match]:
         return delete_match(self.db, match_id)
     
+
+            
+                

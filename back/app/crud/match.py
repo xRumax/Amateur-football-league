@@ -5,9 +5,9 @@ from app.models import team as team_models
 from app.models import tournament as tournament_models
 from fastapi import HTTPException
 from app.models.match import Match
-from app.models.action import Action
-from app.schemas.action import ActionTypeEnum
+from app.models.action import Action, ActionTypeEnum
 from app.crud.tournament import check_and_update_tournament_status
+
 
 
 def create_match(db: Session, match: MatchCreate):
@@ -65,14 +65,15 @@ def update_match(db: Session, match: MatchUpdate, match_id: int):
 def delete_match(db: Session, match_id: int):
     db_match = get_match(db=db, match_id=match_id)
     if db_match:
-        # Delete all actions related to the match
+        # Usuń wszystkie akcje powiązane z meczem
         db.query(Action).filter(Action.match_id == match_id).delete()
         db.commit()
 
-        # Delete the match
+        # Usuń mecz
         db.delete(db_match)
         db.commit()
     return db_match
+
 
 def get_match_player(db:Session, match_id:int):
     match = db.query(Match).filter(Match.id == match_id).first()
@@ -84,6 +85,7 @@ def get_match_player(db:Session, match_id:int):
         "team_1_players": team_1_players,
         "team_2_players": team_2_players
     }
+
 
 def calculate_match_result(db: Session, match_id: int):
     actions = db.query(Action).filter(Action.match_id == match_id).all()
@@ -113,5 +115,8 @@ def calculate_match_result(db: Session, match_id: int):
     check_and_update_tournament_status(db, db_match.tournament_id)
 
     return db_match
+
+
+
 
 

@@ -13,6 +13,7 @@ export class ActionFormComponent implements OnInit {
   @Input() matchId!: number;
   @Input() formIndex!: number;
   @Input() formGroup!: FormGroup;
+  @Input() tournamentId!: number;
   teams: any[] = [];
   players: any[] = [];
   formFields: any[] = [];
@@ -23,6 +24,7 @@ export class ActionFormComponent implements OnInit {
     match_id: 0,
     player_id: 0,
     team_id: 0,
+    tournament_id: 0,
   };
 
   constructor(

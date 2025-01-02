@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.schemas.action import ActionCreate, ActionUpdate, Action, ActionPlayerDisplay, ActionTeamDisplay, ActionMatchDisplay
+from app.schemas.action import ActionCreate, ActionUpdate, Action, ActionPlayerDisplay, ActionTeamDisplay, ActionTournamentDisplay, ActionMatchDisplay
 from app.services.action import ActionService
 from app.database import get_db
-from app.crud.action import get_player_action_summary, get_team_action_summary, get_match_action_summary
+from app.crud.action import get_player_action_summary, get_team_action_summary, get_match_action_summary, get_tournament_action_summary
 from typing import List
 
 router = APIRouter(prefix="/actions", tags=["actions"])
@@ -58,3 +58,7 @@ def read_team_actions(team_id: int, db: Session = Depends(get_db)):
 @router.get("/match/{match_id}/actions", response_model=List[ActionMatchDisplay])
 def read_match_team_actions(match_id: int, db: Session = Depends(get_db)):
     return get_match_action_summary(db, match_id)
+
+@router.get("/tournament/{tournament_id}/actions", response_model=List[ActionTournamentDisplay])
+def read_tournament_actions(tournament_id: int, db: Session = Depends(get_db)):
+    return get_tournament_action_summary(db, tournament_id)
