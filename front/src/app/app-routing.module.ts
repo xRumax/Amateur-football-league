@@ -13,13 +13,12 @@ import { routes_player_create } from './features/player/player-create/player-cre
 import { routes_players_base } from './features/player/players-base/players-base-routing.module';
 import { routes_player_details } from './features/player/player-details/player-details-routing.module';
 import { routes_tournament_create } from './features/tournament/tournament-create/tournament-create-routing.module';
-import { routes_match_create } from './features/match/match-create/match-create-routing.module';
 import { routes_tournament_base } from './features/tournament/tournament-base/tournament-base-routing.module';
 import { routes_match_base_finished } from './features/match/match-base-finished/match-base-routing.module';
-import { routes_matches_soon } from './features/match/matches-soon/matches-soon-routing.module';
 import { routes_tournament_details } from './features/tournament/tournament-details/tournament-details-routing.module';
 import { routes_match_manager } from './features/match/match-manager/match-manager-routing.module';
 import { routes_match_update } from './features/match/match-update/match-update-routing.module';
+import { routes_match_details } from './features/match/match-details/match-details-routing.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -36,11 +35,10 @@ const routes: Routes = [
   ...routes_tournament_create,
   ...routes_tournament_base,
   ...routes_tournament_details,
-  ...routes_match_create,
   ...routes_match_base_finished,
-  ...routes_matches_soon,
   ...routes_match_manager,
   ...routes_match_update,
+  ...routes_match_details,
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],

@@ -14,11 +14,7 @@ export class CardMatchesComponent {
   @Input() tournaments: Tournament[] = [];
   teamNames: { [key: number]: string } = {};
 
-  @Input() dataType!:
-    | 'match-soon'
-    | 'match-finished'
-    | 'matches'
-    | 'tournament-matches';
+  @Input() dataType!: 'match-finished' | 'matches' | 'tournament-matches';
 
   constructor(private teamService: TeamService, private router: Router) {}
 
@@ -37,16 +33,11 @@ export class CardMatchesComponent {
     }
   }
 
-  onCardClickedManage(matchId: any): void {
-    if (this.dataType === 'matches') {
-      this.router.navigate(['/match', matchId]);
-    } else if (this.dataType === 'match-soon') {
-      this.router.navigate(['/match', matchId]);
-    }
-  }
   onCardClicked(matchId: any): void {
     if (this.dataType === 'matches') {
       this.router.navigate(['/match-update', matchId]);
+    } else if (this.dataType === 'match-finished') {
+      this.router.navigate(['/match', matchId]);
     }
   }
 }

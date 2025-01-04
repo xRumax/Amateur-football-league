@@ -28,7 +28,6 @@ export class TeamDetailsComponent implements OnInit {
   teamDetails: { key: keyof Team; label: string }[] = [
     { key: 'name', label: 'Name' },
     { key: 'matches_played', label: 'Matches played' },
-    { key: 'league_name', label: 'League' },
     { key: 'creator_username', label: 'Creator' },
   ];
 

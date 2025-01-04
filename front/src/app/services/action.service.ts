@@ -6,7 +6,7 @@ import { Environment } from '../../environments/environment';
 import axios from 'axios';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-export interface MatchAction {
+export interface Action {
   id: number;
   action_type: string;
   minute: number;
@@ -16,6 +16,17 @@ export interface MatchAction {
   team_id: number;
   team_name?: string;
   tournament_id: number;
+}
+
+export interface MatchStatics {
+  team_id: number;
+  goals: number;
+  assists: number;
+  yellow_cards: number;
+  red_cards: number;
+  offside: number;
+  shots: number;
+  shots_on_target: number;
 }
 
 export interface ActionColumns {
@@ -30,7 +41,7 @@ export class ActionService {
   constructor(private envService: Environment, private snackBar: MatSnackBar) {}
 
   generateActionFields(
-    action: MatchAction,
+    action: Action,
     players: Player[],
     teams: Team[]
   ): FormField[] {
@@ -88,6 +99,32 @@ export class ActionService {
     ];
   }
 
+  generateMarchActionFields(action: Action): FormField[] {
+    return [
+      {
+        type: 'select',
+        name: 'action_type',
+        id: 'action_type',
+        placeholder: 'Action Type',
+        options: [
+          { label: 'Goal', value: 'Goal' },
+          { label: 'Assist', value: 'Assist' },
+          { label: 'Yellow Card', value: 'Yellow Card' },
+          { label: 'Red Card', value: 'Red Card' },
+          { label: 'Substitution', value: 'Substitution' },
+          { label: 'Offside', value: 'Offside' },
+          { label: 'Corner', value: 'Corner' },
+          { label: 'Free Kick', value: 'Free Kick' },
+          { label: 'Penalty', value: 'Penalty' },
+          { label: 'Shot', value: 'Shot' },
+          { label: 'Shot On Target', value: 'Shot On Target' },
+          { label: 'Foul', value: 'Foul' },
+        ],
+        value: action.action_type ?? '',
+      },
+    ];
+  }
+
   playerStaticsColumns: ActionColumns[] = [
     { key: 'goals', header: 'Goals' },
     { key: 'assists', header: 'Assists' },
@@ -98,7 +135,7 @@ export class ActionService {
     { key: 'shots_on_target', header: 'Shots on Target' },
   ];
 
-  createAction(action: MatchAction): Promise<MatchAction> {
+  createAction(action: Action): Promise<Action> {
     return axios
       .post(`${this.envService.base_url}/actions`, action)
       .then((response) => {
@@ -113,7 +150,7 @@ export class ActionService {
       });
   }
 
-  createActions(actions: MatchAction[]): Promise<void> {
+  createActions(actions: Action[]): Promise<void> {
     return axios
       .post(`${this.envService.base_url}/actions/bulk`, actions)
       .then(() => {
@@ -150,6 +187,28 @@ export class ActionService {
         .catch((error) => {
           reject(error);
         });
+    });
+  }
+
+  getMatchActions(matchId: number): Promise<MatchStatics[]> {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${this.envService.base_url}/actions/match/${matchId}/actions`)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  getMatchActionsForTeam(
+    matchId: number,
+    teamId: number
+  ): Promise<MatchStatics[]> {
+    return this.getMatchActions(matchId).then((actions) => {
+      return actions.filter((action) => action.team_id === teamId);
     });
   }
 }

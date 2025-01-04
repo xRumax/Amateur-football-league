@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatchService, Match } from '../../../services/match.service';
-import { ActionService, MatchAction } from '../../../services/action.service';
+import { ActionService, Action } from '../../../services/action.service';
 import { ActivatedRoute } from '@angular/router';
 import { Player, PlayerService } from '../../../services/player.service';
 import { Team, TeamService } from '../../../services/team.service';
@@ -43,7 +43,7 @@ export class MatchUpdateComponent implements OnInit {
   }
 
   addNewForm(): void {
-    const action: MatchAction = {
+    const action: Action = {
       id: 0,
       action_type: '',
       minute: 0,
@@ -75,7 +75,7 @@ export class MatchUpdateComponent implements OnInit {
         value: formGroup.controls[key].value,
       }));
 
-      const actionData: MatchAction = {
+      const actionData: Action = {
         id: 0,
         action_type: String(
           formFields

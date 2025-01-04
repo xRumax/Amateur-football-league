@@ -4,6 +4,7 @@ import {
   Tournament,
   TournamentService,
 } from '../../services/tournament.service';
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -15,6 +16,7 @@ export class HomeComponent {
   tournaments: Tournament[] = [];
 
   constructor(
+    private authService: AuthService,
     private matchService: MatchService,
     private tournamentService: TournamentService
   ) {}
@@ -44,10 +46,10 @@ export class HomeComponent {
 
   async loadTournaments(): Promise<void> {
     try {
-      const allTournaments = await this.tournamentService.getTournaments(3);
+      const allTournaments = await this.tournamentService.getTournaments();
       // Only show active tournaments and limit to 3
       this.tournaments = allTournaments.filter(
-        (tournament) => tournament.teams.length < tournament.amount_of_teams
+        (tournament) => tournament.is_active === true
       );
     } catch (error) {
       console.error('Error loading tournaments:', error);
@@ -92,5 +94,9 @@ export class HomeComponent {
     if (heroSection) {
       heroSection.classList.add('visible');
     }
+  }
+
+  get isNotLoggedIn(): boolean {
+    return this.authService.isLoggedIn() === false;
   }
 }

@@ -11,17 +11,18 @@
   }
 
   mat-card {
-    width: 50vw;
-    height: 70vh;
+    width: 40vw;
+    height: 40vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    background: transparent !important;
-    border: 1.5px solid #000000;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    // background: transparent !important;
+    // border: 1.5px solid #000000;
+    // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+    background-color: #202124e7;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.7);
   }
 }
 

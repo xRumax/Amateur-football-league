@@ -20,12 +20,14 @@ export class TableComponent implements OnInit {
     | 'player'
     | 'teamPlayers'
     | 'teamStatics'
-    | 'playerStatics' = 'team';
+    | 'playerStatics'
+    | 'matchStatics' = 'team';
   @Input() columns: { key: string; header: string }[] = [];
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @Input() teamId: number | null = null;
   @Input() playerId: number | null = null;
+  @Input() matchId: number | null = null;
 
   data: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
@@ -64,7 +66,7 @@ export class TableComponent implements OnInit {
     this.columns = this.teamService.teamColumns;
 
     try {
-      const teams = await this.teamService.getAllTeamsWithLeagueName();
+      const teams = await this.teamService.getAllTeams();
       this.data = new MatTableDataSource<Team>(teams);
       this.data.paginator = this.paginator;
       this.data.sort = this.sort;

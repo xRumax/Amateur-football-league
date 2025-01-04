@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RegisterService } from '../../services/register.service';
+import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
@@ -16,7 +16,7 @@ export class RegisterComponent {
   errorMessage: string = '';
 
   constructor(
-    private registerService: RegisterService,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {}
@@ -36,7 +36,7 @@ export class RegisterComponent {
       this.errorMessage = 'Passwords do not match';
       return;
     }
-    this.registerService
+    this.authService
       .register(this.username, this.email, this.password, this.confirmPassword)
       .then((response) => {
         this.snackBar.open('Register Succesful', 'Close', {

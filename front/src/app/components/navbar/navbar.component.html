@@ -83,16 +83,12 @@
       <li class="dropdown">
         <a
           routerLink="/matches-finished"
-          [class.active]="
-            isActive('/matches-finished') || isActive('/match-create')
-          "
+          [class.active]="isActive('/matches-finished')"
           routerLinkActive="active"
           ><div
             [ngClass]="{
               'active-link':
-                isActive('/matches-finished') ||
-                isActive('/match-create') ||
-                isActive('/match-manager')
+                isActive('/matches-finished') || isActive('/match-manager')
             }"
           >
             Matches

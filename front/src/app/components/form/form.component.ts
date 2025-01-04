@@ -8,7 +8,6 @@ import {
 import { UserService, UserResponse } from '../../services/user.service';
 import { TeamService } from '../../services/team.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { LeagueService, League } from '../../services/league.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PlayerService } from '../../services/player.service';
 import { SessionService } from '../../services/session.service';
@@ -48,14 +47,12 @@ export class FormComponent implements OnInit {
   fields: any[] = [];
   user: UserResponse | null = null;
   userPassword: any = {};
-  leagues: League[] = [];
   teams: Team[] = [];
   playerId: number | undefined;
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private leagueService: LeagueService,
     @Optional() public dialogRef: MatDialogRef<FormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private teamService: TeamService,
@@ -139,18 +136,16 @@ export class FormComponent implements OnInit {
   }
 
   async initializeTeamForm(): Promise<void> {
-    this.leagues = await this.leagueService.getLeagues();
     this.fields = this.teamService
-      .generateTeamFields(this.team, this.leagues)
-      .filter((field) => ['name', 'league_id', 'logo'].includes(field.name));
+      .generateTeamFields(this.team)
+      .filter((field) => ['name', 'logo'].includes(field.name));
     this.initializeForm(this.fields);
   }
 
   async initializeTeamEditForm(): Promise<void> {
-    this.leagues = await this.leagueService.getLeagues();
     this.fields = this.teamService
-      .generateTeamFields(this.team, this.leagues)
-      .filter((field) => ['name', 'league_id'].includes(field.name));
+      .generateTeamFields(this.team)
+      .filter((field) => ['name'].includes(field.name));
     this.initializeForm(this.fields);
   }
 

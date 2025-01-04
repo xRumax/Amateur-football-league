@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PlayerService } from '../../services/player.service';
-import { ActionService, MatchAction } from '../../services/action.service';
+import { ActionService, Action } from '../../services/action.service';
 import { MatchService } from '../../services/match.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class ActionFormComponent implements OnInit {
   teams: any[] = [];
   players: any[] = [];
   formFields: any[] = [];
-  action: MatchAction = {
+  action: Action = {
     id: 0,
     action_type: '',
     minute: 0,

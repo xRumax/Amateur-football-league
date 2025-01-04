@@ -24,7 +24,6 @@ import { PlayersBaseComponent } from './features/player/players-base/players-bas
 import { PlayerDetailsComponent } from './features/player/player-details/player-details.component';
 import { TournamentCreateComponent } from './features/tournament/tournament-create/tournament-create.component';
 import { TournamentBaseComponent } from './features/tournament/tournament-base/tournament-base.component';
-import { MatchCreateComponent } from './features/match/match-create/match-create.component';
 
 // Modules
 import { MatButtonModule } from '@angular/material/button';
@@ -45,15 +44,14 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { DetailsContentModule } from './components/details-content/details-content.module';
-import { StepperModule } from './components/stepper/stepper.module';
 import { CardModule } from './components/card/card.module';
 import { MatchBaseComponent } from './features/match/match-base-finished/match-base.component';
-import { MatchesSoonComponent } from './features/match/matches-soon/matches-soon.component';
 import { CardMatchesModule } from './components/card-matches/card-matches.module';
 import { TournamentDetailsComponent } from './features/tournament/tournament-details/tournament-details.component';
 import { MatchManagerComponent } from './features/match/match-manager/match-manager.component';
 import { ActionFormModule } from './components/action-form/action-form.module';
 import { MatchUpdateComponent } from './features/match/match-update/match-update.component';
+import { MatchDetailsComponent } from './features/match/match-details/match-details.component';
 
 @NgModule({
   declarations: [
@@ -71,12 +69,11 @@ import { MatchUpdateComponent } from './features/match/match-update/match-update
     PlayerDetailsComponent,
     TournamentCreateComponent,
     TournamentBaseComponent,
-    MatchCreateComponent,
     MatchBaseComponent,
-    MatchesSoonComponent,
     TournamentDetailsComponent,
     MatchManagerComponent,
     MatchUpdateComponent,
+    MatchDetailsComponent,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -101,7 +98,6 @@ import { MatchUpdateComponent } from './features/match/match-update/match-update
     MatIconModule,
     MatSortModule,
     DetailsContentModule,
-    StepperModule,
     CardModule,
     CardMatchesModule,
     ActionFormModule,

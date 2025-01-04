@@ -3,7 +3,8 @@
     *ngIf="
       dataType !== 'teamPlayers' &&
       dataType !== 'teamStatics' &&
-      dataType !== 'playerStatics'
+      dataType !== 'playerStatics' &&
+      dataType !== 'matchStatics'
     "
     class="search-bar"
   >
@@ -18,7 +19,11 @@
   </div>
 
   <table
-    *ngIf="dataType !== 'teamStatics' && dataType !== 'playerStatics'"
+    *ngIf="
+      dataType !== 'teamStatics' &&
+      dataType !== 'playerStatics' &&
+      dataType !== 'matchStatics'
+    "
     mat-table
     [dataSource]="data"
     matSort
@@ -45,7 +50,11 @@
   <!----------------------table for team statics (no sorting)------------------------>
 
   <table
-    *ngIf="dataType === 'teamStatics' || dataType === 'playerStatics'"
+    *ngIf="
+      dataType === 'teamStatics' ||
+      dataType === 'playerStatics' ||
+      dataType === 'matchStatics'
+    "
     mat-table
     [dataSource]="data"
     class="mat-elevation-z8"
@@ -72,7 +81,8 @@
     *ngIf="
       dataType !== 'teamPlayers' &&
       dataType !== 'teamStatics' &&
-      dataType !== 'playerStatics'
+      dataType !== 'playerStatics' &&
+      dataType !== 'matchStatics'
     "
     [pageSize]="10"
     [pageSizeOptions]="[5, 10, 20]"

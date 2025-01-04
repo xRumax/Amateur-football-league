@@ -62,6 +62,16 @@ export class AuthService {
     return this.isUserLoggedIn;
   }
 
+  register(
+    username: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) {
+    const user = { username, email, password, confirmPassword };
+    return axios.post(this.envService.registerUrl, user);
+  }
+
   logout(): void {
     this.isUserLoggedIn = false;
     localStorage.setItem('isLoggedIn', 'false');

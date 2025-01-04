@@ -8,7 +8,7 @@
     </p>
 
     <div class="hero-btn-con">
-      <button class="cta-button">Join Now</button>
+      <button class="cta-button" *ngIf="isNotLoggedIn">Join Now</button>
       <button class="cta-button">View tournaments</button>
     </div>
   </section>
@@ -53,7 +53,7 @@
     </div>
   </section>
   <!------Tournament Section---------->
-  <section class="news" *ngIf="tournaments.length > 0">
+  <section class="news">
     <h1>Active Tournaments</h1>
     <div class="card">
       <app-card dataType="home"></app-card>
