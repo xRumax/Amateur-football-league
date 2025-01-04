@@ -1,0 +1,69 @@
+<div class="main-container">
+  <div class="match-squads">
+    <h1 class="team-name">{{ match?.team_1?.name | uppercase }}</h1>
+    <div class="vs-text">VS</div>
+    <h1 class="team-name">{{ match?.team_2?.name | uppercase }}</h1>
+  </div>
+  <!-- <div class="components-btn-con">
+    <ul>
+      <li>
+        <a
+          (click)="switchView('result')"
+          [class.active]="currentView === 'result'"
+          >Result</a
+        >
+      </li>
+      <span>|</span>
+      <li>
+        <a
+          (click)="switchView('statics')"
+          [class.active]="currentView === 'statics'"
+          >Statics</a
+        >
+      </li>
+    </ul>
+  </div> -->
+  <div class="container">
+    <!-- <h2>RESULT</h2> -->
+    <div class="result-section">
+      <p class="date-text">
+        {{ match?.date_of_match | date : "dd.MM.yyyy" }}
+      </p>
+      <p class="result-text">{{ match?.result }}</p>
+    </div>
+
+    <h2 class="statics-title">TEAM STATICS</h2>
+
+    <div class="statics-section">
+      <div *ngFor="let action of actionsTeam1" class="data-row">
+        <div class="data-cell">{{ action.goals }}</div>
+        <div class="data-cell">{{ action.assists }}</div>
+        <div class="data-cell">{{ action.yellow_cards }}</div>
+        <div class="data-cell">{{ action.red_cards }}</div>
+        <div class="data-cell">{{ action.offside }}</div>
+        <div class="data-cell">{{ action.shots }}</div>
+        <div class="data-cell">{{ action.shots_on_target }}</div>
+      </div>
+
+      <div class="header-row">
+        <div class="header-cell">Goals</div>
+        <div class="header-cell">Assists</div>
+        <div class="header-cell">Yellow Cards</div>
+        <div class="header-cell">Red Cards</div>
+        <div class="header-cell">Offside</div>
+        <div class="header-cell">Shots</div>
+        <div class="header-cell">Shots on Target</div>
+      </div>
+
+      <div *ngFor="let action of actionsTeam2" class="data-row">
+        <div class="data-cell">{{ action.goals }}</div>
+        <div class="data-cell">{{ action.assists }}</div>
+        <div class="data-cell">{{ action.yellow_cards }}</div>
+        <div class="data-cell">{{ action.red_cards }}</div>
+        <div class="data-cell">{{ action.offside }}</div>
+        <div class="data-cell">{{ action.shots }}</div>
+        <div class="data-cell">{{ action.shots_on_target }}</div>
+      </div>
+    </div>
+  </div>
+</div>
