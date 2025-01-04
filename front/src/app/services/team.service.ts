@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Environment } from '../../environments/environment';
 import { FormField } from '../app.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { League } from './league.service';
 import { SessionService } from './session.service';
 import { Request, Response } from 'express';
 import { Player } from './player.service';
@@ -14,11 +13,8 @@ export interface Team {
   matches_played: number;
   players: Player[];
   statics: number;
-  league_id: number;
   creator_id: number;
   creator_username?: string;
-  league_name?: string;
-  logo?: string;
 }
 
 export interface TeamColumns {
@@ -36,7 +32,7 @@ export class TeamService {
     private sessionService: SessionService
   ) {}
 
-  generateTeamFields(team: Team, leagues: League[]): FormField[] {
+  generateTeamFields(team: Team): FormField[] {
     return [
       {
         type: 'number',
@@ -60,24 +56,6 @@ export class TeamService {
         value: team.matches_played ?? '',
       },
       {
-        type: 'string',
-        name: 'league_name',
-        id: 'league_name',
-        placeholder: 'League Name',
-        value: team.league_id ?? '',
-      },
-      {
-        type: 'select',
-        name: 'league_id',
-        id: 'league_id',
-        placeholder: 'League',
-        value: team.league_name ?? '',
-        options: leagues.map((league) => ({
-          label: league.name,
-          value: league.id,
-        })),
-      },
-      {
         type: 'number',
         name: 'creator_id',
         id: 'creator_id',
@@ -98,13 +76,6 @@ export class TeamService {
         placeholder: 'Statics',
         value: team.statics ?? '',
       },
-      {
-        type: 'file',
-        name: 'logo',
-        id: 'logo',
-        placeholder: 'Logo',
-        value: team.logo ?? '',
-      },
     ];
   }
 
@@ -112,7 +83,6 @@ export class TeamService {
     { key: 'id', header: 'ID' },
     { key: 'name', header: 'Name' },
     { key: 'matches_played', header: 'Matches Played' },
-    { key: 'league_name', header: 'League' },
   ];
 
   staticsColumns = [
@@ -235,15 +205,6 @@ export class TeamService {
       });
   }
 
-  getLeagueNameById(leagueId: number): Promise<string> {
-    return axios
-      .get(`${this.envService.base_url}/leagues/${leagueId}`)
-      .then((response) => response.data.name)
-      .catch((error) => {
-        console.error('Error fetching league name:', error);
-        throw error;
-      });
-  }
   async getCreatorUsernameById(creatorId: number): Promise<string> {
     return axios
       .get(`${this.envService.base_url}/users/${creatorId}`)
@@ -252,20 +213,6 @@ export class TeamService {
         console.error('Error fetching creator username:', error);
         throw error;
       });
-  }
-
-  async getAllTeamsWithLeagueName(): Promise<Team[]> {
-    try {
-      const teams = await this.getAllTeams();
-      const teamPromises = teams.map(async (team) => {
-        team.league_name = await this.getLeagueNameById(team.league_id);
-        return team;
-      });
-      return Promise.all(teamPromises);
-    } catch (error) {
-      console.error('Error fetching teams with league names:', error);
-      throw error;
-    }
   }
 
   async getTeamNamebyId(teamId: number): Promise<string> {

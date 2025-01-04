@@ -8,12 +8,10 @@ class TeamTournamentDisplay(BaseModel):
     id: int
     name: str
 class TeamCreate(TeamBase):
-    league_id: int
-    logo: Optional[str] = None
+    pass
     
 class TeamUpdate(TeamBase):
-    league_id: int
-
+    pass
 
 class TeamMatch(BaseModel):
     id: int
@@ -29,9 +27,7 @@ class Team(BaseModel):
     name:str
     matches_played: Optional[int] = 0
     players: Optional[List[Player]] = None
-    league_id: int
     creator_id: int
-    logo: Optional[str] = None
 
     class Config:
         from_attributes = True
