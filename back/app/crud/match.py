@@ -37,6 +37,9 @@ def create_match(db: Session, match: MatchCreate):
 def get_all_matches(db: Session):
     return db.query(models.Match).all()
 
+def get_matches_with_results(db: Session):
+    return db.query(models.Match).filter(models.Match.result != None).all()
+
 def get_match(db: Session, match_id: int):
     return db.query(models.Match).filter(models.Match.id == match_id).first()
 
@@ -115,6 +118,7 @@ def calculate_match_result(db: Session, match_id: int):
     check_and_update_tournament_status(db, db_match.tournament_id)
 
     return db_match
+
 
 
 

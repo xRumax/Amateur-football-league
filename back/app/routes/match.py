@@ -18,6 +18,12 @@ def read_matches(limit: Optional[int]= None, db: Session = Depends(get_db)):
     match_service = MatchService(db)
     return match_service.get_all_matches(limit=limit)
 
+
+@router.get("/matches_with_results", response_model=list[Match])
+def read_all_matches_with_results(db: Session = Depends(get_db)):
+    match_service = MatchService(db)
+    return match_service.get_matches_with_results()
+
 @router.get("/{match_id}", response_model=Match)
 def read_match(match_id: int, db: Session = Depends(get_db)):
     match_service = MatchService(db)
