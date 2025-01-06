@@ -17,7 +17,6 @@ def create_tournament(tournament: TournamentCreate, db: Session = Depends(get_db
     
     tournament_service = TournamentService(db)
 
-    # Check if the user already has an active tournament
     existing_active_tournament = tournament_service.get_active_tournament_by_user_id(current_user['user_id'])
     if existing_active_tournament:
         raise HTTPException(status_code=400, detail="User already has an active tournament")
@@ -38,7 +37,7 @@ def read_tournament(tournament_id: int, db: Session = Depends(get_db)):
     return db_tournament
 
 @router.put("/{tournament_id}", response_model=Tournament)
-def update_tournament(tournament_id: int, tournament: TournamentUpdate, db: Session = Depends(get_db)):
+def update_tournament(tournament_id: int, tournament: TournamentUpdate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     tournament_service = TournamentService(db)
     db_tournament = tournament_service.get_tournament(tournament_id)
     if db_tournament is None:
@@ -77,3 +76,14 @@ def read_tournament_teams(tournament_id: int, db: Session = Depends(get_db)):
     if db_tournament is None:
         raise HTTPException(status_code=404, detail="Tournament not found")
     return db_tournament.teams
+
+
+@router.get("/{tournament_id}/matches_with_results", response_model=list[Match])
+def read_tournament_matches_with_results(tournament_id: int, db: Session = Depends(get_db)):
+    tournament_service = TournamentService(db)
+    db_tournament = tournament_service.get_tournament(tournament_id)
+    if db_tournament is None:
+        raise HTTPException(status_code=404, detail="Tournament not found")
+    
+    result_matches = [match for match in db_tournament.matches if match.result ]
+    return result_matches

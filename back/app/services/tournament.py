@@ -81,10 +81,12 @@ class TournamentService:
     def check_and_update_tournament_status(self, tournament_id: int):
         db_tournament = self.get_tournament(tournament_id)
         if db_tournament:
-            all_matches_have_result = all(match.result is not None for match in db_tournament.matches)
+            all_matches_have_result = all(match.result is not None and match.result != "0" for match in db_tournament.matches)
             if all_matches_have_result:
                 db_tournament.is_active = False
                 self.db.commit()
+
+  
 
         
     
