@@ -11,6 +11,7 @@ class UserCreate(BaseModel):
     email: str
     password: str
     is_superuser: bool = Field(default=False)
+    is_referee: bool = Field(default=False)
 
 class UserUpdate(UserBase):
     pass
@@ -31,6 +32,7 @@ class User(BaseModel):
     password: str
     team: Optional[Team] = None
     is_superuser: bool
+    is_referee: bool
     tournaments: Optional[List[TournamentPlayerDisplay]] = None
 
     class Config:
