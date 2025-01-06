@@ -13,6 +13,7 @@ export interface UserResponse {
   password: string;
   team?: Team | null;
   is_superuser: boolean;
+  is_referee: boolean;
   tournaments: any[];
 }
 

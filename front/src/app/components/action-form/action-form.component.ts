@@ -59,7 +59,6 @@ export class ActionFormComponent implements OnInit {
       this.formGroup.addControl(field.name, control);
     });
 
-    // listener for team_id changes
     this.formGroup.get('team_id')?.valueChanges.subscribe((teamId) => {
       if (teamId) {
         this.loadPlayersByTeamId(teamId);

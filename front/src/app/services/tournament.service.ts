@@ -231,4 +231,18 @@ export class TournamentService {
         throw error;
       });
   }
+
+  getTournamentMatchesWithResult(tournamentId: number): Promise<Match[]> {
+    return axios
+      .get(
+        `${this.envService.base_url}/tournaments/${tournamentId}/matches_with_results`,
+        {
+          params: { result: true },
+        }
+      )
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Error fetching matches:', error);
+      });
+  }
 }

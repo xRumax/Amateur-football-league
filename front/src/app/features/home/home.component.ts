@@ -47,7 +47,6 @@ export class HomeComponent {
   async loadTournaments(): Promise<void> {
     try {
       const allTournaments = await this.tournamentService.getTournaments();
-      // Only show active tournaments and limit to 3
       this.tournaments = allTournaments.filter(
         (tournament) => tournament.is_active === true
       );

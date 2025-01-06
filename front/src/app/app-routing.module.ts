@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-//routes
 import { routes_login } from './features/login/login-routing.module';
 import { routes_home } from './features/home/home-routing.module';
 import { routes_profile } from './features/profile/profile-routing.module';

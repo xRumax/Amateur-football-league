@@ -65,13 +65,12 @@ export class PlayerDetailsComponent implements OnInit {
       const [teamName] = await Promise.all([teamNamePromise]);
 
       if (this.player && this.player.team_id) {
-        this.player.team_name = teamName ?? undefined; // Set the league name
+        this.player.team_name = teamName ?? undefined;
       }
     }
 
     this.playerColumnKeys = this.playerColumns.map((column) => column.key);
 
-    // Assign player data to dataSource
     if (this.player) {
       this.dataSource.data = [this.player];
     }

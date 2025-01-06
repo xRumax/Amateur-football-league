@@ -14,9 +14,9 @@
       <span>|</span>
       <li>
         <a
-          (click)="switchView('match-ladder')"
-          [class.active]="currentView === 'match-ladder'"
-          >Match Ladder</a
+          (click)="switchView('matches')"
+          [class.active]="currentView === 'matches'"
+          >Matches</a
         >
       </li>
     </ul>
@@ -31,6 +31,12 @@
           team.name
         }}</mat-card-title>
       </mat-card>
+    </div>
+  </div>
+
+  <div *ngIf="currentView === 'matches'" class="matches-section">
+    <div class="card-container">
+      <app-card-matches [dataType]="'tournament-matches'"></app-card-matches>
     </div>
   </div>
 </div>

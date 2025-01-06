@@ -72,4 +72,14 @@ export class MatchService {
         throw error;
       });
   }
+
+  getMatchesWithResults(): Promise<Match[]> {
+    return axios
+      .get(`${this.envService.base_url}/matches/matches_with_results`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('Error fetching matches with results:', error);
+        throw error;
+      });
+  }
 }

@@ -25,7 +25,6 @@ export class MatchDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     const matchId = this.route.snapshot.paramMap.get('id');
-    console.log('ngOnInit - matchId:', matchId); // Dodaj debugowanie
     if (matchId) {
       this.matchId = Number(matchId);
       this.loadMatchDetails();
@@ -36,7 +35,6 @@ export class MatchDetailsComponent implements OnInit {
   async loadMatchDetails(): Promise<void> {
     try {
       this.match = await this.matchService.getMatchById(this.matchId);
-      console.log('loadMatchDetails - match:', this.match); // Dodaj debugowanie
       if (this.match) {
         this.loadActions();
       }
@@ -47,7 +45,6 @@ export class MatchDetailsComponent implements OnInit {
 
   async loadActions(): Promise<void> {
     try {
-      console.log('loadActions - matchId:', this.matchId); // Dodaj debugowanie
       if (this.match) {
         this.actionsTeam1 = await this.actionService.getMatchActionsForTeam(
           this.matchId,
@@ -57,8 +54,6 @@ export class MatchDetailsComponent implements OnInit {
           this.matchId,
           this.match.team_2.id
         );
-        console.log('loadActions - actionsTeam1:', this.actionsTeam1); // Dodaj debugowanie
-        console.log('loadActions - actionsTeam2:', this.actionsTeam2); // Dodaj debugowanie
       }
     } catch (error) {
       console.error('Error loading match actions:', error);

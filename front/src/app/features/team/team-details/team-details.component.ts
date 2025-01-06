@@ -19,9 +19,9 @@ export class TeamDetailsComponent implements OnInit {
   totalNumOfRedCards: number = 0;
 
   fields: any[] = [];
-  dataSource = new MatTableDataSource<Player>(); // Initialize dataSource here
-  staticsDataSource = new MatTableDataSource<any>([]); // Additional dataSource for statics
-  id: number = 0; // Initialize id as number
+  dataSource = new MatTableDataSource<Player>();
+  staticsDataSource = new MatTableDataSource<any>([]);
+  id: number = 0;
   team: Team | undefined;
   isCreator: boolean = false;
 
@@ -54,7 +54,6 @@ export class TeamDetailsComponent implements OnInit {
 
       this.dataSource.data = players;
 
-      // Calculate totals
       this.totalNumOfGoals = players.reduce(
         (sum: number, player: any) => sum + (player.num_of_goals || 0),
         0
@@ -68,7 +67,6 @@ export class TeamDetailsComponent implements OnInit {
         0
       );
 
-      // Update staticsDataSource with totals
       this.staticsDataSource.data = [
         {
           num_of_goals: this.totalNumOfGoals,
@@ -105,9 +103,7 @@ export class TeamDetailsComponent implements OnInit {
       width: '600px',
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      // Handle the result from the dialog here
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   openAddPlayerDialog(): void {
@@ -121,8 +117,6 @@ export class TeamDetailsComponent implements OnInit {
       width: '600px',
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      // Handle the result from the dialog here
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 }

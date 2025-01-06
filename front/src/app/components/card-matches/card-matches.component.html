@@ -1,6 +1,12 @@
 <!-------------------Match history--------------------->
-<div *ngIf="dataType === 'match-finished'" class="type">
-  <div class="card-container" *ngFor="let match of matches">
+<div
+  *ngIf="dataType === 'match-finished' || dataType === 'tournament-matches'"
+  class="type"
+>
+  <div *ngIf="filteredMatches.length === 0">
+    <p>There are no matches yet</p>
+  </div>
+  <div class="card-container" *ngFor="let match of filteredMatches">
     <mat-card
       class="card-container-items"
       appearance="outlined"
@@ -21,6 +27,9 @@
 </div>
 <!-------------------------------All Matches (Match Manager)----------------------->
 <div *ngIf="dataType === 'matches'" class="type">
+  <div *ngIf="matches.length === 0">
+    <p>There are no matches yet</p>
+  </div>
   <div class="card-container" *ngFor="let match of matches">
     <mat-card
       class="card-container-items"
@@ -33,23 +42,6 @@
           <p>{{ match.date_of_match | date : "dd.MM.yyyy" }}</p>
           <div class="versus"><span>VS</span></div>
         </div>
-        <span>{{ match.team_2.name }}</span>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>
-
-<!-------------------------------Tournament Matches----------------------->
-<div *ngIf="dataType === 'tournament-matches'" class="type">
-  <div class="card-container" *ngFor="let match of matches">
-    <mat-card
-      class="card-container-items"
-      appearance="outlined"
-      (click)="onCardClicked(match.id)"
-    >
-      <mat-card-content class="card-container-teams-name">
-        <span>{{ match.team_1.name }}</span>
-        <div class="versus"><span>VS</span></div>
         <span>{{ match.team_2.name }}</span>
       </mat-card-content>
     </mat-card>

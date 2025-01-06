@@ -20,10 +20,10 @@ export class TournamentDetailsComponent {
   teams: any = [];
   tournament: Tournament | undefined;
   matches: Match[] = [];
-  tournamentId: number = 0;
   fields: FormField[] = [];
-  currentView: 'teams' | 'match-ladder' = 'teams';
+  currentView: 'teams' | 'matches' = 'teams';
   isCreator: boolean = false;
+  tournamentMatches: Match[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -36,7 +36,6 @@ export class TournamentDetailsComponent {
     const tournamentId = this.route.snapshot.paramMap.get('id');
     if (tournamentId) {
       this.loadTournamentDetails(Number(tournamentId));
-      this.loadTournamentMatches(Number(tournamentId));
       this.loadTournamentTeams(Number(tournamentId));
     }
 
@@ -60,19 +59,7 @@ export class TournamentDetailsComponent {
       });
   }
 
-  async loadTournamentMatches(tournamentId: Number): Promise<void> {
-    try {
-      const tournamentMatches =
-        await this.tournamentService.getMatchesByTournamentId(
-          Number(tournamentId)
-        );
-      this.matches = tournamentMatches;
-    } catch (error) {
-      console.error('Error loading Matches:', error);
-    }
-  }
-
-  switchView(view: 'teams' | 'match-ladder'): void {
+  switchView(view: 'teams' | 'matches'): void {
     this.currentView = view;
   }
 

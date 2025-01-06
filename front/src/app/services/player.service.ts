@@ -158,7 +158,6 @@ export class PlayerService {
   createPlayer(playerData: any): Promise<Player> {
     const token = this.sessionService.getToken();
 
-    // Mapping values from int to string
     if (playerData.sex === 1) {
       playerData.sex = 'Male';
     } else if (playerData.sex === 2) {

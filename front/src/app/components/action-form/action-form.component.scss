@@ -1,6 +1,6 @@
 .form-container form {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap; /* Dodaj, aby elementy mogły się zawijać, jeśli jest ich za dużo w jednym rzędzie */
-  gap: 16px; /* Dodaj odstępy między elementami */
+  flex-wrap: wrap;
+  gap: 16px;
 }

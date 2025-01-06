@@ -4,27 +4,8 @@
     <div class="vs-text">VS</div>
     <h1 class="team-name">{{ match?.team_2?.name | uppercase }}</h1>
   </div>
-  <!-- <div class="components-btn-con">
-    <ul>
-      <li>
-        <a
-          (click)="switchView('result')"
-          [class.active]="currentView === 'result'"
-          >Result</a
-        >
-      </li>
-      <span>|</span>
-      <li>
-        <a
-          (click)="switchView('statics')"
-          [class.active]="currentView === 'statics'"
-          >Statics</a
-        >
-      </li>
-    </ul>
-  </div> -->
+
   <div class="container">
-    <!-- <h2>RESULT</h2> -->
     <div class="result-section">
       <p class="date-text">
         {{ match?.date_of_match | date : "dd.MM.yyyy" }}

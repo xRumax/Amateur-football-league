@@ -9,7 +9,6 @@ import { FormModule } from './components/form/form.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 
-// Components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './features/login/login.component';
@@ -25,7 +24,6 @@ import { PlayerDetailsComponent } from './features/player/player-details/player-
 import { TournamentCreateComponent } from './features/tournament/tournament-create/tournament-create.component';
 import { TournamentBaseComponent } from './features/tournament/tournament-base/tournament-base.component';
 
-// Modules
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatToolbarModule } from '@angular/material/toolbar';

@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Environment } from '../../environments/environment';
 import { SessionService } from './session.service';
 import { Router } from '@angular/router';
+import { UserService } from './user.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +16,8 @@ export class AuthService {
   constructor(
     private envService: Environment,
     private sessionService: SessionService,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   login(email: string, password: string): Observable<any> {
@@ -27,20 +30,25 @@ export class AuthService {
         .then((response) => {
           if (response.data.access_token) {
             this.isUserLoggedIn = true;
-            localStorage.setItem('isLoggedIn', 'true'); // Set the login state
-            localStorage.setItem('access_token', response.data.access_token); // Save the JWT to localStorage
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('access_token', response.data.access_token);
+            const decodedToken: any = jwtDecode(response.data.access_token);
+            const userId = decodedToken.user_id;
 
-            axios
-              .get(`${this.envService.base_url}/users/me`, {
-                headers: {
-                  Authorization: `Bearer ${response.data.access_token}`,
-                },
-              })
+            this.userService
+              .getUser(userId)
               .then((userResponse) => {
-                const userId = userResponse.data.user_id; // Replace 'user_id' with the actual key in the response
+                const isReferee = userResponse.is_referee;
+                localStorage.setItem(
+                  'is_referee',
+                  isReferee ? 'true' : 'false'
+                );
+                observer.next(response.data);
+                observer.complete();
+              })
+              .catch((error) => {
+                observer.error('Error fetching user data');
               });
-            observer.next(response.data);
-            observer.complete();
           } else {
             observer.error('Invalid email or password');
           }
@@ -62,6 +70,11 @@ export class AuthService {
     return this.isUserLoggedIn;
   }
 
+  isReferee(): boolean {
+    const isReferee = localStorage.getItem('is_referee');
+    return isReferee === 'true';
+  }
+
   register(
     username: string,
     email: string,
@@ -76,6 +89,9 @@ export class AuthService {
     this.isUserLoggedIn = false;
     localStorage.setItem('isLoggedIn', 'false');
     this.sessionService.clearSession();
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('is_referee');
+    localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }
 }
