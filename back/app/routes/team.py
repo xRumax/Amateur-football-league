@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, Form
 from sqlalchemy.orm import Session
 from app.schemas.team import TeamCreate, TeamUpdate, Team
 from app.services.team import TeamService
 from app.database import get_db
 from app.utils.auth import get_current_user
-from app.services.upload_service import UploadService
 
 router = APIRouter(prefix="/teams", tags=["teams"])
 
