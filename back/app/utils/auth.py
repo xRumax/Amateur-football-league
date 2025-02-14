@@ -12,7 +12,6 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(o
     token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print('Decoded Token:', payload)   # Logging the decoded token
         return payload
     except JWTError:
         raise HTTPException(
@@ -55,5 +54,6 @@ def hash_password(password: str) -> str:
 
 def verify_password(password: str, hashed_password: str):
     return pwd_context.verify(password, hashed_password)
+
 
 

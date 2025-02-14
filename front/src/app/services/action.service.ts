@@ -21,7 +21,6 @@ export interface Action {
 export interface MatchStatics {
   team_id: number;
   goals: number;
-  assists: number;
   yellow_cards: number;
   red_cards: number;
   offside: number;
@@ -78,14 +77,10 @@ export class ActionService {
           { label: 'Assist', value: 'Assist' },
           { label: 'Yellow Card', value: 'Yellow Card' },
           { label: 'Red Card', value: 'Red Card' },
-          { label: 'Substitution', value: 'Substitution' },
           { label: 'Offside', value: 'Offside' },
           { label: 'Corner', value: 'Corner' },
-          { label: 'Free Kick', value: 'Free Kick' },
-          { label: 'Penalty', value: 'Penalty' },
           { label: 'Shot', value: 'Shot' },
           { label: 'Shot On Target', value: 'Shot On Target' },
-          { label: 'Foul', value: 'Foul' },
         ],
         value: action.action_type ?? '',
       },
@@ -111,14 +106,10 @@ export class ActionService {
           { label: 'Assist', value: 'Assist' },
           { label: 'Yellow Card', value: 'Yellow Card' },
           { label: 'Red Card', value: 'Red Card' },
-          { label: 'Substitution', value: 'Substitution' },
           { label: 'Offside', value: 'Offside' },
           { label: 'Corner', value: 'Corner' },
-          { label: 'Free Kick', value: 'Free Kick' },
-          { label: 'Penalty', value: 'Penalty' },
           { label: 'Shot', value: 'Shot' },
           { label: 'Shot On Target', value: 'Shot On Target' },
-          { label: 'Foul', value: 'Foul' },
         ],
         value: action.action_type ?? '',
       },

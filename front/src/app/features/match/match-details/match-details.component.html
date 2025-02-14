@@ -13,12 +13,11 @@
       <p class="result-text">{{ match?.result }}</p>
     </div>
 
-    <h2 class="statics-title">TEAM STATICS</h2>
+    <h2 class="statics-title">TEAM STATISTICS</h2>
 
     <div class="statics-section">
       <div *ngFor="let action of actionsTeam1" class="data-row">
         <div class="data-cell">{{ action.goals }}</div>
-        <div class="data-cell">{{ action.assists }}</div>
         <div class="data-cell">{{ action.yellow_cards }}</div>
         <div class="data-cell">{{ action.red_cards }}</div>
         <div class="data-cell">{{ action.offside }}</div>
@@ -28,7 +27,6 @@
 
       <div class="header-row">
         <div class="header-cell">Goals</div>
-        <div class="header-cell">Assists</div>
         <div class="header-cell">Yellow Cards</div>
         <div class="header-cell">Red Cards</div>
         <div class="header-cell">Offside</div>
@@ -38,7 +36,6 @@
 
       <div *ngFor="let action of actionsTeam2" class="data-row">
         <div class="data-cell">{{ action.goals }}</div>
-        <div class="data-cell">{{ action.assists }}</div>
         <div class="data-cell">{{ action.yellow_cards }}</div>
         <div class="data-cell">{{ action.red_cards }}</div>
         <div class="data-cell">{{ action.offside }}</div>

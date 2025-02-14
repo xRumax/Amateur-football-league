@@ -1,5 +1,6 @@
 <mat-toolbar class="nav-bar">
   <span class="nav-bar-logo">AFL</span>
+  <div class="referee-info-panel" *ngIf="isReferee">Referee Panel</div>
   <div class="nav-bar-links">
     <ul>
       <li>
@@ -10,7 +11,7 @@
           >Home</a
         >
       </li>
-      <li *ngIf="isLoggedIn">
+      <li *ngIf="isLoggedIn && !isReferee">
         <a
           routerLink="/profile"
           [class.active]="isActive('/profile')"
@@ -43,7 +44,7 @@
         <div class="nav-bar-submenu-block">
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
-              <li *ngIf="isLoggedIn">
+              <li *ngIf="isLoggedIn && !isReferee">
                 <a routerLink="/team-create"
                   ><div
                     [ngClass]="{
@@ -65,7 +66,7 @@
                   </div></a
                 >
               </li>
-              <li *ngIf="isLoggedIn">
+              <li *ngIf="isLoggedIn && !isReferee">
                 <a (click)="navigateToMyTeam()"
                   ><div
                     [ngClass]="{
@@ -88,7 +89,9 @@
           ><div
             [ngClass]="{
               'active-link':
-                isActive('/matches-finished') || isActive('/match-manager')
+                isActive('/matches-finished') ||
+                isActive('/match-manager') ||
+                isActive('/match')
             }"
           >
             Matches
@@ -108,7 +111,7 @@
                   </div></a
                 >
               </li>
-              <li *ngIf="isLoggedIn">
+              <li *ngIf="isLoggedIn && isReferee">
                 <a routerLink="/match-manager"
                   ><div
                     [ngClass]="{
@@ -137,7 +140,8 @@
               'active-link':
                 isActive('/players') ||
                 isActive('/players-base') ||
-                isActive('/player-create')
+                isActive('/player-create') ||
+                isActive('/player')
             }"
           >
             Players
@@ -146,7 +150,7 @@
         <div class="nav-bar-submenu-block">
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
-              <li *ngIf="isLoggedIn">
+              <li *ngIf="isLoggedIn && isReferee === false">
                 <a (click)="navigateToCreatePlayer()"
                   ><div
                     [ngClass]="{
@@ -182,7 +186,7 @@
         <div class="nav-bar-submenu-block">
           <div class="nav-bar-submenu-padding">
             <ul class="nav-bar-level2">
-              <li *ngIf="isLoggedIn">
+              <li *ngIf="isLoggedIn && !isReferee">
                 <a routerLink="/tournament-create"
                   ><div
                     [ngClass]="{
@@ -204,7 +208,7 @@
                   </div></a
                 >
               </li>
-              <li *ngIf="isLoggedIn">
+              <li *ngIf="isLoggedIn && !isReferee">
                 <a (click)="navigateToMyTournament()"
                   ><div
                     [ngClass]="{

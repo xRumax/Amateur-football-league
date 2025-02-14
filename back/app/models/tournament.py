@@ -25,3 +25,4 @@ class Tournament(Base):
     creator = relationship("User", back_populates="tournaments")
 
     actions = relationship("Action", back_populates="tournaments")
+    tournament_table = relationship("TournamentTable", back_populates="tournament")

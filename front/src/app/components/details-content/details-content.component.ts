@@ -49,7 +49,11 @@ export class DetailsContentComponent implements OnInit {
         team.creator_id
       );
       const fields = this.teamService.generateTeamFields(team);
-      this.fields = [...fields.slice(1, 5), ...fields.slice(6, 7)];
+      this.fields = [
+        ...fields.slice(1, 3),
+        ...fields.slice(4, 5),
+        ...fields.slice(6, 7),
+      ];
     } catch (error) {
       console.error('Error loading team details:', error);
     }

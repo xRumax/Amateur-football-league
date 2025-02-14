@@ -73,9 +73,11 @@ export class MatchService {
       });
   }
 
-  getMatchesWithResults(): Promise<Match[]> {
+  getMatchesWithResults(limit?: number): Promise<Match[]> {
     return axios
-      .get(`${this.envService.base_url}/matches/matches_with_results`)
+      .get(`${this.envService.base_url}/matches/matches_with_results`, {
+        params: limit ? { limit } : {},
+      })
       .then((response) => response.data)
       .catch((error) => {
         console.error('Error fetching matches with results:', error);

@@ -17,7 +17,11 @@ export class CardMatchesComponent {
   teamNames: { [key: number]: string } = {};
   filteredMatches: Match[] = [];
 
-  @Input() dataType!: 'match-finished' | 'matches' | 'tournament-matches';
+  @Input() dataType!:
+    | 'match-finished'
+    | 'matches'
+    | 'tournament-matches'
+    | 'home';
 
   constructor(
     private teamService: TeamService,
@@ -36,6 +40,8 @@ export class CardMatchesComponent {
       this.loadMatchManager();
     } else if (this.dataType === 'tournament-matches') {
       this.loadTournamentMatches(Number(tournamentId));
+    } else if (this.dataType === 'home') {
+      this.loadMatchesHome();
     }
   }
 
@@ -47,6 +53,17 @@ export class CardMatchesComponent {
       });
     } catch (error) {
       console.error('Error loading teams:', error);
+    }
+  }
+
+  async loadMatchesHome(): Promise<void> {
+    try {
+      const allMatches = await this.matchService.getMatchesWithResults(3);
+      this.filteredMatches = allMatches.filter((match) => {
+        return match.result != null || match.result != undefined;
+      });
+    } catch (error) {
+      console.error('Error loading Matches:', error);
     }
   }
 
@@ -89,6 +106,8 @@ export class CardMatchesComponent {
     if (this.dataType === 'matches') {
       this.router.navigate(['/match-update', matchId]);
     } else if (this.dataType === 'match-finished') {
+      this.router.navigate(['/match', matchId]);
+    } else if (this.dataType === 'home') {
       this.router.navigate(['/match', matchId]);
     }
   }

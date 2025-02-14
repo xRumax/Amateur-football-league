@@ -4,6 +4,7 @@ from app.models import tournament as models
 from datetime import datetime, timedelta
 from app.models.action import Action
 from app.models.match import Match
+from app.models.tournament_table import TournamentTable
 
 def create_tournament(db: Session, tournament: TournamentCreate, creator_id: int):
     today = datetime.today().date()
@@ -34,6 +35,8 @@ def delete_tournament(db: Session, tournament_id: int):
         db.query(Action).filter(Action.tournament_id == tournament_id).delete()
         db.commit()
         db.query(Match).filter(Match.tournament_id == tournament_id).delete()
+        db.commit()
+        db.query(TournamentTable).filter(TournamentTable.tournament_id == tournament_id).delete()
         db.commit()
         
         db.delete(db_tournament)

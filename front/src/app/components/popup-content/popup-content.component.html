@@ -1,8 +1,27 @@
-<div class="main-container">
+<div
+  class="main-container"
+  *ngIf="data.dataType != 'edit-form' && data.dataType != 'action-form'"
+>
   <h1>{{ title }}</h1>
   <p>{{ message }}</p>
   <div class="btn-con">
     <button mat-button (click)="cancel()">No</button>
     <button mat-button class="yes-btn" (click)="confirmFunction()">Yes</button>
+  </div>
+</div>
+
+<div class="main-container" *ngIf="data.dataType === 'edit-form'">
+  <h1 mat-dialog-title>Are you sure?</h1>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="false">No</button>
+    <button mat-button [mat-dialog-close]="true" color="primary">Yes</button>
+  </div>
+</div>
+
+<div class="main-container" *ngIf="data.dataType === 'action-form'">
+  <h1 mat-dialog-title>Are you sure?</h1>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="false">No</button>
+    <button mat-button [mat-dialog-close]="true" color="primary">Yes</button>
   </div>
 </div>

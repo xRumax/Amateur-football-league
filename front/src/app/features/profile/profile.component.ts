@@ -34,7 +34,6 @@ export class ProfileComponent {
   openEditDialog(): void {
     const dialogRef = this.dialog.open(FormComponent, {
       data: {
-        title: 'Edit Form',
         formType: 'user',
         data: { fields: this.fields },
       },

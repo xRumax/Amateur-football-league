@@ -14,7 +14,7 @@ class Player(Base):
     name = Column(String)
     last_name = Column(String)
     date_of_birth = Column(Date)
-    sex = Column(SQLEnum(SexEnum))
+    gender = Column(SQLEnum(SexEnum))
 
     # Relationship with team
     team_id  = Column(Integer, ForeignKey("teams.id"))

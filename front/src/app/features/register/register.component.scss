@@ -58,6 +58,29 @@
   outline: none;
   box-shadow: none;
 }
+.input-box .info-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.input-box .info-icon:hover::after {
+  content: "Password should contain at least 8 characters, including one special character (@!?#$%^&*()) and one uppercase letter.";
+  position: absolute;
+  top: -80px;
+  left: -20px;
+  background: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: normal;
+  width: 200px;
+}
 
 .input-box i {
   position: absolute;

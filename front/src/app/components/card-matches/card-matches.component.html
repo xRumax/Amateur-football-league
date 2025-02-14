@@ -47,3 +47,28 @@
     </mat-card>
   </div>
 </div>
+
+<!----------------------------------Match Home-------------------------->
+<div *ngIf="dataType === 'home'" class="type">
+  <div *ngIf="filteredMatches.length === 0">
+    <p>There are no matches yet</p>
+  </div>
+  <div class="card-container" *ngFor="let match of filteredMatches">
+    <mat-card
+      class="card-container-items"
+      appearance="outlined"
+      (click)="onCardClicked(match.id)"
+    >
+      <mat-card-content class="card-container-teams-name">
+        <span>{{ match.team_1.name }}</span>
+        <div class="date-info">
+          <p>{{ match.date_of_match | date : "dd.MM.yyyy" }}</p>
+          <div class="result">
+            <p>{{ match.result }}</p>
+          </div>
+        </div>
+        <span>{{ match.team_2.name }}</span>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

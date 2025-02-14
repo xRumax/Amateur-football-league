@@ -1,13 +1,10 @@
-<div class="mat-elevation-z8">
-  <div
-    *ngIf="
-      dataType !== 'teamPlayers' &&
-      dataType !== 'teamStatics' &&
-      dataType !== 'playerStatics' &&
-      dataType !== 'matchStatics'
-    "
-    class="search-bar"
-  >
+<div
+  *ngIf="
+    dataType === 'player' || dataType === 'team' || dataType === 'teamPlayers'
+  "
+  class="mat-elevation-z8"
+>
+  <div *ngIf="dataType !== 'teamPlayers'" class="search-bar">
     <mat-form-field>
       <mat-label>Search</mat-label>
       <input
@@ -18,17 +15,7 @@
     </mat-form-field>
   </div>
 
-  <table
-    *ngIf="
-      dataType !== 'teamStatics' &&
-      dataType !== 'playerStatics' &&
-      dataType !== 'matchStatics'
-    "
-    mat-table
-    [dataSource]="data"
-    matSort
-    class="mat-elevation-z8"
-  >
+  <table mat-table [dataSource]="data" matSort class="mat-elevation-z8">
     <!-- Header row definition -->
     <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="{{ column.key }}">
@@ -46,19 +33,27 @@
       (click)="onRowClicked(row)"
     ></tr>
   </table>
-
-  <!----------------------table for team statics (no sorting)------------------------>
-
-  <table
-    *ngIf="
-      dataType === 'teamStatics' ||
-      dataType === 'playerStatics' ||
-      dataType === 'matchStatics'
-    "
-    mat-table
-    [dataSource]="data"
-    class="mat-elevation-z8"
+  <mat-paginator
+    *ngIf="dataType !== 'teamPlayers'"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
   >
+  </mat-paginator>
+</div>
+
+<!----------------------table for team statics (no sorting)------------------------>
+<div
+  *ngIf="
+    dataType === 'teamStatics' ||
+    dataType === 'playerStatics' ||
+    dataType === 'matchStatics' ||
+    dataType === 'tournamentTable'
+  "
+  class="mat-elevation-z8"
+>
+  <table mat-table [dataSource]="data" class="mat-elevation-z8">
     <!-- Header row definition -->
     <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
       <th mat-header-cell *matHeaderCellDef>
@@ -76,18 +71,4 @@
       (click)="onRowClicked(row)"
     ></tr>
   </table>
-
-  <mat-paginator
-    *ngIf="
-      dataType !== 'teamPlayers' &&
-      dataType !== 'teamStatics' &&
-      dataType !== 'playerStatics' &&
-      dataType !== 'matchStatics'
-    "
-    [pageSize]="10"
-    [pageSizeOptions]="[5, 10, 20]"
-    showFirstLastButtons
-    aria-label="Select page of periodic elements"
-  >
-  </mat-paginator>
 </div>

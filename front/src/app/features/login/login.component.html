@@ -13,10 +13,9 @@
               email
               (keyup.enter)="login()"
             />
-            <label class="placeholder-label">Email</label>
+            <label class="placeholder-label" type="Email">Email</label>
             <i class="bx bxs-user"></i>
           </div>
-
           <div class="input-box">
             <input
               id="password"
@@ -31,10 +30,6 @@
             <i class="bx bxs-lock-alt"></i>
           </div>
 
-          <div class="remember-forgot">
-            <label><input type="checkbox" />Remember me</label>
-            <a routerLink="#"> Forgot password?</a>
-          </div>
           <button mat-button class="btn">Login</button>
         </form>
         <mat-error *ngIf="errorMessage" class="error-message">{{

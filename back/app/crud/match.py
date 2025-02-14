@@ -46,22 +46,10 @@ def get_match(db: Session, match_id: int):
 def update_match(db: Session, match: MatchUpdate, match_id: int):
     db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
     if db_match:
-        previous_result = db_match.result
         db.query(models.Match).filter(models.Match.id == match_id).update(match.dict())
         db.commit()
         db.refresh(db_match)
 
-        # Update matches_played for both teams if result is not None
-        if db_match.result is not None and previous_result is None:
-            team_1 = db.query(team_models.Team).filter(team_models.Team.id == db_match.team_1_id).first()
-            team_2 = db.query(team_models.Team).filter(team_models.Team.id == db_match.team_2_id).first()
-
-            if team_1:
-                team_1.matches_played = team_1.matches_played + 1 if team_1.matches_played is not None else 1
-            if team_2:
-                team_2.matches_played = team_2.matches_played + 1 if team_2.matches_played is not None else 1
-
-            db.commit()
 
     return get_match(db=db, match_id=match_id)
 
@@ -114,6 +102,18 @@ def calculate_match_result(db: Session, match_id: int):
     db_match.result = result
     db.commit()
     db.refresh(db_match)
+
+    # Update matches_played for both teams if result is not None
+    if db_match.result is not None:
+        team_1 = db.query(team_models.Team).filter(team_models.Team.id == db_match.team_1_id).first()
+        team_2 = db.query(team_models.Team).filter(team_models.Team.id == db_match.team_2_id).first()
+
+        if team_1:
+            team_1.matches_played = team_1.matches_played + 1 if team_1.matches_played is not None else 1
+        if team_2:
+            team_2.matches_played = team_2.matches_played + 1 if team_2.matches_played is not None else 1
+
+        db.commit()
 
     check_and_update_tournament_status(db, db_match.tournament_id)
 

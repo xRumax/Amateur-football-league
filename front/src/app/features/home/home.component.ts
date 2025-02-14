@@ -23,7 +23,6 @@ export class HomeComponent {
 
   ngOnInit(): void {
     this.loadMatches();
-    this.loadTournaments();
     this.addScrollEvent();
     this.checkSectionVisibility();
     this.makeHeroVisible();
@@ -31,7 +30,7 @@ export class HomeComponent {
 
   async loadMatches(): Promise<void> {
     try {
-      const allMatches = await this.matchService.getMatches(3);
+      const allMatches = await this.matchService.getMatchesWithResults(3);
       this.filteredMatches = allMatches
         .filter((match) => match.result && match.result.trim() !== '')
         .sort(
@@ -43,7 +42,6 @@ export class HomeComponent {
       console.error('Error loading Matches:', error);
     }
   }
-
   async loadTournaments(): Promise<void> {
     try {
       const allTournaments = await this.tournamentService.getTournaments();
@@ -52,20 +50,6 @@ export class HomeComponent {
       );
     } catch (error) {
       console.error('Error loading tournaments:', error);
-    }
-  }
-
-  async loadData(): Promise<void> {
-    try {
-      const [matches, tournaments] = await Promise.all([
-        this.matchService.getMatches(3),
-        this.tournamentService.getTournaments(3),
-      ]);
-
-      this.filteredMatches = matches;
-      this.tournaments = tournaments;
-    } catch (error) {
-      console.error('Error loading data:', error);
     }
   }
 

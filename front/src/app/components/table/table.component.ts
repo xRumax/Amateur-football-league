@@ -8,6 +8,10 @@ import { PlayerService, Player } from '../../services/player.service';
 import { ActionService } from '../../services/action.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupContentComponent } from '../popup-content/popup-content.component';
+import {
+  TournamentTableService,
+  TournamentTable,
+} from '../../services/tournament-table.py.service';
 
 @Component({
   selector: 'app-table',
@@ -21,13 +25,15 @@ export class TableComponent implements OnInit {
     | 'teamPlayers'
     | 'teamStatics'
     | 'playerStatics'
-    | 'matchStatics' = 'team';
+    | 'matchStatics'
+    | 'tournamentTable' = 'team';
   @Input() columns: { key: string; header: string }[] = [];
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @Input() teamId: number | null = null;
   @Input() playerId: number | null = null;
   @Input() matchId: number | null = null;
+  @Input() tournamentId: number | undefined;
 
   data: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 
@@ -37,7 +43,8 @@ export class TableComponent implements OnInit {
     private playerService: PlayerService,
     private router: Router,
     private actionService: ActionService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private tournamentTableService: TournamentTableService
   ) {}
 
   ngOnInit() {
@@ -55,11 +62,40 @@ export class TableComponent implements OnInit {
     } else if (this.dataType === 'playerStatics') {
       this.columns = this.actionService.playerStaticsColumns;
       this.loadPlayerStaticsData();
-    }
+    } else if (this.dataType === 'tournamentTable') {
+      this.loadTournamentTableData();
 
-    this.route.params.subscribe((params) => {
-      this.playerId = params['id'];
-    });
+      this.route.params.subscribe((params) => {
+        this.playerId = params['id'];
+      });
+    }
+  }
+
+  private async loadTournamentTableData() {
+    this.columns = this.tournamentTableService.tournamentTableColumns;
+
+    try {
+      const table = await this.tournamentTableService.getTournamentTable(
+        this.tournamentId!
+      );
+
+      // Pobierz nazwy drużyn
+      const updatedTable = await Promise.all(
+        table.map(async (row) => {
+          row.team_name = await this.teamService.getTeamNamebyId(row.team_id);
+          return row;
+        })
+      );
+
+      // Posortuj dane po kolumnie 'points'
+      updatedTable.sort((a, b) => b.points - a.points);
+
+      this.data = new MatTableDataSource<TournamentTable>(updatedTable);
+      this.data.paginator = this.paginator;
+      this.data.sort = this.sort;
+    } catch (error) {
+      console.error('Error fetching tournament table:', error);
+    }
   }
 
   private async loadTeamData() {

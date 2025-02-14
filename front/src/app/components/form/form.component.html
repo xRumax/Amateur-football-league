@@ -1,6 +1,16 @@
 <div class="form-container">
   <h1 *ngIf="formType === 'user'" class="header">Edit Profile</h1>
   <h1 *ngIf="formType === 'password'" class="header">Change Password</h1>
+  <h1
+    *ngIf="
+      formType === 'player-edit' ||
+      formType === 'team-edit' ||
+      formType === 'tournament-edit'
+    "
+    class="header"
+  >
+    Edit Form
+  </h1>
   <form
     [formGroup]="form"
     (ngSubmit)="submitForm()"

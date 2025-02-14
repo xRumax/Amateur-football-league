@@ -11,7 +11,7 @@ export interface Player {
   name: string;
   last_name: string;
   date_of_birth: string;
-  sex: string;
+  gender: string;
   team_id: number;
   team_name?: string;
   goals?: number;
@@ -76,14 +76,14 @@ export class PlayerService {
       },
       {
         type: 'select',
-        name: 'sex',
-        id: 'sex',
-        placeholder: 'Sex',
+        name: 'gender',
+        id: 'gender',
+        placeholder: 'Gender',
         options: [
           { label: 'Male', value: 1 },
           { label: 'Female', value: 2 },
         ],
-        value: player.sex ?? '',
+        value: player.gender ?? '',
       },
       {
         type: 'number',
@@ -158,10 +158,10 @@ export class PlayerService {
   createPlayer(playerData: any): Promise<Player> {
     const token = this.sessionService.getToken();
 
-    if (playerData.sex === 1) {
-      playerData.sex = 'Male';
-    } else if (playerData.sex === 2) {
-      playerData.sex = 'Female';
+    if (playerData.gender === 1) {
+      playerData.gender = 'Male';
+    } else if (playerData.gender === 2) {
+      playerData.gender = 'Female';
     }
     return axios
       .post(

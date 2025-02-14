@@ -7,7 +7,11 @@ import {
 } from '@angular/forms';
 import { UserService, UserResponse } from '../../services/user.service';
 import { TeamService } from '../../services/team.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog,
+} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PlayerService } from '../../services/player.service';
 import { SessionService } from '../../services/session.service';
@@ -16,7 +20,8 @@ import { MatchService } from '../../services/match.service';
 import { Router } from '@angular/router';
 import { NavigationService } from '../../services/navigation.service';
 import { Team } from '../../services/team.service';
-
+import { DetailsContentComponent } from '../details-content/details-content.component';
+import { PopupContentComponent } from '../popup-content/popup-content.component';
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -53,6 +58,7 @@ export class FormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private dialog: MatDialog,
     @Optional() public dialogRef: MatDialogRef<FormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private teamService: TeamService,
@@ -163,7 +169,7 @@ export class FormComponent implements OnInit {
     this.fields = this.playerService
       .generatePlayerFields(this.player)
       .filter((field) =>
-        ['name', 'last_name', 'date_of_birth', 'sex'].includes(field.name)
+        ['name', 'last_name', 'date_of_birth', 'gender'].includes(field.name)
       );
     this.initializeForm(this.fields);
     this.form.addControl('team_id', new FormControl(this.player.team_id || ''));
@@ -217,6 +223,32 @@ export class FormComponent implements OnInit {
   }
 
   async submitForm(): Promise<void> {
+    if (
+      this.formType === 'team-edit' ||
+      this.formType === 'user' ||
+      this.formType === 'player-edit' ||
+      this.formType === 'tournament-edit' ||
+      this.formType === 'password'
+    ) {
+      const dialogRef = this.dialog.open(PopupContentComponent, {
+        data: {
+          dataType: 'edit-form',
+        },
+        height: '150px',
+        width: '500px',
+      });
+
+      dialogRef.afterClosed().subscribe(async (confirmed: boolean) => {
+        if (confirmed) {
+          await this.handleFormSubmission();
+        }
+      });
+    } else {
+      await this.handleFormSubmission();
+    }
+  }
+
+  private async handleFormSubmission(): Promise<void> {
     if (this.form.valid) {
       try {
         switch (this.formType) {

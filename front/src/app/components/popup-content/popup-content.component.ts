@@ -11,7 +11,13 @@ import { PlayerService } from '../../services/player.service';
 import { NavigationService } from '../../services/navigation.service';
 
 interface DialogData {
-  dataType: 'profile' | 'team' | 'tournament' | 'player';
+  dataType:
+    | 'profile'
+    | 'team'
+    | 'tournament'
+    | 'player'
+    | 'edit-form'
+    | 'action-form';
   playerId?: number;
 }
 

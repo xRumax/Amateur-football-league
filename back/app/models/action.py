@@ -8,15 +8,11 @@ class ActionTypeEnum(PyEnum):
     Assist = "Assist"
     YellowCard = "Yellow Card"
     RedCard = "Red Card"
-    Substitution = "Substitution"
     Offside = "Offside"
     Corner = "Corner"
-    FreeKick = "Free Kick"
-    Penalty = "Penalty"
     Shot = "Shot"
     ShotOnTarget = "Shot On Target"
-    Foul = "Foul"
-    
+
 
 class Action(Base):
     __tablename__ = "actions"

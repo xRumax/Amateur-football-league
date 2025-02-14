@@ -8,6 +8,7 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { error } from 'console';
 
 @Injectable({
   providedIn: 'root',
@@ -24,9 +25,27 @@ export class AuthGuard implements CanActivate {
     | boolean
     | UrlTree {
     const isLoggedIn = this.authService.isLoggedIn();
+    const isReferee = this.authService.isReferee();
+    const currentUrl = state.url;
     if (!isLoggedIn) {
       this.router.navigate(['/login']);
       return false;
+    } else if (isLoggedIn && !isReferee) {
+      if (
+        currentUrl === '/match-manager' ||
+        currentUrl.startsWith('/match-update')
+      ) {
+        this.router.navigate(['/login']);
+        return false;
+      }
+    } else if (isLoggedIn && isReferee) {
+      if (
+        currentUrl !== '/match-manager' &&
+        !currentUrl.startsWith('/match-update')
+      ) {
+        this.router.navigate(['/login']);
+        return false;
+      }
     }
     return true;
   }

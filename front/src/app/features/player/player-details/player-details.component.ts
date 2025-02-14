@@ -28,7 +28,7 @@ export class PlayerDetailsComponent implements OnInit {
     { key: 'name', label: 'Name' },
     { key: 'last_name', label: 'Last Name' },
     { key: 'date_of_birth', label: 'Birthday' },
-    { key: 'sex', label: 'Sex' },
+    { key: 'gender', label: 'Gender' },
     { key: 'team_name', label: 'Team Name' },
   ];
 
@@ -101,7 +101,6 @@ export class PlayerDetailsComponent implements OnInit {
   openEditDialog(): void {
     const dialogRef = this.dialog.open(FormComponent, {
       data: {
-        title: 'Edit Form',
         formType: 'player-edit',
         playerId: this.playerId,
       },

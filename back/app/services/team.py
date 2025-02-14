@@ -4,6 +4,7 @@ from app.crud.team import create_team, get_all_teams, get_team, update_team, del
 from sqlalchemy.orm import Session
 from typing import Optional
 from sqlalchemy import select
+from fastapi import HTTPException
 from app.models.team import Team
 
 class TeamService:
@@ -11,6 +12,9 @@ class TeamService:
         self.db = db
 
     def create_team(self, team: TeamCreate, creator_id: str) -> models.Team:
+        if len(team.name) > 30:
+            raise HTTPException(status_code=400, detail="Team name cannot exceed 30 characters")
+        
         return create_team(self.db, team, creator_id)
 
     def get_all_teams(self) -> list[models.Team]:
@@ -20,6 +24,9 @@ class TeamService:
         return get_team(self.db, team_id)
 
     def update_team(self, team: TeamUpdate, team_id: int) -> Optional[models.Team]:
+        if team.name and len(team.name) > 30:
+            raise HTTPException(status_code=400, detail="Team name cannot exceed 30 characters")
+        
         return update_team(self.db, team, team_id)
 
     def delete_team(self, team_id: int) -> Optional[models.Team]:

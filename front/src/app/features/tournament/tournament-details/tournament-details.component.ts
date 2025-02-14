@@ -21,9 +21,10 @@ export class TournamentDetailsComponent {
   tournament: Tournament | undefined;
   matches: Match[] = [];
   fields: FormField[] = [];
-  currentView: 'teams' | 'matches' = 'teams';
+  currentView: 'teams' | 'matches' | 'table' = 'teams';
   isCreator: boolean = false;
   tournamentMatches: Match[] = [];
+  tournamentId: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -59,7 +60,7 @@ export class TournamentDetailsComponent {
       });
   }
 
-  switchView(view: 'teams' | 'matches'): void {
+  switchView(view: 'teams' | 'matches' | 'table'): void {
     this.currentView = view;
   }
 

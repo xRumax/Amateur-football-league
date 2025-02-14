@@ -13,9 +13,16 @@
               required
             />
             <label class="placeholder-label">Name</label>
+            <div
+              *ngIf="nameField.invalid && nameField.touched"
+              class="error-message"
+            >
+              Name is required
+            </div>
           </div>
           <div class="input-box">
             <input
+              class="custom-input"
               [(ngModel)]="email"
               #emailField="ngModel"
               name="email"
@@ -23,26 +30,61 @@
               email
             />
             <label class="placeholder-label">Email</label>
+            <div
+              *ngIf="emailField.invalid && emailField.touched"
+              class="error-message"
+            >
+              <div *ngIf="emailField.errors?.['required']">
+                Email is required
+              </div>
+              <div *ngIf="emailField.errors?.['email']">
+                Invalid email format
+              </div>
+            </div>
           </div>
           <div class="input-box">
             <input
               type="password"
+              class="custom-input"
               [(ngModel)]="password"
               #passwordField="ngModel"
               name="password"
               required
             />
             <label class="placeholder-label">Password</label>
+            <div
+              class="info-icon"
+              matTooltip="Password should contain at least 8 characters, including one special character (@!?#$%^&*()) and one uppercase letter."
+            >
+              <i class="fa fa-info-circle"></i>
+            </div>
+            <div
+              *ngIf="passwordField.invalid && passwordField.touched"
+              class="error-message"
+            >
+              <div *ngIf="passwordField.errors?.['required']">
+                Password is required
+              </div>
+            </div>
           </div>
           <div class="input-box">
             <input
               type="password"
+              class="custom-input"
               [(ngModel)]="confirmPassword"
               #confirmPasswordField="ngModel"
               name="confirmPassword"
               required
             />
             <label class="placeholder-label">Confirm Password</label>
+            <div
+              *ngIf="
+                confirmPasswordField.invalid && confirmPasswordField.touched
+              "
+              class="error-message"
+            >
+              Confirm Password is required
+            </div>
           </div>
           <button mat-button class="btn" (click)="register()">Register</button>
         </form>

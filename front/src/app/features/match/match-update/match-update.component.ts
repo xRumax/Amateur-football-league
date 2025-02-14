@@ -7,6 +7,8 @@ import { Team, TeamService } from '../../../services/team.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PopupContentComponent } from '../../../components/popup-content/popup-content.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-match-update',
@@ -28,7 +30,8 @@ export class MatchUpdateComponent implements OnInit {
     private route: ActivatedRoute,
     private playerService: PlayerService,
     private teamService: TeamService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -69,57 +72,69 @@ export class MatchUpdateComponent implements OnInit {
   }
 
   async submitAllForms(): Promise<void> {
-    const allActions = this.actionForms.map((formGroup) => {
-      const formFields = Object.keys(formGroup.controls).map((key) => ({
-        name: key,
-        value: formGroup.controls[key].value,
-      }));
-
-      const actionData: Action = {
-        id: 0,
-        action_type: String(
-          formFields
-            .filter((field) => field.name === 'action_type')
-            .map((field) => field.value)[0]
-        ),
-        minute: Number(
-          formFields
-            .filter((field) => field.name === 'minute')
-            .map((field) => field.value)[0]
-        ),
-        match_id: this.matchId,
-        player_id: Number(
-          formFields
-            .filter((field) => field.name === 'player_id')
-            .map((field) => field.value)[0]
-        ),
-        team_id: Number(
-          formFields
-            .filter((field) => field.name === 'team_id')
-            .map((field) => field.value)[0]
-        ),
-        tournament_id: this.match?.tournament_id ?? 0,
-      };
-
-      return actionData;
+    const dialogRef = this.dialog.open(PopupContentComponent, {
+      width: '250px',
+      data: {
+        message: 'Are you sure you want to submit all forms?',
+        dataType: 'action-form',
+      },
     });
 
-    try {
-      await this.actionService.createActions(allActions);
-      this.snackBar.open('Actions created successfully', 'Close', {
-        duration: 5000,
-      });
-      setTimeout(() => {
-        this.router.navigateByUrl('/matches-finished').then(() => {
-          window.location.reload();
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        const allActions = this.actionForms.map((formGroup) => {
+          const formFields = Object.keys(formGroup.controls).map((key) => ({
+            name: key,
+            value: formGroup.controls[key].value,
+          }));
+
+          const actionData: Action = {
+            id: 0,
+            action_type: String(
+              formFields
+                .filter((field) => field.name === 'action_type')
+                .map((field) => field.value)[0]
+            ),
+            minute: Number(
+              formFields
+                .filter((field) => field.name === 'minute')
+                .map((field) => field.value)[0]
+            ),
+            match_id: this.matchId,
+            player_id: Number(
+              formFields
+                .filter((field) => field.name === 'player_id')
+                .map((field) => field.value)[0]
+            ),
+            team_id: Number(
+              formFields
+                .filter((field) => field.name === 'team_id')
+                .map((field) => field.value)[0]
+            ),
+            tournament_id: this.match?.tournament_id ?? 0,
+          };
+
+          return actionData;
         });
-      }, 500);
-    } catch (error) {
-      console.error('Błąd przy zapisywaniu działań:', error);
-      this.snackBar.open('Error creating actions', 'Close', {
-        duration: 5000,
-      });
-    }
+
+        try {
+          await this.actionService.createActions(allActions);
+          this.snackBar.open('Actions created successfully', 'Close', {
+            duration: 5000,
+          });
+          setTimeout(() => {
+            this.router.navigateByUrl('/matches-finished').then(() => {
+              window.location.reload();
+            });
+          }, 500);
+        } catch (error) {
+          console.error('Błąd przy zapisywaniu działań:', error);
+          this.snackBar.open('Error creating actions', 'Close', {
+            duration: 5000,
+          });
+        }
+      }
+    });
   }
 
   removeForm(index: number): void {

@@ -53,7 +53,7 @@ export class UserService {
         type: 'password',
         name: 'password',
         id: 'password',
-        placeholder: 'Old Password',
+        placeholder: 'Current Password',
         value: '',
       },
       {

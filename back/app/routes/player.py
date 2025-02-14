@@ -3,8 +3,6 @@ from sqlalchemy.orm import Session
 from app.schemas.player import PlayerCreate, PlayerUpdate, Player
 from app.services.player import PlayerService
 from app.database import get_db
-from app.schemas.action import ActionPlayerDisplay
-from app.crud.action import get_player_action_summary
 
 router = APIRouter(prefix="/players", tags=["players"])
 

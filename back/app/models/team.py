@@ -28,3 +28,6 @@ class Team(Base):
     # Relationship with actions
     actions = relationship("Action", back_populates="teams")
 
+    # Relationship with tournament tables
+    tournament_tables = relationship("TournamentTable", back_populates="team")
+

@@ -18,8 +18,11 @@ class MatchService:
             query = query.limit(limit)
         return query.all()
     
-    def get_matches_with_results(self):
-        return get_matches_with_results(self.db)
+    def get_matches_with_results(self, limit: Optional[int] = None):
+        query = self.db.query(MatchModel).filter(MatchModel.result != None).order_by(MatchModel.date_of_match)
+        if limit:
+            query = query.limit(limit)
+        return query.all()
     
     def get_match(self, match_id: int) -> Optional[models.Match]:
         return get_match(self.db, match_id)

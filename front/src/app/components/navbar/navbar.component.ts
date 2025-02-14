@@ -27,6 +27,10 @@ export class NavbarComponent {
     return this.authService.isLoggedIn();
   }
 
+  get isReferee(): boolean {
+    return this.authService.isReferee();
+  }
+
   async navigateToMyTeam(): Promise<void> {
     await this.navigationService.navigateToMyTeam();
   }

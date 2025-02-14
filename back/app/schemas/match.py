@@ -14,6 +14,9 @@ class MatchCreate(MatchBase):
     tournament_id: int
 
 class MatchUpdate(BaseModel):
+    team_1_id : int
+    team_2_id : int
+    date_of_match: Optional[date] = None
     result: Optional[str] = None
     
     @validator('result')
